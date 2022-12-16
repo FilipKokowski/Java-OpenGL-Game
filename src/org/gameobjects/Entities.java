@@ -8,6 +8,7 @@ public class Entities extends GameObject {
 	public float velocityY = 0;
 	
 	public float speed = 3;
+	public float speedCap = 6;
 	public float acceleration = speed / 100;
 	public float friction = speed * acceleration / 2;
 	

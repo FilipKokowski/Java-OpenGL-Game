@@ -13,8 +13,8 @@ public class Renderer {
 	private static GLWindow window = null;
 	private static GLProfile profile = null;
 	
-	private static int screenW = 640;
-	private static int screenH = 360;
+	private static int screenW = 1280;
+	private static int screenH = 720;
 
 	public static float unitsWide = 10;
 	public static float unitsTall = 0;
