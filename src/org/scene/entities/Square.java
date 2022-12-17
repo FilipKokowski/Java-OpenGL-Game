@@ -1,8 +1,10 @@
 package org.scene.entities;
 
 import org.engine.GameLoop;
+import org.engine.Handler;
 import org.gameobjects.Entities;
 import org.gameobjects.GameObject;
+import org.gameobjects.ID;
 import org.graphics.Animation;
 import org.graphics.Graphics;
 import org.graphics.Renderer;
@@ -13,9 +15,14 @@ import com.jogamp.newt.event.KeyEvent;
 
 public class Square extends Entities{
 	
+	
+	private static float height = 1.5f;
+	private static float width = height/2;
+	
 	public Square() {
-		width = .5f;
-		height = 1f;
+		super(0,0,width, height);
+		
+		id = ID.Player;
 		
 		currentAnimation = 0;
 	
@@ -76,19 +83,28 @@ public class Square extends Entities{
 		else if(velocityY != 0) 
 			velocityY += (velocityY >= 0) ? (-friction) : (friction);
 		
+			
 		x += velocityX * GameLoop.updateDelta();
 		
-		if(y >= (-Renderer.unitsTall + height) / 2) { 
+		
+		if(y > (-Renderer.unitsTall + height) / 2) { 
 			gravity();
 			y += velocityY * GameLoop.updateDelta();
 		}
 		else {
+			for(int i = 0; i < Handler.gameObjects.size(); i++) {
+				GameObject tempObj = getAt(i);
+				
+				if(doOverlap(getBounds(), tempObj.getBounds()) && tempObj.id == ID.Entities){
+					System.out.println("Overlap");
+				}
+			}
+			y = (-Renderer.unitsTall + height) / 2;
 			if(KeyInput.getKey(KeyEvent.VK_W) || KeyInput.getKey(KeyEvent.VK_SPACE)){
 				velocityY = jumpForce;
 				y += velocityY * GameLoop.updateDelta();
 			}
 		}
-		
 		
 		Camera.x += (x - Camera.x) * speed * GameLoop.updateDelta();
 		//System.out.println(x + "-" + y);

@@ -8,8 +8,8 @@ import org.resource.ImageResource;
 public class Background extends GameObject {
 
 	public Background(String path) {
-		width = Renderer.unitsWide * 2;
-		height = Renderer.unitsTall;
+		super(0,0, Renderer.unitsWide * 2, Renderer.unitsTall);	
+		
 		
 		animations = new Animation[1];
 		animations[0] = new Animation();

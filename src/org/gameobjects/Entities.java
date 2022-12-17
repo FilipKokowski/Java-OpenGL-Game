@@ -1,9 +1,13 @@
 package org.gameobjects;
 
-import org.engine.Handler;
 import org.scene.entities.Camera;
 
 public class Entities extends GameObject {
+	public Entities(float x, float y, float width, float height) {
+		super(x, y, width, height);
+		// TODO Auto-generated constructor stub
+	}
+
 	public float velocityX = 0;
 	public float velocityY = 0;
 	

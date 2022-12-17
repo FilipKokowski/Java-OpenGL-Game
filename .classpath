@@ -2,12 +2,12 @@
 <classpath>
 	<classpathentry kind="con" path="org.eclipse.jdt.launching.JRE_CONTAINER/org.eclipse.jdt.internal.debug.ui.launcher.StandardVMType/JavaSE-1.8"/>
 	<classpathentry kind="src" path="src"/>
-	<classpathentry kind="lib" path="D:/Eclipse/workspace/2D/jogamp-all-platforms/jar/gluegen-rt.jar">
+	<classpathentry kind="lib" path="D:/Eclipse/workspace/Java-OpenGL-Game/jogamp-all-platforms/jar/gluegen-rt.jar">
 		<attributes>
 			<attribute name="org.eclipse.jdt.launching.CLASSPATH_ATTR_LIBRARY_PATH_ENTRY" value="2D/src/natives/windows-amd64"/>
 		</attributes>
 	</classpathentry>
-	<classpathentry kind="lib" path="D:/Eclipse/workspace/2D/jogamp-all-platforms/jar/jogl-all.jar">
+	<classpathentry kind="lib" path="D:/Eclipse/workspace/Java-OpenGL-Game/jogamp-all-platforms/jar/jogl-all.jar">
 		<attributes>
 			<attribute name="org.eclipse.jdt.launching.CLASSPATH_ATTR_LIBRARY_PATH_ENTRY" value="2D/src/natives/windows-amd64"/>
 		</attributes>
