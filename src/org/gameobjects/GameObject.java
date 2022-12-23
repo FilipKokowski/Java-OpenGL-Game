@@ -51,6 +51,12 @@ public class GameObject {
 		return -(unitsTall / Renderer.getWindowHeight() * y - unitsTall/2) + Camera.y;
 	}
 	
+	public float getX() { return x; };
+	public float getY() { return y; };
+	
+	public float getWidth() { return width; };
+	public float getHeight() { return height; };
+	
 	public void setColor(float r, float g, float b, float a) {
 		red = Math.max(0, Math.min(1, r));
 		green = Math.max(0, Math.min(1, g));
@@ -60,8 +66,8 @@ public class GameObject {
 	
 	public float[] getBounds() {
 		float[] bounds = new float[4];
-		bounds[0] = getWorldX();
-		bounds[1] = getWorldY();
+		bounds[0] = x;
+		bounds[1] = y;
 		bounds[2] = width;
 		bounds[3] = height;
 		
@@ -69,9 +75,8 @@ public class GameObject {
 	}
 	
 	public boolean doOverlap(float[] rec1, float[] rec2) {
-		System.out.println("rec1[0] + rec1[2]: " + rec1[0] + " + " + rec1[2] + " (" + (rec1[0] + rec1[2]) +") >= rec2[0]: " + rec2[0]);
-		System.out.println("\nrec1[1]: " + rec1[1] + " < rec2[1]: " + rec2[1]);
-		if(rec1[0] + rec1[2] >= rec2[0] && rec1[1] < rec2[1]) {
+		if(rec1[0] + rec1[2] / 2 >= rec2[0] - rec2[2] / 2 && rec1[0] - rec1[2] < rec2[0] + rec2[2] / 2 - rec1[2] / 2 
+				&& rec1[1] - rec1[3] / 2 < rec2[1] + rec2[3] / 2) {
 			return true;
 		}
 		

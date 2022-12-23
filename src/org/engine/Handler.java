@@ -15,7 +15,6 @@ public class Handler {
 		for(GameObject go : gameObjects){
 			go.render();
 		}
-		//System.out.println(gameObjects.size());
 	}
 	
 	public static void update() {

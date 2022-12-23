@@ -23,5 +23,17 @@ public class Entities extends GameObject {
 	public static Camera camera = new Camera();
 	public static int cameraID = -1;
 	
+	public static boolean collisionR = false;
+	public static boolean collisionL = false;
+	public static boolean collisionU = false;
+	public static boolean collisionD = false;
+	
 	public void gravity() { velocityY -= mass/G; };
+	
+	public void clearCollision() {
+		collisionR = false;
+		collisionL = false;
+		collisionU = false;
+		collisionD = false;
+	}
 }

@@ -34,8 +34,6 @@ public class Renderer {
 		window.addGLEventListener(new EventListener());
 		window.addMouseListener(new MouseInput());
 		window.addKeyListener(new KeyInput());
-		//window.setFullscreen(true);
-		//window.setResizable(false);
 		
 		window.display();
 	}

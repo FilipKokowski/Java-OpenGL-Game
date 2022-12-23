@@ -22,6 +22,8 @@ public class Square extends Entities{
 	public Square() {
 		super(0,0,width, height);
 		
+		jumpForce = 15;
+		
 		id = ID.Player;
 		
 		currentAnimation = 0;
@@ -55,19 +57,17 @@ public class Square extends Entities{
 	
 	}
 	
+	public void render() {
+		Graphics.setColor(1, 1, 1, 1);
+		Graphics.fillRect(x, y, width, height);
+	}
+	
+	
 	@Override
 	public void update() {
 		
+		//If player's not moving play idle animation
 		if(!KeyInput.getKey(KeyEvent.VK_A) && !KeyInput.getKey(KeyEvent.VK_D)) { currentAnimation = 0; }
-		
-		if(KeyInput.getKey(KeyEvent.VK_A)) { 
-			if(velocityX >= -speedCap)
-				velocityX -= speed * acceleration; currentAnimation = 1; 
-		}
-		if(KeyInput.getKey(KeyEvent.VK_D)) {
-			if(velocityX <= speedCap)
-				velocityX += speed * acceleration; currentAnimation = 2; 
-		}
 		
 	
 		
@@ -79,35 +79,93 @@ public class Square extends Entities{
 				currentAnimation = 3;
 		}
 			
+		
 		if(velocityY <= friction && velocityY >= -friction) velocityY = 0;	
 		else if(velocityY != 0) 
 			velocityY += (velocityY >= 0) ? (-friction) : (friction);
 		
-			
-		x += velocityX * GameLoop.updateDelta();
-		
 		
 		if(y > (-Renderer.unitsTall + height) / 2) { 
 			gravity();
+			
 			y += velocityY * GameLoop.updateDelta();
-		}
-		else {
+			
+			//Collision detection
 			for(int i = 0; i < Handler.gameObjects.size(); i++) {
+				//Grab one of gameObjects
 				GameObject tempObj = getAt(i);
 				
-				if(doOverlap(getBounds(), tempObj.getBounds()) && tempObj.id == ID.Entities){
-					System.out.println("Overlap");
+				//Check if objects ID is ID.Obstacle and is intersecting with player
+				if(tempObj.id == ID.Obstacle && doOverlap(getBounds(), tempObj.getBounds())){
+					
+					//If player is beetween X1 and X2 of tempobject, stop falling
+					if(x + width / 2 > tempObj.getX() - tempObj.getWidth() / 2 && x - width / 2 < tempObj.getX() + tempObj.getWidth() / 2) {
+						collisionD = true;
+						velocityY = 0;
+						y = tempObj.getY() + tempObj.getHeight() / 2 + height / 2;
+					}
 				}
 			}
-			y = (-Renderer.unitsTall + height) / 2;
-			if(KeyInput.getKey(KeyEvent.VK_W) || KeyInput.getKey(KeyEvent.VK_SPACE)){
+			
+			//Jump if player's standing on obstacle
+			if((KeyInput.getKey(KeyEvent.VK_W) || KeyInput.getKey(KeyEvent.VK_SPACE)) && collisionD){
 				velocityY = jumpForce;
 				y += velocityY * GameLoop.updateDelta();
 			}
 		}
+		else {
+			
+			//Set y to bottom of the screen
+			y = (-Renderer.unitsTall + height) / 2; 
+			
+			//Jumping 
+			if(KeyInput.getKey(KeyEvent.VK_W) || KeyInput.getKey(KeyEvent.VK_SPACE)){
+				velocityY = jumpForce;
+				y += velocityY * GameLoop.updateDelta();
+			}
+			
+			//Collision detection
+			for(int i = 0; i < Handler.gameObjects.size(); i++) {
+				GameObject tempObj = getAt(i);
+				
+				if(tempObj.id == ID.Obstacle && doOverlap(getBounds(), tempObj.getBounds())){
+					velocityX = 0;
+					if(x < tempObj.getX()) {
+						collisionR = true;
+						x = tempObj.getX() - tempObj.getWidth() / 2 - width / 2;
+					}
+					else if(x > tempObj.getX()) {
+						collisionL = true;
+						x = tempObj.getX() + (tempObj.getWidth() + width) / 2;
+					}
+					
+				}
+			}
+			
+			
+		}
 		
+		//Moving left
+		if(KeyInput.getKey(KeyEvent.VK_A) && !collisionL) { 
+			if(velocityX >= -speedCap)
+				velocityX -= speed * acceleration; currentAnimation = 1; 
+		}
+		
+		//Moving right
+		if(KeyInput.getKey(KeyEvent.VK_D) && !collisionR) {
+			if(velocityX <= speedCap)
+				velocityX += speed * acceleration; currentAnimation = 2; 
+		}
+		
+		//Change x based on velocity
+		x += velocityX * GameLoop.updateDelta();
+		
+		//Camera follow player
 		Camera.x += (x - Camera.x) * speed * GameLoop.updateDelta();
-		//System.out.println(x + "-" + y);
+		
+		
+		clearCollision();
+		
 	}
 	
 }
