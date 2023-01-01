@@ -22,13 +22,15 @@ public class Square extends Entities{
 	public Square() {
 		super(0,0,width, height);
 		
+		reloadCrouchHeight();
+		
 		jumpForce = 10;
 		
 		id = ID.Player;
 		
 		currentAnimation = 0;
 	
-		animations = new Animation[4];
+		animations = new Animation[6];
 		
 		animations[0] = new Animation();
 		animations[0].frames = new ImageResource[1];
@@ -52,6 +54,14 @@ public class Square extends Entities{
 		animations[3].frames = new ImageResource[1];
 		animations[3].frames[0] = new ImageResource("/res/org/scene/entities/Player/Idle/idleSkate.png");
 		
+		animations[4] = new Animation();
+		animations[4].frames = new ImageResource[1];
+		animations[4].frames[0] = new ImageResource("/res/org/scene/entities/Player/Idle/CrouchRightIdle.png");
+		
+		animations[5] = new Animation();
+		animations[5].frames = new ImageResource[1];
+		animations[5].frames[0] = new ImageResource("/res/org/scene/entities/Player/Idle/CrouchLeftIdle.png");
+		
 		speed = 4;
 		speedCap = 8;
 	
@@ -67,7 +77,9 @@ public class Square extends Entities{
 	public void update() {
 		
 		//If player's not moving play idle animation
-		if(!KeyInput.getKey(KeyEvent.VK_A) && !KeyInput.getKey(KeyEvent.VK_D)) { currentAnimation = 0; }
+		if(!KeyInput.getKey(KeyEvent.VK_A) && !KeyInput.getKey(KeyEvent.VK_D) && !crouched) { 
+			currentAnimation = 0; 
+		}
 		
 	
 		
@@ -97,13 +109,8 @@ public class Square extends Entities{
 				//Check if objects ID is ID.Obstacle and is intersecting with player
 				if(tempObj.id == ID.Obstacle && doOverlap(getBounds(), tempObj.getBounds())){
 					
-					//System.out.println("Touching");
-					//System.out.println("x + width / 2 = " + (x + width / 2));
-					//System.out.println("tempObj.getX() - tempObj.getWidth() / 2 = " + (tempObj.getX() - tempObj.getWidth() / 2));
-					//System.out.println("y - width / 2 = " + (y - width / 2));
-					//System.out.println("tempObj.getX() + tempObj.getWidth() / 2 = " + (tempObj.getX() + tempObj.getWidth() / 2) + "\n\n");
 					
-					//If player is beetween X1 and X2 of tempobject, stop falling
+					System.out.println("Touching");
 					
 					if(x < tempObj.getX()) {
 							collisionR = true;
@@ -111,26 +118,29 @@ public class Square extends Entities{
 					else if(x > tempObj.getX()) {
 							collisionL = true;
 					}
-					
+
+					//If player is beetween X1 and X2 of tempobject, stop falling
 					if(y - height / 2 <= tempObj.getY() + tempObj.getHeight() / 2 && y - height / 2 >= tempObj.getY() + tempObj.getHeight() / 2 - .125f) {
+						
+						//Do not set y to the top of tempObj if neither of the walls of player are colliding with walls of the tempObj
 						if(x - width / 2 != tempObj.getX() + tempObj.getWidth() / 2 && x + width / 2 != tempObj.getX() - tempObj.getWidth() / 2) {
 							collisionD = true;
-							velocityY = 0;
-							y = tempObj.getY() + tempObj.getHeight() / 2 + height / 2;
-							
 							collisionR = false;
 							collisionL = false;
+							
+							velocityY = 0;
+							y = tempObj.getY() + tempObj.getHeight() / 2 + height / 2;
 						}
 					}
 					
 					if(collisionR) {
 						velocityX = 0;
-						System.out.println("tempObj.getX() - (tempObj.getWidth() + width) / 2 = " + (tempObj.getX() - (tempObj.getWidth() + width) / 2) + collisionR);
+						//System.out.println("tempObj.getX() - (tempObj.getWidth() + width) / 2 = " + (tempObj.getX() - (tempObj.getWidth() + width) / 2) + collisionR);
 						x = tempObj.getX() - (tempObj.getWidth() + width) / 2;
 					}
 					if(collisionL) {
 						velocityX = 0;
-						System.out.println("tempObj.getX() + (tempObj.getWidth() + width) / 2 = " + (tempObj.getX() + (tempObj.getWidth() + width) / 2) + collisionL);
+						//System.out.println("tempObj.getX() + (tempObj.getWidth() + width) / 2 = " + (tempObj.getX() + (tempObj.getWidth() + width) / 2) + collisionL);
 						x = tempObj.getX() + (tempObj.getWidth() + width) / 2;
 					}
 				
@@ -161,7 +171,7 @@ public class Square extends Entities{
 				
 				if(tempObj.id == ID.Obstacle && doOverlap(getBounds(), tempObj.getBounds())){
 					velocityX = 0;
-					//System.out.println("Touching");
+					System.out.println("Touching");
 					if(x < tempObj.getX()) {
 						collisionR = true;
 						x = tempObj.getX() - tempObj.getWidth() / 2 - width / 2;
@@ -191,11 +201,16 @@ public class Square extends Entities{
 		
 		//Crouching
 		if(KeyInput.getKey(KeyEvent.VK_S) && !crouched) {
-			height /= 2;
+			height = crouchHeight;
+			y -= height / 4;
 			crouched = true;
 		}
 		else if(!KeyInput.getKey(KeyEvent.VK_S)){
-			height = 1.5f;
+			height = (crouchHeight / 2) * 3f;
+			
+			if(crouched) 
+				y += height / 6;
+			
 			crouched = false;
 		}
 		
@@ -206,11 +221,18 @@ public class Square extends Entities{
 		Camera.x += (x - Camera.x) * speed * GameLoop.updateDelta();
 		
 		
-		System.out.println(
+		/*System.out.println(
 		"\n\nUp collision: " + collisionU + 
 		"\nDown collision: " + collisionD + 
 		"\nLeft collision: " + collisionL + 
 		"\nRight collision: " + collisionR 	
+		);*/
+		System.out.println(
+		"\n\nX: " + x +		
+		"\nY: " + y +
+		"\nWidth: " + width + 
+		"\nHeight: " + height + 
+		"\nCrouch height: " + crouchHeight
 		);
 		
 		clearCollision();

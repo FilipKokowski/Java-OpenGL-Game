@@ -15,6 +15,8 @@ public class GameObject {
 	protected float width = 1;
 	protected float height = 1;
 	
+	protected float crouchHeight = (height / 3) * 2;
+	
 	public float red = 1;
 	public float green = 1;
 	public float blue = 1;
@@ -96,7 +98,9 @@ public class GameObject {
 		return null;
 	}
 	
-
+	public void reloadCrouchHeight() {
+		crouchHeight = (height / 3) * 2;
+	}
 	
 	
 }
