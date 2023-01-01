@@ -15,8 +15,14 @@ public class Main {
 		
 		Handler.addGO(new Square());
 		
-		Obstacle obstacle = new Obstacle(-3, (-Renderer.unitsTall + 2) / 2 , 2, 2);
+		Obstacle obstacle = new Obstacle(-3, onGround(1), 2, 1);
 		obstacle.setColor(1f, .25f, .58f, .5f);
 		Handler.addGO(obstacle);
+		
+		Obstacle obstacle2 = new Obstacle(-5, onGround(1) + 1, 2, 1);
+		obstacle2.setColor(1f, .25f, .58f, .5f);
+		Handler.addGO(obstacle2);
 	}
+	
+	public static float onGround(float height) { return(-Renderer.unitsTall + height) / 2; }
 }

@@ -22,7 +22,7 @@ public class Square extends Entities{
 	public Square() {
 		super(0,0,width, height);
 		
-		jumpForce = 15;
+		jumpForce = 10;
 		
 		id = ID.Player;
 		
@@ -94,16 +94,46 @@ public class Square extends Entities{
 			for(int i = 0; i < Handler.gameObjects.size(); i++) {
 				//Grab one of gameObjects
 				GameObject tempObj = getAt(i);
-				
 				//Check if objects ID is ID.Obstacle and is intersecting with player
 				if(tempObj.id == ID.Obstacle && doOverlap(getBounds(), tempObj.getBounds())){
 					
+					//System.out.println("Touching");
+					//System.out.println("x + width / 2 = " + (x + width / 2));
+					//System.out.println("tempObj.getX() - tempObj.getWidth() / 2 = " + (tempObj.getX() - tempObj.getWidth() / 2));
+					//System.out.println("y - width / 2 = " + (y - width / 2));
+					//System.out.println("tempObj.getX() + tempObj.getWidth() / 2 = " + (tempObj.getX() + tempObj.getWidth() / 2) + "\n\n");
+					
 					//If player is beetween X1 and X2 of tempobject, stop falling
-					if(x + width / 2 > tempObj.getX() - tempObj.getWidth() / 2 && x - width / 2 < tempObj.getX() + tempObj.getWidth() / 2) {
-						collisionD = true;
-						velocityY = 0;
-						y = tempObj.getY() + tempObj.getHeight() / 2 + height / 2;
+					
+					if(x < tempObj.getX()) {
+							collisionR = true;
 					}
+					else if(x > tempObj.getX()) {
+							collisionL = true;
+					}
+					
+					if(y - height / 2 <= tempObj.getY() + tempObj.getHeight() / 2 && y - height / 2 >= tempObj.getY() + tempObj.getHeight() / 2 - .125f) {
+						if(x - width / 2 != tempObj.getX() + tempObj.getWidth() / 2 && x + width / 2 != tempObj.getX() - tempObj.getWidth() / 2) {
+							collisionD = true;
+							velocityY = 0;
+							y = tempObj.getY() + tempObj.getHeight() / 2 + height / 2;
+							
+							collisionR = false;
+							collisionL = false;
+						}
+					}
+					
+					if(collisionR) {
+						velocityX = 0;
+						System.out.println("tempObj.getX() - (tempObj.getWidth() + width) / 2 = " + (tempObj.getX() - (tempObj.getWidth() + width) / 2) + collisionR);
+						x = tempObj.getX() - (tempObj.getWidth() + width) / 2;
+					}
+					if(collisionL) {
+						velocityX = 0;
+						System.out.println("tempObj.getX() + (tempObj.getWidth() + width) / 2 = " + (tempObj.getX() + (tempObj.getWidth() + width) / 2) + collisionL);
+						x = tempObj.getX() + (tempObj.getWidth() + width) / 2;
+					}
+				
 				}
 			}
 			
@@ -128,8 +158,10 @@ public class Square extends Entities{
 			for(int i = 0; i < Handler.gameObjects.size(); i++) {
 				GameObject tempObj = getAt(i);
 				
+				
 				if(tempObj.id == ID.Obstacle && doOverlap(getBounds(), tempObj.getBounds())){
 					velocityX = 0;
+					//System.out.println("Touching");
 					if(x < tempObj.getX()) {
 						collisionR = true;
 						x = tempObj.getX() - tempObj.getWidth() / 2 - width / 2;
@@ -157,12 +189,29 @@ public class Square extends Entities{
 				velocityX += speed * acceleration; currentAnimation = 2; 
 		}
 		
+		//Crouching
+		if(KeyInput.getKey(KeyEvent.VK_S) && !crouched) {
+			height /= 2;
+			crouched = true;
+		}
+		else if(!KeyInput.getKey(KeyEvent.VK_S)){
+			height = 1.5f;
+			crouched = false;
+		}
+		
 		//Change x based on velocity
 		x += velocityX * GameLoop.updateDelta();
 		
 		//Camera follow player
 		Camera.x += (x - Camera.x) * speed * GameLoop.updateDelta();
 		
+		
+		System.out.println(
+		"\n\nUp collision: " + collisionU + 
+		"\nDown collision: " + collisionD + 
+		"\nLeft collision: " + collisionL + 
+		"\nRight collision: " + collisionR 	
+		);
 		
 		clearCollision();
 		

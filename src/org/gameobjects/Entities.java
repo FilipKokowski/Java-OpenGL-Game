@@ -7,6 +7,8 @@ public class Entities extends GameObject {
 		super(x, y, width, height);
 		// TODO Auto-generated constructor stub
 	}
+	
+	public boolean crouched = false;
 
 	public float velocityX = 0;
 	public float velocityY = 0;
