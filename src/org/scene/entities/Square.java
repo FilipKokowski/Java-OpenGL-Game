@@ -16,21 +16,25 @@ import com.jogamp.newt.event.KeyEvent;
 public class Square extends Entities{
 	
 	
-	private static float height = 1.5f;
-	private static float width = height/2;
+	private static float HEIGHT = 1.25f;
+	private static float WIDTH = HEIGHT/2;
+	
+	//False == left, True == right
+	private static boolean lastFacing = false;
 	
 	public Square() {
-		super(0,0,width, height);
+		super(0,0,WIDTH, HEIGHT);
 		
 		reloadCrouchHeight();
 		
-		jumpForce = 10;
+		jumpForce = 7;
+		reloadCrouchJumpForce();
 		
 		id = ID.Player;
 		
 		currentAnimation = 0;
 	
-		animations = new Animation[6];
+		animations = new Animation[10];
 		
 		animations[0] = new Animation();
 		animations[0].frames = new ImageResource[1];
@@ -62,23 +66,51 @@ public class Square extends Entities{
 		animations[5].frames = new ImageResource[1];
 		animations[5].frames[0] = new ImageResource("/res/org/scene/entities/Player/Idle/CrouchLeftIdle.png");
 		
+		animations[6] = new Animation();
+		animations[6].frames = new ImageResource[4];
+		animations[6].frames[0] = new ImageResource("/res/org/scene/entities/Player/CrouchLeft/CrouchLeft1.png");
+		animations[6].frames[1] = new ImageResource("/res/org/scene/entities/Player/CrouchLeft/CrouchLeft2.png");
+		animations[6].frames[2] = new ImageResource("/res/org/scene/entities/Player/CrouchLeft/CrouchLeft3.png");
+		animations[6].frames[3] = new ImageResource("/res/org/scene/entities/Player/CrouchLeft/CrouchLeft4.png");
+		
+		animations[7] = new Animation();
+		animations[7].frames = new ImageResource[4];
+		animations[7].frames[0] = new ImageResource("/res/org/scene/entities/Player/CrouchRight/CrouchRight1.png");
+		animations[7].frames[1] = new ImageResource("/res/org/scene/entities/Player/CrouchRight/CrouchRight2.png");
+		animations[7].frames[2] = new ImageResource("/res/org/scene/entities/Player/CrouchRight/CrouchRight3.png");
+		animations[7].frames[3] = new ImageResource("/res/org/scene/entities/Player/CrouchRight/CrouchRight4.png");
+		
+		animations[8] = new Animation();
+		animations[8].frames = new ImageResource[1];
+		animations[8].frames[0] = new ImageResource("/res/org/scene/entities/Player/Idle/idleSkateCrouchLeft.png");
+		
+		animations[9] = new Animation();
+		animations[9].frames = new ImageResource[1];
+		animations[9].frames[0] = new ImageResource("/res/org/scene/entities/Player/Idle/idleSkateCrouchRight.png");
+		
 		speed = 4;
 		speedCap = 8;
-	
 	}
 	
-	public void render() {
+	/*public void render() {
 		Graphics.setColor(1, 1, 1, 1);
 		Graphics.fillRect(x, y, width, height);
-	}
+	}*/
 	
 	
 	@Override
 	public void update() {
 		
 		//If player's not moving play idle animation
-		if(!KeyInput.getKey(KeyEvent.VK_A) && !KeyInput.getKey(KeyEvent.VK_D) && !crouched) { 
-			currentAnimation = 0; 
+		if(!KeyInput.getKey(KeyEvent.VK_A) && !KeyInput.getKey(KeyEvent.VK_D)) { 
+			if(!crouched)
+				currentAnimation = 0;
+			else {
+				if(lastFacing)
+					currentAnimation = 4;
+				else
+					currentAnimation = 5;
+			}
 		}
 		
 	
@@ -87,8 +119,14 @@ public class Square extends Entities{
 		else if(velocityX != 0)	{
 			velocityX += (velocityX >= 0) ? (-friction) : (friction);
 			
-			if(!KeyInput.getKey(KeyEvent.VK_A) && !KeyInput.getKey(KeyEvent.VK_D))
-				currentAnimation = 3;
+			if(!KeyInput.getKey(KeyEvent.VK_A) && !KeyInput.getKey(KeyEvent.VK_D)) {
+				if(crouched) {
+					if(lastFacing) currentAnimation = 9;
+					else currentAnimation = 8;
+				}
+				else
+					currentAnimation = 3;
+			}
 		}
 			
 		
@@ -99,6 +137,7 @@ public class Square extends Entities{
 		
 		if(y > (-Renderer.unitsTall + height) / 2) { 
 			gravity();
+			onGround = false;
 			
 			y += velocityY * GameLoop.updateDelta();
 			
@@ -108,9 +147,16 @@ public class Square extends Entities{
 				GameObject tempObj = getAt(i);
 				//Check if objects ID is ID.Obstacle and is intersecting with player
 				if(tempObj.id == ID.Obstacle && doOverlap(getBounds(), tempObj.getBounds())){
+					float[] bounds = getBounds();
+					/*System.out.println(
+						"\n\nX: " + bounds[0] +		
+						"\nY: " + bounds[1] +
+						"\nWidth: " + bounds[2] + 
+						"\nHeight: " + bounds[3] + 
+						"\nCrouch height: " + crouchHeight
+					);*/
 					
-					
-					System.out.println("Touching");
+					//System.out.println("Touching");
 					
 					if(x < tempObj.getX()) {
 							collisionR = true;
@@ -155,6 +201,8 @@ public class Square extends Entities{
 		}
 		else {
 			
+			onGround = true;
+			
 			//Set y to bottom of the screen
 			y = (-Renderer.unitsTall + height) / 2; 
 			
@@ -171,7 +219,8 @@ public class Square extends Entities{
 				
 				if(tempObj.id == ID.Obstacle && doOverlap(getBounds(), tempObj.getBounds())){
 					velocityX = 0;
-					System.out.println("Touching");
+					//System.out.println("Touching");
+					
 					if(x < tempObj.getX()) {
 						collisionR = true;
 						x = tempObj.getX() - tempObj.getWidth() / 2 - width / 2;
@@ -189,37 +238,86 @@ public class Square extends Entities{
 		
 		//Moving left
 		if(KeyInput.getKey(KeyEvent.VK_A) && !collisionL) { 
-			if(velocityX >= -speedCap)
-				velocityX -= speed * acceleration; currentAnimation = 1; 
+			lastFacing = false;
+			if(velocityX >= -speedCap) {
+				velocityX -= speed * acceleration; 
+				if(!crouched) {
+					currentAnimation = 1;	
+				}
+				else currentAnimation = 6;
+				 
+			}else velocityX += .25f;
 		}
 		
 		//Moving right
 		if(KeyInput.getKey(KeyEvent.VK_D) && !collisionR) {
-			if(velocityX <= speedCap)
-				velocityX += speed * acceleration; currentAnimation = 2; 
+			lastFacing = true;
+			if(velocityX <= speedCap) {
+				velocityX += speed * acceleration; 
+				if(!crouched) {
+					currentAnimation = 2;	
+				}
+				else currentAnimation = 7; 
+			}
+			else velocityX -= .25f;
 		}
 		
+		if((onGround || collisionD) && crouched) speedCap = 2;
+		
 		//Crouching
-		if(KeyInput.getKey(KeyEvent.VK_S) && !crouched) {
+		if(KeyInput.getKey(KeyEvent.VK_SHIFT) && !crouched) {
+			
+			if(onGround || collisionD)
+				speedCap = 2;
+			
+			//speed = crouchSpeed;
+			jumpForce = crouchJumpForce;
+			
 			height = crouchHeight;
 			y -= height / 4;
+			
 			crouched = true;
+			
+			if(lastFacing)
+				currentAnimation = 4;
+			else 
+				currentAnimation = 5;
 		}
-		else if(!KeyInput.getKey(KeyEvent.VK_S)){
+		else if(!KeyInput.getKey(KeyEvent.VK_SHIFT)){
+			//Resets speed back to the one assigned before
+			//reloadSpeed();
+			
 			height = (crouchHeight / 2) * 3f;
 			
-			if(crouched) 
+			jumpForce = crouchJumpForce * 2;
+			
+			if(crouched) { 
 				y += height / 6;
+				speedCap = 8;
+			}
 			
 			crouched = false;
 		}
 		
+		boolean reset = false;
+		
+		if(KeyInput.getKey(KeyEvent.VK_X) && !reset) {
+			y = 0;
+			x = 0;
+			velocityX = 0;
+			velocityY = 0;
+			
+			reset = true;
+		} else if(!KeyInput.getKey(KeyEvent.VK_X) && reset) reset = false;
+		
 		//Change x based on velocity
 		x += velocityX * GameLoop.updateDelta();
+		
 		
 		//Camera follow player
 		Camera.x += (x - Camera.x) * speed * GameLoop.updateDelta();
 		
+		System.out.println("speedCap = " + speedCap);
 		
 		/*System.out.println(
 		"\n\nUp collision: " + collisionU + 
@@ -227,15 +325,16 @@ public class Square extends Entities{
 		"\nLeft collision: " + collisionL + 
 		"\nRight collision: " + collisionR 	
 		);*/
-		System.out.println(
+		/*System.out.println(
 		"\n\nX: " + x +		
 		"\nY: " + y +
 		"\nWidth: " + width + 
 		"\nHeight: " + height + 
 		"\nCrouch height: " + crouchHeight
-		);
+		);*/
 		
 		clearCollision();
+
 		
 	}
 	
