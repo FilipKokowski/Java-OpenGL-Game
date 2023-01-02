@@ -268,7 +268,7 @@ public class Square extends Entities{
 		if(KeyInput.getKey(KeyEvent.VK_SHIFT) && !crouched) {
 			
 			if(onGround || collisionD)
-				speedCap = 2;
+				speedCap = crouchSpeed;
 			
 			//speed = crouchSpeed;
 			jumpForce = crouchJumpForce;
@@ -319,12 +319,12 @@ public class Square extends Entities{
 		
 		//System.out.println("speedCap = " + speedCap);
 		
-		System.out.println(
+		/*System.out.println(
 		"\n\nUp collision: " + collisionU + 
-		"\nDown collision: " + collisionD + 
+		"\nDown collision: " + collisionD +  
 		"\nLeft collision: " + collisionL + 
 		"\nRight collision: " + collisionR 	
-		);
+		);*/
 		/*System.out.println(
 		"\n\nX: " + x +		
 		"\nY: " + y +
