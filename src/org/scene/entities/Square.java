@@ -166,7 +166,7 @@ public class Square extends Entities{
 					}
 
 					//If player is beetween X1 and X2 of tempobject, stop falling
-					if(y - height / 2 <= tempObj.getY() + tempObj.getHeight() / 2 && y - height / 2 >= tempObj.getY() + tempObj.getHeight() / 2 - .125f) {
+					if(y - height / 2 <= tempObj.getY() + tempObj.getHeight() / 2 && y - height / 2 >= tempObj.getY() + tempObj.getHeight() / 2 - .25f) {
 						
 						//Do not set y to the top of tempObj if neither of the walls of player are colliding with walls of the tempObj
 						if(x - width / 2 != tempObj.getX() + tempObj.getWidth() / 2 && x + width / 2 != tempObj.getX() - tempObj.getWidth() / 2) {
@@ -317,14 +317,14 @@ public class Square extends Entities{
 		//Camera follow player
 		Camera.x += (x - Camera.x) * speed * GameLoop.updateDelta();
 		
-		System.out.println("speedCap = " + speedCap);
+		//System.out.println("speedCap = " + speedCap);
 		
-		/*System.out.println(
+		System.out.println(
 		"\n\nUp collision: " + collisionU + 
 		"\nDown collision: " + collisionD + 
 		"\nLeft collision: " + collisionL + 
 		"\nRight collision: " + collisionR 	
-		);*/
+		);
 		/*System.out.println(
 		"\n\nX: " + x +		
 		"\nY: " + y +
