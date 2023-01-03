@@ -9,6 +9,7 @@ public class Entities extends GameObject {
 	}
 	
 	public boolean crouched = false;
+	public boolean forceCrouch = false;
 	public boolean onGround = false;
 
 	public float velocityX = 0;

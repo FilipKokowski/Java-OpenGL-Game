@@ -179,6 +179,23 @@ public class Square extends Entities{
 						}
 					}
 					
+					if(y + height / 2 >= tempObj.getY() - tempObj.getHeight() / 2 && y + height / 2 <= tempObj.getY() - tempObj.getHeight() / 2 + .25f) {
+						
+						//Do not set y to the top of tempObj if neither of the walls of player are colliding with walls of the tempObj
+						if(x - width / 2 != tempObj.getX() + tempObj.getWidth() / 2 && x + width / 2 != tempObj.getX() - tempObj.getWidth() / 2) {
+							collisionU = true;
+							collisionL = false;
+							collisionR = false;
+							
+							forceCrouch = true;
+							
+							velocityY = 0;	
+							
+						}
+					}
+					
+					
+					
 					if(collisionR) {
 						velocityX = 0;
 						//System.out.println("tempObj.getX() - (tempObj.getWidth() + width) / 2 = " + (tempObj.getX() - (tempObj.getWidth() + width) / 2) + collisionR);
@@ -191,6 +208,13 @@ public class Square extends Entities{
 					}
 				
 				}
+				if(tempObj.id == ID.Obstacle && !collisionU && x - width / 2 <= tempObj.getX() + tempObj.getWidth() / 2 && x + width / 2 >= tempObj.getX() - tempObj.getWidth() / 2) {
+					if(y + HEIGHT / 2 >= tempObj.getY() - tempObj.getHeight() / 2 && y + HEIGHT / 2 <= tempObj.getY() - tempObj.getHeight() / 2 + .25f) {
+						forceCrouch = true;
+						System.out.println("forceCrouch");
+					}
+				}
+
 			}
 			
 			//Jump if player's standing on obstacle
@@ -221,20 +245,39 @@ public class Square extends Entities{
 					velocityX = 0;
 					//System.out.println("Touching");
 					
-					if(x < tempObj.getX()) {
+					if(y + height / 2 >= tempObj.getY() - tempObj.getHeight() / 2 && y + height / 2 <= tempObj.getY() - tempObj.getHeight() / 2 + .25f) {
+						
+						//Do not set y to the top of tempObj if neither of the walls of player are colliding with walls of the tempObj
+						if(x - width / 2 != tempObj.getX() + tempObj.getWidth() / 2 && x + width / 2 != tempObj.getX() - tempObj.getWidth() / 2) {
+							collisionU = true;
+							forceCrouch = true;
+							
+							velocityY = 0;	
+							
+						}
+					}
+					
+					if(x < tempObj.getX() && !collisionU) {
 						collisionR = true;
 						x = tempObj.getX() - tempObj.getWidth() / 2 - width / 2;
 					}
-					else if(x > tempObj.getX()) {
+					else if(x > tempObj.getX() && !collisionU) {
 						collisionL = true;
 						x = tempObj.getX() + (tempObj.getWidth() + width) / 2;
 					}
-					
+				}
+				
+				if(tempObj.id == ID.Obstacle && !collisionU && x - width / 2 <= tempObj.getX() + tempObj.getWidth() / 2 && x + width / 2 >= tempObj.getX() - tempObj.getWidth() / 2) {
+					if(y + HEIGHT / 2 >= tempObj.getY() - tempObj.getHeight() / 2 && y + HEIGHT / 2 <= tempObj.getY() - tempObj.getHeight() / 2 + .25f) {
+						forceCrouch = true;
+						System.out.println("forceCrouch");
+					}
 				}
 			}
 			
 			
 		}
+		
 		
 		//Moving left
 		if(KeyInput.getKey(KeyEvent.VK_A) && !collisionL) { 
@@ -283,7 +326,7 @@ public class Square extends Entities{
 			else 
 				currentAnimation = 5;
 		}
-		else if(!KeyInput.getKey(KeyEvent.VK_SHIFT)){
+		else if(!KeyInput.getKey(KeyEvent.VK_SHIFT) && !forceCrouch){
 			//Resets speed back to the one assigned before
 			//reloadSpeed();
 			
@@ -317,7 +360,7 @@ public class Square extends Entities{
 		//Camera follow player
 		Camera.x += (x - Camera.x) * speed * GameLoop.updateDelta();
 		
-		//System.out.println("speedCap = " + speedCap);
+		//System.out.println("forceCrouch = " + forceCrouch);
 		
 		/*System.out.println(
 		"\n\nUp collision: " + collisionU + 
@@ -332,6 +375,8 @@ public class Square extends Entities{
 		"\nHeight: " + height + 
 		"\nCrouch height: " + crouchHeight
 		);*/
+		
+		forceCrouch = false;
 		
 		clearCollision();
 

@@ -15,7 +15,7 @@ public class Main {
 		
 		Handler.addGO(new Square());
 		
-		Obstacle obstacle = new Obstacle(-3, onGround(1), 2, 1);
+		Obstacle obstacle = new Obstacle(-3, onGround(1) + 1, 2, 1);
 		obstacle.setColor(1f, .25f, .58f, .5f);
 		Handler.addGO(obstacle);
 		
