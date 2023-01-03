@@ -6,14 +6,13 @@ import org.gameobjects.Entities;
 import org.gameobjects.GameObject;
 import org.gameobjects.ID;
 import org.graphics.Animation;
-import org.graphics.Graphics;
 import org.graphics.Renderer;
 import org.input.KeyInput;
 import org.resource.ImageResource;
 
 import com.jogamp.newt.event.KeyEvent;
 
-public class Square extends Entities{
+public class Player extends Entities{
 	
 	
 	private static float HEIGHT = 1.25f;
@@ -22,12 +21,12 @@ public class Square extends Entities{
 	//False == left, True == right
 	private static boolean lastFacing = false;
 	
-	public Square() {
+	public Player() {
 		super(0,0,WIDTH, HEIGHT);
 		
 		reloadCrouchHeight();
 		
-		jumpForce = 14;
+		jumpForce = 7;
 		reloadCrouchJumpForce();
 		
 		id = ID.Player;
@@ -92,10 +91,10 @@ public class Square extends Entities{
 		speedCap = 8;
 	}
 	
-	public void render() {
+	/*public void render() {
 		Graphics.setColor(1, 1, 1, 1);
 		Graphics.fillRect(x, y, width, height);
-	}
+	}*/
 	
 	
 	@Override

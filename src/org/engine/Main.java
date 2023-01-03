@@ -2,7 +2,7 @@ package org.engine;
 
 import org.scene.background.Background;
 import org.scene.entities.Obstacle;
-import org.scene.entities.Square;
+import org.scene.entities.Player;
 import org.graphics.Renderer;
 
 public class Main {
@@ -13,7 +13,7 @@ public class Main {
 		
 		Handler.addGO(new Background("/res/org/scene/background/bg.jpg"));
 		
-		Handler.addGO(new Square());
+		Handler.addGO(new Player());
 		
 		Obstacle obstacle = new Obstacle(-3, onGround(1) + 1, 2, 1);
 		obstacle.setColor(1f, .25f, .58f, .5f);
