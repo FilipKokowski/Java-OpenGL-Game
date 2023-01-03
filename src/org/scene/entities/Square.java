@@ -27,7 +27,7 @@ public class Square extends Entities{
 		
 		reloadCrouchHeight();
 		
-		jumpForce = 7;
+		jumpForce = 14;
 		reloadCrouchJumpForce();
 		
 		id = ID.Player;
@@ -92,10 +92,10 @@ public class Square extends Entities{
 		speedCap = 8;
 	}
 	
-	/*public void render() {
+	public void render() {
 		Graphics.setColor(1, 1, 1, 1);
 		Graphics.fillRect(x, y, width, height);
-	}*/
+	}
 	
 	
 	@Override
@@ -143,24 +143,18 @@ public class Square extends Entities{
 			
 			//Collision detection
 			for(int i = 0; i < Handler.gameObjects.size(); i++) {
+				
 				//Grab one of gameObjects
 				GameObject tempObj = getAt(i);
+				
 				//Check if objects ID is ID.Obstacle and is intersecting with player
 				if(tempObj.id == ID.Obstacle && doOverlap(getBounds(), tempObj.getBounds())){
-					float[] bounds = getBounds();
-					/*System.out.println(
-						"\n\nX: " + bounds[0] +		
-						"\nY: " + bounds[1] +
-						"\nWidth: " + bounds[2] + 
-						"\nHeight: " + bounds[3] + 
-						"\nCrouch height: " + crouchHeight
-					);*/
 					
-					//System.out.println("Touching");
-					
+					//If player is more to the left side of obstacle, trigger left collision
 					if(x < tempObj.getX()) {
 							collisionR = true;
 					}
+					//If player is more to the right side of obstacle, trigger right collision
 					else if(x > tempObj.getX()) {
 							collisionL = true;
 					}
@@ -181,20 +175,20 @@ public class Square extends Entities{
 					
 					if(y + height / 2 >= tempObj.getY() - tempObj.getHeight() / 2 && y + height / 2 <= tempObj.getY() - tempObj.getHeight() / 2 + .25f) {
 						
-						//Do not set y to the top of tempObj if neither of the walls of player are colliding with walls of the tempObj
+						//When player is under object set forceCrouch and up collision to true
 						if(x - width / 2 != tempObj.getX() + tempObj.getWidth() / 2 && x + width / 2 != tempObj.getX() - tempObj.getWidth() / 2) {
+							velocityY = 0;	
+							y = tempObj.getY() - tempObj.getHeight() / 2 - height / 2;
+							
 							collisionU = true;
+							forceCrouch = true;
+							
+							//Prevents player from recognizing up collision as left or right collision
 							collisionL = false;
 							collisionR = false;
 							
-							forceCrouch = true;
-							
-							velocityY = 0;	
-							
 						}
 					}
-					
-					
 					
 					if(collisionR) {
 						velocityX = 0;
@@ -208,10 +202,10 @@ public class Square extends Entities{
 					}
 				
 				}
-				if(tempObj.id == ID.Obstacle && !collisionU && x - width / 2 <= tempObj.getX() + tempObj.getWidth() / 2 && x + width / 2 >= tempObj.getX() - tempObj.getWidth() / 2) {
-					if(y + HEIGHT / 2 >= tempObj.getY() - tempObj.getHeight() / 2 && y + HEIGHT / 2 <= tempObj.getY() - tempObj.getHeight() / 2 + .25f) {
+				//When player is below object but not colliding with it, but his standing height is colliding with tempObj trigger forceCrouch
+				if(tempObj.id == ID.Obstacle && !collisionU && x - width / 2 < tempObj.getX() + tempObj.getWidth() / 2 && x + width / 2 > tempObj.getX() - tempObj.getWidth() / 2) {
+					if(y + HEIGHT / 2 >= tempObj.getY() - tempObj.getHeight() / 2 && y + HEIGHT / 2 <= tempObj.getY() - tempObj.getHeight() / 2 + 1f) {
 						forceCrouch = true;
-						System.out.println("forceCrouch");
 					}
 				}
 
@@ -247,20 +241,28 @@ public class Square extends Entities{
 					
 					if(y + height / 2 >= tempObj.getY() - tempObj.getHeight() / 2 && y + height / 2 <= tempObj.getY() - tempObj.getHeight() / 2 + .25f) {
 						
-						//Do not set y to the top of tempObj if neither of the walls of player are colliding with walls of the tempObj
-						if(x - width / 2 != tempObj.getX() + tempObj.getWidth() / 2 && x + width / 2 != tempObj.getX() - tempObj.getWidth() / 2) {
+						//When player is under object set forceCrouch and up collision to true
+						if(x - width / 2 >= tempObj.getX() + tempObj.getWidth() / 2 && x + width / 2 <= tempObj.getX() - tempObj.getWidth() / 2) {
+							velocityY = 0;
+							y = tempObj.getY() - tempObj.getHeight() / 2 - height / 2;
+							
 							collisionU = true;
 							forceCrouch = true;
 							
-							velocityY = 0;	
+							//Prevents player from recognizing up collision as left or right collision
+							collisionL = false;
+							collisionR = false;
 							
 						}
 					}
 					
+					//If player is more to the left side of obstacle, trigger left collision
 					if(x < tempObj.getX() && !collisionU) {
 						collisionR = true;
 						x = tempObj.getX() - tempObj.getWidth() / 2 - width / 2;
 					}
+					
+					//If player is more to the right side of obstacle, trigger right collision
 					else if(x > tempObj.getX() && !collisionU) {
 						collisionL = true;
 						x = tempObj.getX() + (tempObj.getWidth() + width) / 2;
@@ -268,9 +270,8 @@ public class Square extends Entities{
 				}
 				
 				if(tempObj.id == ID.Obstacle && !collisionU && x - width / 2 <= tempObj.getX() + tempObj.getWidth() / 2 && x + width / 2 >= tempObj.getX() - tempObj.getWidth() / 2) {
-					if(y + HEIGHT / 2 >= tempObj.getY() - tempObj.getHeight() / 2 && y + HEIGHT / 2 <= tempObj.getY() - tempObj.getHeight() / 2 + .25f) {
+					if(y + HEIGHT / 2 >= tempObj.getY() - tempObj.getHeight() / 2 && y + HEIGHT / 2 <= tempObj.getY() - tempObj.getHeight() / 2 + 1f) {
 						forceCrouch = true;
-						System.out.println("forceCrouch");
 					}
 				}
 			}
