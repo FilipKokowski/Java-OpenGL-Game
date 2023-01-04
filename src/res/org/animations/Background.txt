@@ -1,0 +1,2 @@
+@
+/res/org/scene/background/bg.jpg

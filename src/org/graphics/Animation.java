@@ -1,10 +1,12 @@
 package org.graphics;
 
+import java.util.ArrayList;
+
 import org.resource.ImageResource;
 
 public class Animation {
 	
-	public ImageResource[] frames;
+	public ArrayList<ImageResource> frames = new ArrayList<>();
 	
 	private int currentFrame = 0;
 	
@@ -19,7 +21,7 @@ public class Animation {
 		if(currentTime > lastFrameTime + (1000000000 / FPS)) {
 			currentFrame++;
 			
-			if(currentFrame >= frames.length) {
+			if(currentFrame >= frames.size()) {
 				if(loop) currentFrame = 0;
 				else currentFrame--;
 			}
@@ -29,6 +31,6 @@ public class Animation {
 	}
 	
 	public ImageResource getImage() {
-		return frames[currentFrame];
+		return frames.get(currentFrame);
 	}
 }

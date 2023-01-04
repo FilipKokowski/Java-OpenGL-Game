@@ -1,11 +1,15 @@
 package org.scene.entities;
 
+import java.io.IOException;
+
+import org.engine.AnimationHandler;
 import org.engine.GameLoop;
 import org.engine.Handler;
 import org.gameobjects.Entities;
 import org.gameobjects.GameObject;
 import org.gameobjects.ID;
 import org.graphics.Animation;
+import org.graphics.EventListener;
 import org.graphics.Renderer;
 import org.input.KeyInput;
 import org.resource.ImageResource;
@@ -21,8 +25,10 @@ public class Player extends Entities{
 	//False == left, True == right
 	private static boolean lastFacing = false;
 	
+	private static String animationsPath = "/res/org/animations/Player.txt";
+	
 	public Player() {
-		super(0,0,WIDTH, HEIGHT);
+		super(0,0,WIDTH, HEIGHT, animationsPath);
 		
 		reloadCrouchHeight();
 		
@@ -33,60 +39,6 @@ public class Player extends Entities{
 		
 		currentAnimation = 0;
 	
-		animations = new Animation[10];
-		
-		animations[0] = new Animation();
-		animations[0].frames = new ImageResource[1];
-		animations[0].frames[0] = new ImageResource("/res/org/scene/entities/Player/Idle/idle.png");
-		
-		animations[1] = new Animation();
-		animations[1].frames = new ImageResource[4];
-		animations[1].frames[0] = new ImageResource("/res/org/scene/entities/Player/WalkLeft/walk0.png");
-		animations[1].frames[1] = new ImageResource("/res/org/scene/entities/Player/WalkLeft/walk1.png");
-		animations[1].frames[2] = new ImageResource("/res/org/scene/entities/Player/WalkLeft/walk2.png");
-		animations[1].frames[3] = new ImageResource("/res/org/scene/entities/Player/WalkLeft/walk3.png");
-		
-		animations[2] = new Animation();
-		animations[2].frames = new ImageResource[4];
-		animations[2].frames[0] = new ImageResource("/res/org/scene/entities/Player/WalkRight/walk0.png");
-		animations[2].frames[1] = new ImageResource("/res/org/scene/entities/Player/WalkRight/walk1.png");
-		animations[2].frames[2] = new ImageResource("/res/org/scene/entities/Player/WalkRight/walk2.png");
-		animations[2].frames[3] = new ImageResource("/res/org/scene/entities/Player/WalkRight/walk3.png");
-		
-		animations[3] = new Animation();
-		animations[3].frames = new ImageResource[1];
-		animations[3].frames[0] = new ImageResource("/res/org/scene/entities/Player/Idle/idleSkate.png");
-		
-		animations[4] = new Animation();
-		animations[4].frames = new ImageResource[1];
-		animations[4].frames[0] = new ImageResource("/res/org/scene/entities/Player/Idle/CrouchRightIdle.png");
-		
-		animations[5] = new Animation();
-		animations[5].frames = new ImageResource[1];
-		animations[5].frames[0] = new ImageResource("/res/org/scene/entities/Player/Idle/CrouchLeftIdle.png");
-		
-		animations[6] = new Animation();
-		animations[6].frames = new ImageResource[4];
-		animations[6].frames[0] = new ImageResource("/res/org/scene/entities/Player/CrouchLeft/CrouchLeft1.png");
-		animations[6].frames[1] = new ImageResource("/res/org/scene/entities/Player/CrouchLeft/CrouchLeft2.png");
-		animations[6].frames[2] = new ImageResource("/res/org/scene/entities/Player/CrouchLeft/CrouchLeft3.png");
-		animations[6].frames[3] = new ImageResource("/res/org/scene/entities/Player/CrouchLeft/CrouchLeft4.png");
-		
-		animations[7] = new Animation();
-		animations[7].frames = new ImageResource[4];
-		animations[7].frames[0] = new ImageResource("/res/org/scene/entities/Player/CrouchRight/CrouchRight1.png");
-		animations[7].frames[1] = new ImageResource("/res/org/scene/entities/Player/CrouchRight/CrouchRight2.png");
-		animations[7].frames[2] = new ImageResource("/res/org/scene/entities/Player/CrouchRight/CrouchRight3.png");
-		animations[7].frames[3] = new ImageResource("/res/org/scene/entities/Player/CrouchRight/CrouchRight4.png");
-		
-		animations[8] = new Animation();
-		animations[8].frames = new ImageResource[1];
-		animations[8].frames[0] = new ImageResource("/res/org/scene/entities/Player/Idle/idleSkateCrouchLeft.png");
-		
-		animations[9] = new Animation();
-		animations[9].frames = new ImageResource[1];
-		animations[9].frames[0] = new ImageResource("/res/org/scene/entities/Player/Idle/idleSkateCrouchRight.png");
-		
 		speed = 4;
 		speedCap = 8;
 	}

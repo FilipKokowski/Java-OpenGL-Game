@@ -3,8 +3,8 @@ package org.gameobjects;
 import org.scene.entities.Camera;
 
 public class Entities extends GameObject {
-	public Entities(float x, float y, float width, float height) {
-		super(x, y, width, height);
+	public Entities(float x, float y, float width, float height, String animationPath) {
+		super(x, y, width, height, animationPath);
 		// TODO Auto-generated constructor stub
 	}
 	

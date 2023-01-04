@@ -1,7 +1,9 @@
 package org.gameobjects;
 
+import java.io.IOException;
 import java.util.Iterator;
 
+import org.engine.AnimationHandler;
 import org.engine.Handler;
 import org.graphics.Animation;
 import org.graphics.Graphics;
@@ -24,25 +26,32 @@ public class GameObject {
 	
 	public float rotation = 0;
 	
-	public Animation[] animations;
+	public AnimationHandler animation;
 	public int currentAnimation = 0;
 	
 	public ID id = null;
 	
-	public GameObject(float x, float y, float width, float height) {
+	public GameObject(float x, float y, float width, float height, String animationPath) {
 		this.x = x;
 		this.y = y;
 		this.width = width;
 		this.height = height;
+		
+		try {
+			animation = new AnimationHandler(animationPath);
+		} catch (IOException e) {
+			
+		}
 	}
 		
 	public void update() {};
 
 	public void render() {
-		animations[currentAnimation].play();
+		
+		animation.get(currentAnimation).play();
 		
 		Graphics.Rotate(-rotation);
-		Graphics.drawImage(animations[currentAnimation].getImage(), x, y, width, height);
+		Graphics.drawImage(animation.get(currentAnimation).getImage(), x, y, width, height);
 		Graphics.Rotate(0);
 	}
 	
