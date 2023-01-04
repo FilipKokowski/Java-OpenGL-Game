@@ -1,26 +1,24 @@
 package org.scene.entities;
 
-import java.io.IOException;
 
-import org.engine.AnimationHandler;
 import org.engine.GameLoop;
 import org.engine.Handler;
 import org.gameobjects.Entities;
 import org.gameobjects.GameObject;
 import org.gameobjects.ID;
-import org.graphics.Animation;
-import org.graphics.EventListener;
+import org.graphics.Graphics;
 import org.graphics.Renderer;
 import org.input.KeyInput;
-import org.resource.ImageResource;
 
 import com.jogamp.newt.event.KeyEvent;
 
 public class Player extends Entities{
 	
 	
+	//w 1 h 2,3
+	
 	private static float HEIGHT = 1.25f;
-	private static float WIDTH = HEIGHT/2;
+	private static float WIDTH = HEIGHT/2f;
 	
 	//False == left, True == right
 	private static boolean lastFacing = false;
@@ -28,7 +26,7 @@ public class Player extends Entities{
 	private static String animationsPath = "/res/org/animations/Player.txt";
 	
 	public Player() {
-		super(0,0,WIDTH, HEIGHT, animationsPath);
+		super(0, 0, WIDTH, HEIGHT, animationsPath);
 		
 		reloadCrouchHeight();
 		
@@ -124,7 +122,7 @@ public class Player extends Entities{
 						}
 					}
 					
-					if(y + height / 2 >= tempObj.getY() - tempObj.getHeight() / 2 && y + height / 2 <= tempObj.getY() - tempObj.getHeight() / 2 + .25f) {
+					if(y + height / 2 >= tempObj.getY() - tempObj.getHeight() / 2 && y + height / 2 <= tempObj.getY() - tempObj.getHeight() / 2 + .125f) {
 						
 						//When player is under object set forceCrouch and up collision to true
 						if(x - width / 2 != tempObj.getX() + tempObj.getWidth() / 2 && x + width / 2 != tempObj.getX() - tempObj.getWidth() / 2) {
@@ -190,7 +188,7 @@ public class Player extends Entities{
 					velocityX = 0;
 					//System.out.println("Touching");
 					
-					if(y + height / 2 >= tempObj.getY() - tempObj.getHeight() / 2 && y + height / 2 <= tempObj.getY() - tempObj.getHeight() / 2 + .25f) {
+					if(y + height / 2 >= tempObj.getY() - tempObj.getHeight() / 2 && y + height / 2 <= tempObj.getY() - tempObj.getHeight() / 2 + .125f) {
 						
 						//When player is under object set forceCrouch and up collision to true
 						if(x - width / 2 >= tempObj.getX() + tempObj.getWidth() / 2 && x + width / 2 <= tempObj.getX() - tempObj.getWidth() / 2) {
@@ -220,7 +218,7 @@ public class Player extends Entities{
 					}
 				}
 				
-				if(tempObj.id == ID.Obstacle && !collisionU && x - width / 2 <= tempObj.getX() + tempObj.getWidth() / 2 && x + width / 2 >= tempObj.getX() - tempObj.getWidth() / 2) {
+				if(tempObj.id == ID.Obstacle && !collisionU && x - width / 2 < tempObj.getX() + tempObj.getWidth() / 2 && x + width / 2 > tempObj.getX() - tempObj.getWidth() / 2) {
 					if(y + HEIGHT / 2 >= tempObj.getY() - tempObj.getHeight() / 2 && y + HEIGHT / 2 <= tempObj.getY() - tempObj.getHeight() / 2 + 1f) {
 						forceCrouch = true;
 					}

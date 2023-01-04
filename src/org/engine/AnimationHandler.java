@@ -16,7 +16,6 @@ public class AnimationHandler {
 	private BufferedReader reader;
 	
 	private short index = -1;
-	private short line = 1;
 	
 	private ArrayList<Animation> animations =  new ArrayList<>();
 	
@@ -32,16 +31,13 @@ public class AnimationHandler {
 		
 		while((str = reader.readLine()) != null) {
 			if(str.length() == 1 && str.compareTo("@") == 0) {
-				System.out.println(str + " on line " + line);
 				animations.add(new Animation());
 				index++;
 			}
 			else {
-				System.out.println(str);
 				Animation animation = animations.get(index);
 				animation.frames.add(new ImageResource(str));
 			}
-			line++;
 		}
 	}
 	

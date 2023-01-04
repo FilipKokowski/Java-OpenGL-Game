@@ -5,7 +5,6 @@ import java.util.Iterator;
 
 import org.engine.AnimationHandler;
 import org.engine.Handler;
-import org.graphics.Animation;
 import org.graphics.Graphics;
 import org.graphics.Renderer;
 import org.scene.entities.Camera;

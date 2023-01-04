@@ -9,7 +9,7 @@ public class Obstacle extends GameObject{
 	private static String animationsPath = "";
 	
 	public Obstacle(float x, float y, float width, float height) {
-		super(x,y,width,height,animationsPath);
+		super(x, y, width, height, animationsPath);
 		
 		id = ID.Obstacle;
 	}
