@@ -6,10 +6,10 @@ import org.graphics.Graphics;
 
 public class Obstacle extends GameObject{
 
-	private static String animationsPath = "";
+	private static String animationPath = "";
 	
 	public Obstacle(float x, float y, float width, float height) {
-		super(x, y, width, height, animationsPath);
+		super(x, y, width, height, animationPath);
 		
 		id = ID.Obstacle;
 	}

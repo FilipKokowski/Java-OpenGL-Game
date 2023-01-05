@@ -23,10 +23,13 @@ public class Player extends Entities{
 	//False == left, True == right
 	private static boolean lastFacing = false;
 	
-	private static String animationsPath = "/res/org/animations/Player.txt";
+	private Boomerang boomer = new Boomerang(x, y, .25f, .25f);
+	private boolean boomerDeployed;
+	
+	private static String animationPath = "/res/org/animations/Player.txt";
 	
 	public Player() {
-		super(0, 0, WIDTH, HEIGHT, animationsPath);
+		super(0, 0, WIDTH, HEIGHT, animationPath);
 		
 		reloadCrouchHeight();
 		
@@ -292,6 +295,20 @@ public class Player extends Entities{
 			crouched = false;
 		}
 		
+		if(KeyInput.getKey(KeyEvent.VK_T) && !boomerDeployed) {
+			boomer.setX(x);
+			boomer.setY(y);
+			boomer.resetAngle();
+			boomer.setFacing(lastFacing);
+			boomer.setCooldown(5);
+			
+			System.out.println("x: " + boomer.getX());
+			System.out.println("y: " + boomer.getY());
+			
+			Handler.addGO(boomer);
+			boomerDeployed = true;
+		}
+		
 		boolean reset = false;
 		
 		if(KeyInput.getKey(KeyEvent.VK_X) && !reset) {
@@ -303,8 +320,18 @@ public class Player extends Entities{
 			reset = true;
 		} else if(!KeyInput.getKey(KeyEvent.VK_X) && reset) reset = false;
 		
+		if(boomer.destroy) {
+			Handler.removeGO(boomer);
+			boomer.destroy = false;
+			
+			boomerDeployed = false;
+		}
+		
+		
 		//Change x based on velocity
 		x += velocityX * GameLoop.updateDelta();
+		
+		boomer.cooldown -= GameLoop.updateDelta();
 		
 		
 		//Camera follow player

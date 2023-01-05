@@ -26,6 +26,8 @@ public class EventListener implements GLEventListener{
 		gl.glTranslatef(-Camera.x, 0, 0);
 		Handler.render();
 		gl.glTranslatef(Camera.x, 0, 0);
+		
+		Handler.renderHUD();
 
 	}
 

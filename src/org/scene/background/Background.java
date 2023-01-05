@@ -5,10 +5,10 @@ import org.graphics.Renderer;
 
 public class Background extends GameObject {
 
-	private static String animationsPath = "/res/org/animations/Background.txt";
+	private static String animationPath = "/res/org/animations/Background.txt";
 	
 	public Background(String path) {
-		super(0, 0, Renderer.unitsWide * 2, Renderer.unitsTall, animationsPath);	
+		super(0, 0, Renderer.unitsWide * 2, Renderer.unitsTall, animationPath);	
 		
 		/*animations = new Animation[1];
 		animations[0] = new Animation();
