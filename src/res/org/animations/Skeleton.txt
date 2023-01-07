@@ -1,0 +1,2 @@
+@
+\res\org\scene\entities\Skeleton\Frames\SkeletonFront.png

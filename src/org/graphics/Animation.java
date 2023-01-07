@@ -10,7 +10,7 @@ public class Animation {
 	
 	private int currentFrame = 0;
 	
-	public int FPS = 8;
+	public int FPS = 30;
 	private long lastFrameTime = 0;
 	
 	public boolean loop = true;

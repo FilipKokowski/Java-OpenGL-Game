@@ -14,7 +14,9 @@ public class Boomerang extends Entities{
 	private static String animationPath = "/res/org/animations/Boomerang.txt";
 	
 	private float rotationSpeed = 15f;
-	private float rotationRadius = 1f;
+	
+	private float horizontalRotationRadius = 1f;
+	private float verticalRotationRadius = 1f;
 	
 	//Angle of the path
 	private float angle;
@@ -39,7 +41,7 @@ public class Boomerang extends Entities{
 		id = ID.Projectile;
 		
 		x0 = x;
-		y0 = y + rotationRadius;
+		y0 = y + verticalRotationRadius;
 		
 		speed = .1f;
 		
@@ -60,8 +62,8 @@ public class Boomerang extends Entities{
 		else
 			angle -= speed;
 		
-		x = (float) (x0 + Math.cos(angle) * rotationRadius);
-		y = (float) (y0 + Math.sin(angle) * rotationRadius);
+		x = (float) (x0 + Math.cos(angle) * verticalRotationRadius);
+		y = (float) (y0 + Math.sin(angle) * verticalRotationRadius);
 		
 		for(int i = 0; i < Handler.gameObjects.size(); i++) {
 			GameObject tempObj = getAt(i);
@@ -81,7 +83,7 @@ public class Boomerang extends Entities{
 	}
 
 	public void setX(float x) { this.x0 = x; }
-	public void setY(float y) { this.y0 = y + rotationRadius; }
+	public void setY(float y) { this.y0 = y + verticalRotationRadius; }
 	
 	public void resetAngle() { angle = startingAngle; };
 	

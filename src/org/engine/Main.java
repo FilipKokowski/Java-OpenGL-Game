@@ -1,7 +1,6 @@
 package org.engine;
 
 import org.scene.background.Background;
-import org.scene.entities.Boomerang;
 import org.scene.entities.Obstacle;
 import org.scene.entities.Player;
 import org.graphics.Renderer;

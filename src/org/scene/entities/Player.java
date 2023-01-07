@@ -17,13 +17,13 @@ public class Player extends Entities{
 	
 	//w 1 h 2,3
 	
-	private static float HEIGHT = 1.25f;
-	private static float WIDTH = HEIGHT/2f;
+	private static float HEIGHT = 1.15f;
+	private static float WIDTH = HEIGHT/2.3f;
 	
 	//False == left, True == right
 	private static boolean lastFacing = false;
 	
-	private Boomerang boomer = new Boomerang(x, y, .25f, .25f);
+	private Boomerang boomer = new Boomerang(x, y, .1875f, .375f);
 	private boolean boomerDeployed;
 	
 	private static String animationPath = "/res/org/animations/Player.txt";
@@ -40,8 +40,9 @@ public class Player extends Entities{
 		
 		currentAnimation = 0;
 	
-		speed = 4;
-		speedCap = 8;
+		speed = 3;
+		
+		speedCap = 1.5f;
 	}
 	
 	/*public void render() {
