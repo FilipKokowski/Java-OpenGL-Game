@@ -39,12 +39,12 @@ public class GameLoop {
 					Renderer.render();
 					
 					
-					FPS++;
+					/*FPS++;
 					if(System.nanoTime() >= lastFPSCheck + 1000000000) {
 						System.out.println(FPS);
 						FPS = 0;
 						lastFPSCheck = System.nanoTime();
-					}
+					}*/
 					
 					long timeTaken = System.nanoTime() - currentTime;
 					

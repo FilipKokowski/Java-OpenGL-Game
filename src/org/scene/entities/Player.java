@@ -17,8 +17,8 @@ public class Player extends Entities{
 	
 	//w 1 h 2,3
 	
-	private static float HEIGHT = 1.15f;
-	private static float WIDTH = HEIGHT/2.3f;
+	private static final float HEIGHT = 1.15f;
+	private static final float WIDTH = HEIGHT/2.3f;
 	
 	//False == left, True == right
 	private static boolean lastFacing = false;
@@ -129,7 +129,7 @@ public class Player extends Entities{
 					if(y + height / 2 >= tempObj.getY() - tempObj.getHeight() / 2 && y + height / 2 <= tempObj.getY() - tempObj.getHeight() / 2 + .125f) {
 						
 						//When player is under object set forceCrouch and up collision to true
-						if(x - width / 2 != tempObj.getX() + tempObj.getWidth() / 2 && x + width / 2 != tempObj.getX() - tempObj.getWidth() / 2) {
+						if(x + width / 2 > tempObj.getX() - tempObj.getWidth() / 2 && x - width / 2 < tempObj.getX() + tempObj.getWidth() / 2) {
 							velocityY = 0;	
 							y = tempObj.getY() - tempObj.getHeight() / 2 - height / 2;
 							
@@ -157,7 +157,7 @@ public class Player extends Entities{
 				}
 				//When player is below object but not colliding with it, but his standing height is colliding with tempObj trigger forceCrouch
 				if(tempObj.id == ID.Obstacle && !collisionU && x - width / 2 < tempObj.getX() + tempObj.getWidth() / 2 && x + width / 2 > tempObj.getX() - tempObj.getWidth() / 2) {
-					if(y + HEIGHT / 2 >= tempObj.getY() - tempObj.getHeight() / 2 && y + HEIGHT / 2 <= tempObj.getY() - tempObj.getHeight() / 2 + 1f) {
+					if(y - height / 2 + HEIGHT >= tempObj.getY() - tempObj.getHeight() / 2 && y - height / 2 + HEIGHT <= tempObj.getY() - tempObj.getHeight() / 2 + .5f) {
 						forceCrouch = true;
 					}
 				}
@@ -193,12 +193,10 @@ public class Player extends Entities{
 					//System.out.println("Touching");
 					
 					if(y + height / 2 >= tempObj.getY() - tempObj.getHeight() / 2 && y + height / 2 <= tempObj.getY() - tempObj.getHeight() / 2 + .125f) {
-						
 						//When player is under object set forceCrouch and up collision to true
-						if(x - width / 2 >= tempObj.getX() + tempObj.getWidth() / 2 && x + width / 2 <= tempObj.getX() - tempObj.getWidth() / 2) {
+						if(x + width / 2 > tempObj.getX() - tempObj.getWidth() / 2 && x - width / 2 < tempObj.getX() + tempObj.getWidth() / 2) {
 							velocityY = 0;
 							y = tempObj.getY() - tempObj.getHeight() / 2 - height / 2;
-							
 							collisionU = true;
 							forceCrouch = true;
 							
@@ -223,10 +221,11 @@ public class Player extends Entities{
 				}
 				
 				if(tempObj.id == ID.Obstacle && !collisionU && x - width / 2 < tempObj.getX() + tempObj.getWidth() / 2 && x + width / 2 > tempObj.getX() - tempObj.getWidth() / 2) {
-					if(y + HEIGHT / 2 >= tempObj.getY() - tempObj.getHeight() / 2 && y + HEIGHT / 2 <= tempObj.getY() - tempObj.getHeight() / 2 + 1f) {
+					if(y - height / 2 + HEIGHT >= tempObj.getY() - tempObj.getHeight() / 2 && y - height / 2 + HEIGHT <= tempObj.getY() - tempObj.getHeight() / 2 + .5f) {
 						forceCrouch = true;
 					}
 				}
+				
 			}
 			
 			
@@ -262,7 +261,7 @@ public class Player extends Entities{
 		if((onGround || collisionD) && crouched) speedCap = 2;
 		
 		//Crouching
-		if(KeyInput.getKey(KeyEvent.VK_SHIFT) && !crouched) {
+		if((KeyInput.getKey(KeyEvent.VK_SHIFT) && !crouched) ) {
 			
 			if(onGround || collisionD)
 				speedCap = crouchSpeed;
@@ -290,7 +289,7 @@ public class Player extends Entities{
 			
 			if(crouched) { 
 				y += height / 6;
-				speedCap = 8;
+				speedCap = 1.5f;
 			}
 			
 			crouched = false;
