@@ -31,8 +31,8 @@ public class Player extends Entities{
 	public Player() {
 		super(0, 0, WIDTH, HEIGHT, animationPath);
 		
-		jumpForce = 4;
-		mass = .5f;
+		jumpForce = 7;
+		mass = 3;
 		
 		id = ID.Player;
 		
@@ -66,8 +66,6 @@ public class Player extends Entities{
 					currentAnimation = 5;
 			}
 		}
-		
-	
 		
 		if(velocityX <= friction && velocityX >= -friction) velocityX = 0;
 		else if(velocityX != 0)	{
@@ -119,6 +117,7 @@ public class Player extends Entities{
 						//Do not set y to the top of tempObj if neither of the walls of player are colliding with walls of the tempObj
 						if(x - width / 2 != tempObj.getX() + tempObj.getWidth() / 2 && x + width / 2 != tempObj.getX() - tempObj.getWidth() / 2) {
 							collisionD = true;
+							onGround = true;
 							collisionR = false;
 							collisionL = false;
 							
@@ -169,6 +168,7 @@ public class Player extends Entities{
 			if((KeyInput.getKey(KeyEvent.VK_W) || KeyInput.getKey(KeyEvent.VK_SPACE)) && collisionD){
 				velocityY = jumpForce;
 				y += velocityY * GameLoop.updateDelta();
+				currentAnimation = 10;
 			}
 		}
 		else {
@@ -179,9 +179,10 @@ public class Player extends Entities{
 			y = (-Renderer.unitsTall + height) / 2; 
 			
 			//Jumping 
-			if(KeyInput.getKey(KeyEvent.VK_W) || KeyInput.getKey(KeyEvent.VK_SPACE)){
+			if((KeyInput.getKey(KeyEvent.VK_W) || KeyInput.getKey(KeyEvent.VK_SPACE)) && onGround){
 				velocityY = jumpForce;
 				y += velocityY * GameLoop.updateDelta();
+				currentAnimation = 10;
 			}
 			
 			//Collision detection
@@ -338,7 +339,8 @@ public class Player extends Entities{
 		//Camera follow player
 		Camera.x += (x - Camera.x) * speed * GameLoop.updateDelta();
 		
-		//System.out.println("forceCrouch = " + forceCrouch);
+		System.out.println("currentAnimation = " + currentAnimation);
+		System.out.println("onGround = " + onGround);
 		
 		/*System.out.println(
 		"\n\nUp collision: " + collisionU + 
@@ -346,7 +348,7 @@ public class Player extends Entities{
 		"\nLeft collision: " + collisionL + 
 		"\nRight collision: " + collisionR 	
 		);*/
-		System.out.println(
+		/*System.out.println(
 		"\n\nX: " + x +		
 		"\nY: " + y +
 		"\nWidth: " + width + 
@@ -354,7 +356,7 @@ public class Player extends Entities{
 		"\nCrouch height: " + crouchHeight +
 		"\nSpeed cap: " + speedCap +
 		"\nCrouch speed cap: " + crouchSpeedCap 
-		);
+		);*/
 		
 		forceCrouch = false;
 		
