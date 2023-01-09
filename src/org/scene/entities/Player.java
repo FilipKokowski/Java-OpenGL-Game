@@ -31,18 +31,19 @@ public class Player extends Entities{
 	public Player() {
 		super(0, 0, WIDTH, HEIGHT, animationPath);
 		
-		reloadCrouchHeight();
-		
-		jumpForce = 7;
-		reloadCrouchJumpForce();
+		jumpForce = 4;
+		mass = .5f;
 		
 		id = ID.Player;
 		
 		currentAnimation = 0;
 	
 		speed = 3;
-		
 		speedCap = 1.5f;
+		
+		reloadCrouchHeight();
+		reloadCrouchJumpForce();
+		reloadCrouchSpeedCap();
 	}
 	
 	/*public void render() {
@@ -258,13 +259,13 @@ public class Player extends Entities{
 			else velocityX -= .25f;
 		}
 		
-		if((onGround || collisionD) && crouched) speedCap = 2;
+		if((onGround || collisionD) && crouched) speedCap = crouchSpeedCap;
 		
 		//Crouching
 		if((KeyInput.getKey(KeyEvent.VK_SHIFT) && !crouched) ) {
 			
 			if(onGround || collisionD)
-				speedCap = crouchSpeed;
+				speedCap = crouchSpeedCap;
 			
 			//speed = crouchSpeed;
 			jumpForce = crouchJumpForce;
@@ -289,7 +290,7 @@ public class Player extends Entities{
 			
 			if(crouched) { 
 				y += height / 6;
-				speedCap = 1.5f;
+				reloadSpeedCap();
 			}
 			
 			crouched = false;
@@ -345,13 +346,15 @@ public class Player extends Entities{
 		"\nLeft collision: " + collisionL + 
 		"\nRight collision: " + collisionR 	
 		);*/
-		/*System.out.println(
+		System.out.println(
 		"\n\nX: " + x +		
 		"\nY: " + y +
 		"\nWidth: " + width + 
 		"\nHeight: " + height + 
-		"\nCrouch height: " + crouchHeight
-		);*/
+		"\nCrouch height: " + crouchHeight +
+		"\nSpeed cap: " + speedCap +
+		"\nCrouch speed cap: " + crouchSpeedCap 
+		);
 		
 		forceCrouch = false;
 		

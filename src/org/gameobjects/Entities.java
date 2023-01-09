@@ -16,7 +16,7 @@ public class Entities extends GameObject {
 	public float velocityY = 0;
 	
 	public float speed = 3;
-	public float crouchSpeed = speed / 1.5f;
+	public float crouchSpeedCap = speed / 1.5f;
 	public float speedCap = 6;
 	public float acceleration = speed / 100;
 	public float friction = speed * acceleration / 2;
@@ -44,12 +44,12 @@ public class Entities extends GameObject {
 		jumpForce = crouchJumpForce / 2;
 	}
 	
-	public void reloadCrouchSpeed() {
-		crouchSpeed = speed / 1.5f;
+	public void reloadCrouchSpeedCap() {
+		crouchSpeedCap = speedCap / 1.5f;
 	}
 	
-	public void reloadSpeed() {
-		speed = crouchSpeed / 1.5f;
+	public void reloadSpeedCap() {
+		speedCap = crouchSpeedCap * 1.5f;
 	}
 	
 	public void clearCollision() {
