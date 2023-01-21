@@ -21,8 +21,8 @@ public class Player extends Entities{
 	private static final float WHRatio = 2.3f;
 	
 	//w 1 h 2,3
-	private static final float HEIGHT = 1.15f;
-	private static final float WIDTH = HEIGHT/WHRatio;
+	private static final float initialHeight = 1.15f;
+	private static final float initialWidth = initialHeight/WHRatio;
 	
 	//False == left, True == right
 	private static boolean lastFacing = false;
@@ -33,7 +33,10 @@ public class Player extends Entities{
 	private static String animationPath = "/res/org/animations/Player.txt";
 	
 	public Player(){
-		super(0, 0, WIDTH, HEIGHT, animationPath);
+		super(0, 0, initialWidth, initialHeight, animationPath);
+		
+		HEIGHT = initialHeight;
+		WIDTH = initialWidth;
 		
 		jumpForce = 7;
 		mass = 3;
@@ -66,11 +69,10 @@ public class Player extends Entities{
 		paths[13] = "/res/org/scene/entities/Skeleton/Parts/Front/FrontRightFoot.png";
 		
 		try {
-			for(int i=0; i < 14; i++) {
+			for(int i=0; i < 2; i++) {
 				BodyParts bodyPart = new BodyParts(paths[i]);
 				bodyPart.setX(i);
 				bodyPart.currentAnimation = i;
-				bodyPart.mass = -.01f;
 				Handler.addGO(bodyPart);
 			}
 		} catch (IOException e) {
@@ -119,151 +121,14 @@ public class Player extends Entities{
 		else if(velocityY != 0) 
 			velocityY += (velocityY >= 0) ? (-friction) : (friction);
 		
+		//Applying gravity and collision detection
+		applyPhysics(true, true);
 		
-		if(y > (-Renderer.unitsTall + height) / 2) { 
-			gravity();
-			onGround = false;
-			
+		//Jump if player's standing on obstacle
+		if((KeyInput.getKey(KeyEvent.VK_W) || KeyInput.getKey(KeyEvent.VK_SPACE)) && onGround){
+			velocityY = jumpForce;
 			y += velocityY * GameLoop.updateDelta();
-			
-			//Collision detection
-			for(int i = 0; i < Handler.gameObjects.size(); i++) {
-				
-				//Grab one of gameObjects
-				GameObject tempObj = getAt(i);
-				
-				//Check if objects ID is ID.Obstacle and is intersecting with player
-				if(tempObj.id == ID.Obstacle && doOverlap(getBounds(), tempObj.getBounds())){
-					
-					//If player is more to the left side of obstacle, trigger left collision
-					if(x < tempObj.getX()) {
-							collisionR = true;
-					}
-					//If player is more to the right side of obstacle, trigger right collision
-					else if(x > tempObj.getX()) {
-							collisionL = true;
-					}
-
-					//If player is beetween X1 and X2 of tempobject, stop falling
-					if(y - height / 2 <= tempObj.getY() + tempObj.getHeight() / 2 && y - height / 2 >= tempObj.getY() + tempObj.getHeight() / 2 - .25f) {
-						
-						//Do not set y to the top of tempObj if neither of the walls of player are colliding with walls of the tempObj
-						if(x - width / 2 != tempObj.getX() + tempObj.getWidth() / 2 && x + width / 2 != tempObj.getX() - tempObj.getWidth() / 2) {
-							collisionD = true;
-							onGround = true;
-							collisionR = false;
-							collisionL = false;
-							
-							velocityY = 0;
-							y = tempObj.getY() + tempObj.getHeight() / 2 + height / 2;
-						}
-					}
-					
-					if(y + height / 2 >= tempObj.getY() - tempObj.getHeight() / 2 && y + height / 2 <= tempObj.getY() - tempObj.getHeight() / 2 + .125f) {
-						
-						//When player is under object set forceCrouch and up collision to true
-						if(x + width / 2 > tempObj.getX() - tempObj.getWidth() / 2 && x - width / 2 < tempObj.getX() + tempObj.getWidth() / 2) {
-							velocityY = 0;	
-							y = tempObj.getY() - tempObj.getHeight() / 2 - height / 2;
-							
-							collisionU = true;
-							forceCrouch = true;
-							
-							//Prevents player from recognizing up collision as left or right collision
-							collisionL = false;
-							collisionR = false;
-							
-						}
-					}
-					
-					if(collisionR) {
-						velocityX = 0;
-						//System.out.println("tempObj.getX() - (tempObj.getWidth() + width) / 2 = " + (tempObj.getX() - (tempObj.getWidth() + width) / 2) + collisionR);
-						x = tempObj.getX() - (tempObj.getWidth() + width) / 2;
-					}
-					if(collisionL) {
-						velocityX = 0;
-						//System.out.println("tempObj.getX() + (tempObj.getWidth() + width) / 2 = " + (tempObj.getX() + (tempObj.getWidth() + width) / 2) + collisionL);
-						x = tempObj.getX() + (tempObj.getWidth() + width) / 2;
-					}
-				
-				}
-				//When player is below object but not colliding with it, but his standing height is colliding with tempObj trigger forceCrouch
-				if(tempObj.id == ID.Obstacle && !collisionU && x - width / 2 < tempObj.getX() + tempObj.getWidth() / 2 && x + width / 2 > tempObj.getX() - tempObj.getWidth() / 2) {
-					if(y - height / 2 + HEIGHT >= tempObj.getY() - tempObj.getHeight() / 2 && y - height / 2 + HEIGHT <= tempObj.getY() - tempObj.getHeight() / 2 + .5f) {
-						forceCrouch = true;
-					}
-				}
-
-			}
-			
-			//Jump if player's standing on obstacle
-			if((KeyInput.getKey(KeyEvent.VK_W) || KeyInput.getKey(KeyEvent.VK_SPACE)) && collisionD){
-				velocityY = jumpForce;
-				y += velocityY * GameLoop.updateDelta();
-				currentAnimation = 10;
-			}
-		}
-		else {
-			
-			onGround = true;
-			
-			//Set y to bottom of the screen
-			y = (-Renderer.unitsTall + height) / 2; 
-			
-			//Jumping 
-			if((KeyInput.getKey(KeyEvent.VK_W) || KeyInput.getKey(KeyEvent.VK_SPACE)) && onGround){
-				velocityY = jumpForce;
-				y += velocityY * GameLoop.updateDelta();
-				currentAnimation = 10;
-			}
-			
-			//Collision detection
-			for(int i = 0; i < Handler.gameObjects.size(); i++) {
-				GameObject tempObj = getAt(i);
-				
-				
-				if(tempObj.id == ID.Obstacle && doOverlap(getBounds(), tempObj.getBounds())){
-					velocityX = 0;
-					//System.out.println("Touching");
-					
-					if(y + height / 2 >= tempObj.getY() - tempObj.getHeight() / 2 && y + height / 2 <= tempObj.getY() - tempObj.getHeight() / 2 + .125f) {
-						//When player is under object set forceCrouch and up collision to true
-						if(x + width / 2 > tempObj.getX() - tempObj.getWidth() / 2 && x - width / 2 < tempObj.getX() + tempObj.getWidth() / 2) {
-							velocityY = 0;
-							y = tempObj.getY() - tempObj.getHeight() / 2 - height / 2;
-							collisionU = true;
-							forceCrouch = true;
-							
-							//Prevents player from recognizing up collision as left or right collision
-							collisionL = false;
-							collisionR = false;
-							
-						}
-					}
-					
-					//If player is more to the left side of obstacle, trigger left collision
-					if(x < tempObj.getX() && !collisionU) {
-						collisionR = true;
-						x = tempObj.getX() - tempObj.getWidth() / 2 - width / 2;
-					}
-					
-					//If player is more to the right side of obstacle, trigger right collision
-					else if(x > tempObj.getX() && !collisionU) {
-						collisionL = true;
-						x = tempObj.getX() + (tempObj.getWidth() + width) / 2;
-					}
-				}
-				
-				if(tempObj.id == ID.Obstacle && !collisionU && x - width / 2 < tempObj.getX() + tempObj.getWidth() / 2 && x + width / 2 > tempObj.getX() - tempObj.getWidth() / 2) {
-					if(y - height / 2 + HEIGHT >= tempObj.getY() - tempObj.getHeight() / 2 && y - height / 2 + HEIGHT <= tempObj.getY() - tempObj.getHeight() / 2 + .5f) {
-						forceCrouch = true;
-					}
-				}
-				
-			}
-			
-			
+			currentAnimation = 10;
 		}
 		
 		
@@ -337,8 +202,8 @@ public class Player extends Entities{
 			boomer.setFacing(lastFacing);
 			boomer.setCooldown(5);
 			
-			System.out.println("x: " + boomer.getX());
-			System.out.println("y: " + boomer.getY());
+			//System.out.println("x: " + boomer.getX());
+			//System.out.println("y: " + boomer.getY());
 			
 			Handler.addGO(boomer);
 			boomerDeployed = true;
@@ -372,26 +237,13 @@ public class Player extends Entities{
 		//Camera follow player
 		Camera.x += (x - Camera.x) * speed * GameLoop.updateDelta();
 		
-		if((MouseInput.getMouseX() > x - width / 2 && MouseInput.getMouseX() < x + width / 2
-				&& MouseInput.getMouseY() > y - height / 2 && MouseInput.getMouseY() < y + height / 2 && MouseInput.pressed && !MouseInput.draggingSmth) || dragged) {
-			x = MouseInput.getMouseX();
-			y = MouseInput.getMouseY();
-			velocityY = 0;
-			velocityX = 0;
-			dragged = true;
-			MouseInput.draggingSmth = true;
-			//System.out.println("Over player");
-		}
-		if(!MouseInput.pressed) {
-			dragged = false;
-			MouseInput.draggingSmth = false;
-		}
+		draggable();
 		
-		System.out.println("x = " + x + " y = " + y);
-		System.out.println("mouseX = " + MouseInput.getMouseX() + " mouseY = " + MouseInput.getMouseY());
+		//System.out.println("x = " + x + " y = " + y);
+		//System.out.println("mouseX = " + MouseInput.getMouseX() + " mouseY = " + MouseInput.getMouseY());
 		
-		//System.out.println("currentAnimation = " + currentAnimation);
-		//System.out.println("onGround = " + onGround);
+		//System.out.println("Player down collision = " + collisionD);
+		//System.out.println("Player onGround = " + onGround);
 		
 		/*System.out.println(
 		"\n\nUp collision: " + collisionU + 

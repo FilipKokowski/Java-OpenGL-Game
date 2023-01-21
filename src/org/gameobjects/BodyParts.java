@@ -31,23 +31,18 @@ public class BodyParts extends Entities{
 		width = pixelWidth / 250;
 		height = width / WHRatio;
 		
+		//Default width and height
+		WIDTH = width;
+		HEIGHT = height;
+		
 	}
 	
 	public void update() {
-		if((MouseInput.getMouseX() > x - width / 2 && MouseInput.getMouseX() < x + width / 2
-				&& MouseInput.getMouseY() > y - height / 2 && MouseInput.getMouseY() < y + height / 2 && MouseInput.pressed && !MouseInput.draggingSmth) || dragged) {
-			x = MouseInput.getMouseX();
-			y = MouseInput.getMouseY();
-			velocityY = 0;
-			velocityX = 0;
-			dragged = true;
-			MouseInput.draggingSmth = true;
-			//System.out.println("Over player");
-		}
-		if(!MouseInput.pressed) {
-			dragged = false;
-			MouseInput.draggingSmth = false;
-		}
+		
+		applyPhysics(true, true);
+		draggable();
+		
+		
 	}
 	
 	public void setX(float x) {

@@ -7,11 +7,15 @@ import org.engine.AnimationHandler;
 import org.engine.Handler;
 import org.graphics.Graphics;
 import org.graphics.Renderer;
+import org.input.MouseInput;
 import org.scene.entities.Camera;
 
 public class GameObject {
 	protected float x = 0;
 	protected float y = 0;
+	
+	protected float velocityX = 0;
+	protected float velocityY = 0;
 	
 	protected float width = 1;
 	protected float height = 1;
@@ -93,6 +97,23 @@ public class GameObject {
 		}
 		
 		return false;
+	}
+	
+	public void draggable() {
+		if((MouseInput.getMouseX() > x - width / 2 && MouseInput.getMouseX() < x + width / 2
+				&& MouseInput.getMouseY() > y - height / 2 && MouseInput.getMouseY() < y + height / 2 && MouseInput.pressed && !MouseInput.draggingSmth) || dragged) {
+			x = MouseInput.getMouseX();
+			y = MouseInput.getMouseY();
+			velocityY = 0;
+			velocityX = 0;
+			dragged = true;
+			MouseInput.draggingSmth = true;
+			//System.out.println("Over player");
+		}
+		if(!MouseInput.pressed) {
+			dragged = false;
+			MouseInput.draggingSmth = false;
+		}
 	}
 	
 	public GameObject getAt(int index) {
