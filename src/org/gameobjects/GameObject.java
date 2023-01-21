@@ -25,6 +25,8 @@ public class GameObject {
 	
 	public float rotation = 0;
 	
+	public boolean dragged;
+	
 	public AnimationHandler animation;
 	public int currentAnimation = 0;
 	
@@ -110,8 +112,12 @@ public class GameObject {
 		crouchHeight = (height / 3) * 2;
 	}
 	
-	public void setWidth() {
-		
+	public void setWidth(float width) {
+		this.width = width;
+	}
+	
+	public void setHeight(float height) {
+		this.height = height;
 	}
 	
 }

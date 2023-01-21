@@ -1,24 +1,28 @@
 package org.scene.entities;
 
 
+import java.io.IOException;
+
 import org.engine.GameLoop;
 import org.engine.Handler;
+import org.gameobjects.BodyParts;
 import org.gameobjects.Entities;
 import org.gameobjects.GameObject;
 import org.gameobjects.ID;
 import org.graphics.Graphics;
 import org.graphics.Renderer;
 import org.input.KeyInput;
+import org.input.MouseInput;
 
 import com.jogamp.newt.event.KeyEvent;
 
 public class Player extends Entities{
 	
+	private static final float WHRatio = 2.3f;
 	
 	//w 1 h 2,3
-	
 	private static final float HEIGHT = 1.15f;
-	private static final float WIDTH = HEIGHT/2.3f;
+	private static final float WIDTH = HEIGHT/WHRatio;
 	
 	//False == left, True == right
 	private static boolean lastFacing = false;
@@ -28,7 +32,7 @@ public class Player extends Entities{
 	
 	private static String animationPath = "/res/org/animations/Player.txt";
 	
-	public Player() {
+	public Player(){
 		super(0, 0, WIDTH, HEIGHT, animationPath);
 		
 		jumpForce = 7;
@@ -44,6 +48,35 @@ public class Player extends Entities{
 		reloadCrouchHeight();
 		reloadCrouchJumpForce();
 		reloadCrouchSpeedCap();
+		
+		String paths[] = new String[14];
+		paths[0] = "/res/org/scene/entities/Skeleton/Parts/Front/FrontBody.png";
+		paths[1] = "/res/org/scene/entities/Skeleton/Parts/Front/FrontHead.png";
+		paths[2] = "/res/org/scene/entities/Skeleton/Parts/Front/FrontLeftArmDown.png";
+		paths[3] = "/res/org/scene/entities/Skeleton/Parts/Front/FrontLeftArmUp.png";
+		paths[4] = "/res/org/scene/entities/Skeleton/Parts/Front/FrontLeftHand.png";
+		paths[5] = "/res/org/scene/entities/Skeleton/Parts/Front/FrontLeftFoot.png";
+		paths[6] = "/res/org/scene/entities/Skeleton/Parts/Front/FrontLeftLegDown.png";
+		paths[7] = "/res/org/scene/entities/Skeleton/Parts/Front/FrontLeftLegUp.png";
+		paths[8] = "/res/org/scene/entities/Skeleton/Parts/Front/FrontRightArmDown.png";
+		paths[9] = "/res/org/scene/entities/Skeleton/Parts/Front/FrontRightArmUp.png";
+		paths[10] = "/res/org/scene/entities/Skeleton/Parts/Front/FrontRightHand.png";
+		paths[11] = "/res/org/scene/entities/Skeleton/Parts/Front/FrontRightLegDown.png";
+		paths[12] = "/res/org/scene/entities/Skeleton/Parts/Front/FrontRightLegUp.png";
+		paths[13] = "/res/org/scene/entities/Skeleton/Parts/Front/FrontRightFoot.png";
+		
+		try {
+			for(int i=0; i < 14; i++) {
+				BodyParts bodyPart = new BodyParts(paths[i]);
+				bodyPart.setX(i);
+				bodyPart.currentAnimation = i;
+				bodyPart.mass = -.01f;
+				Handler.addGO(bodyPart);
+			}
+		} catch (IOException e) {
+			// TODO Auto-generated catch block
+			e.printStackTrace();
+		}
 	}
 	
 	/*public void render() {
@@ -339,8 +372,26 @@ public class Player extends Entities{
 		//Camera follow player
 		Camera.x += (x - Camera.x) * speed * GameLoop.updateDelta();
 		
-		System.out.println("currentAnimation = " + currentAnimation);
-		System.out.println("onGround = " + onGround);
+		if((MouseInput.getMouseX() > x - width / 2 && MouseInput.getMouseX() < x + width / 2
+				&& MouseInput.getMouseY() > y - height / 2 && MouseInput.getMouseY() < y + height / 2 && MouseInput.pressed && !MouseInput.draggingSmth) || dragged) {
+			x = MouseInput.getMouseX();
+			y = MouseInput.getMouseY();
+			velocityY = 0;
+			velocityX = 0;
+			dragged = true;
+			MouseInput.draggingSmth = true;
+			//System.out.println("Over player");
+		}
+		if(!MouseInput.pressed) {
+			dragged = false;
+			MouseInput.draggingSmth = false;
+		}
+		
+		System.out.println("x = " + x + " y = " + y);
+		System.out.println("mouseX = " + MouseInput.getMouseX() + " mouseY = " + MouseInput.getMouseY());
+		
+		//System.out.println("currentAnimation = " + currentAnimation);
+		//System.out.println("onGround = " + onGround);
 		
 		/*System.out.println(
 		"\n\nUp collision: " + collisionU + 

@@ -6,12 +6,12 @@
 		</attributes>
 	</classpathentry>
 	<classpathentry kind="src" path="src"/>
-	<classpathentry kind="lib" path="C:/Users/filip/Desktop/Projekty/Java-OpenGL-Game/lib/gluegen-rt.jar">
+	<classpathentry kind="lib" path="./lib/gluegen-rt.jar">
 		<attributes>
 			<attribute name="org.eclipse.jdt.launching.CLASSPATH_ATTR_LIBRARY_PATH_ENTRY" value="Java-OpenGL-Game/lib/natives/windows-amd64"/>
 		</attributes>
 	</classpathentry>
-	<classpathentry kind="lib" path="C:/Users/filip/Desktop/Projekty/Java-OpenGL-Game/lib/jogl-all.jar">
+	<classpathentry kind="lib" path="./lib/jogl-all.jar">
 		<attributes>
 			<attribute name="org.eclipse.jdt.launching.CLASSPATH_ATTR_LIBRARY_PATH_ENTRY" value="Java-OpenGL-Game/lib/natives/windows-amd64"/>
 		</attributes>
