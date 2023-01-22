@@ -42,6 +42,7 @@ public class BodyParts extends Entities{
 		applyPhysics(true, true);
 		draggable();
 		
+		//System.out.println("Body part collisionD = " + collisionD);
 		
 	}
 	

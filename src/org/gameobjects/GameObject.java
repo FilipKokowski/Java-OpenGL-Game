@@ -104,10 +104,12 @@ public class GameObject {
 				&& MouseInput.getMouseY() > y - height / 2 && MouseInput.getMouseY() < y + height / 2 && MouseInput.pressed && !MouseInput.draggingSmth) || dragged) {
 			x = MouseInput.getMouseX();
 			y = MouseInput.getMouseY();
+			rotation += MouseInput.rotation;
 			velocityY = 0;
 			velocityX = 0;
 			dragged = true;
 			MouseInput.draggingSmth = true;
+			MouseInput.rotation = 0;
 			//System.out.println("Over player");
 		}
 		if(!MouseInput.pressed) {

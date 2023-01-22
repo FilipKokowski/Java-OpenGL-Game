@@ -69,7 +69,7 @@ public class Player extends Entities{
 		paths[13] = "/res/org/scene/entities/Skeleton/Parts/Front/FrontRightFoot.png";
 		
 		try {
-			for(int i=0; i < 2; i++) {
+			for(int i=0; i < 14; i++) {
 				BodyParts bodyPart = new BodyParts(paths[i]);
 				bodyPart.setX(i);
 				bodyPart.currentAnimation = i;

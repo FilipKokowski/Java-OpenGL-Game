@@ -75,7 +75,7 @@ public class Entities extends GameObject {
 					//Check if objects ID is ID.Obstacle and is intersecting with entity
 					if(tempObj.id == ID.Obstacle && doOverlap(getBounds(), tempObj.getBounds())){
 						
-						//If entity is more to the left side of obstacle, trigger left collision
+						//If entity is more to the left side of obstacle, trigger left collisionW
 						if(x < tempObj.getX()) {
 								collisionR = true;
 						}
@@ -99,7 +99,7 @@ public class Entities extends GameObject {
 							}
 						}
 						
-						if(y + height / 2 >= tempObj.getY() - tempObj.getHeight() / 2 && y + height / 2 <= tempObj.getY() - tempObj.getHeight() / 2 + .125f) {
+						if(y + height / 2 >= tempObj.getY() - tempObj.getHeight() / 2 && y + height / 2 <= tempObj.getY() - tempObj.getHeight() / 2 + .5f) {
 							
 							//When entity is under object set forceCrouch and up collision to true
 							if(x + width / 2 > tempObj.getX() - tempObj.getWidth() / 2 && x - width / 2 < tempObj.getX() + tempObj.getWidth() / 2) {
@@ -130,7 +130,7 @@ public class Entities extends GameObject {
 					}
 					//When player is below object but not colliding with it, but his standing height is colliding with tempObj trigger forceCrouch
 					if(tempObj.id == ID.Obstacle && !collisionU && x - width / 2 < tempObj.getX() + tempObj.getWidth() / 2 && x + width / 2 > tempObj.getX() - tempObj.getWidth() / 2) {
-						if(y + height / 2 + HEIGHT >= tempObj.getY() - tempObj.getHeight() / 2 && y + height / 2 + HEIGHT <= tempObj.getY() - tempObj.getHeight() / 2 + .5f) {
+						if(y - height / 2 + HEIGHT >= tempObj.getY() - tempObj.getHeight() / 2 && y - height / 2 + HEIGHT <= tempObj.getY() - tempObj.getHeight() / 2 + .5f) {
 							forceCrouch = true;
 						}
 					}
@@ -185,7 +185,7 @@ public class Entities extends GameObject {
 					}
 					
 					if(tempObj.id == ID.Obstacle && !collisionU && x - width / 2 < tempObj.getX() + tempObj.getWidth() / 2 && x + width / 2 > tempObj.getX() - tempObj.getWidth() / 2) {
-						if(y + height / 2 + HEIGHT >= tempObj.getY() - tempObj.getHeight() / 2 && y + height / 2 + HEIGHT <= tempObj.getY() - tempObj.getHeight() / 2 + height) {
+						if(y - height / 2 + HEIGHT >= tempObj.getY() - tempObj.getHeight() / 2 && y - height / 2 + HEIGHT <= tempObj.getY() - tempObj.getHeight() / 2 + .5f) {
 							forceCrouch = true;
 						}
 						else {

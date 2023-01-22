@@ -80,6 +80,17 @@ public class Graphics {
 		gl.glRotatef(rotation, 0, 0, 1);
 	}
 	
+	public static void drawLine(float x1, float y1, float x2, float y2) {
+		GL2 gl = EventListener.gl;
+		
+		gl.glColor4f(red, green, blue, alpha);
+		gl.glBegin(GL2.GL_LINES);
+			gl.glVertex2f(x1, y1);
+			gl.glVertex2f(x2, y2);
+		gl.glEnd();
+		gl.glFlush();
+	}
+	
 	public static void Rotate(float rotate) {
 		rotation = -rotate;
 	}

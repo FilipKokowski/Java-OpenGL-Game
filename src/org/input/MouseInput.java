@@ -1,6 +1,5 @@
 package org.input;
 
-import org.engine.GameLoop;
 import org.graphics.Renderer;
 import org.scene.entities.Camera;
 
@@ -20,6 +19,8 @@ public class MouseInput implements MouseListener {
 	
 	public static boolean pressed;
 	public static boolean draggingSmth;
+	
+	public static float rotation = 0;
 	
 	@Override
 	public void mouseClicked(MouseEvent e) {
@@ -64,14 +65,18 @@ public class MouseInput implements MouseListener {
 	@Override
 	public void mouseReleased(MouseEvent e) {
 		pressed = false;
+		rotation = 0;
 		System.out.println("Released");
 		
 	}
 
 	@Override
 	public void mouseWheelMoved(MouseEvent e) {
-		// TODO Auto-generated method stub
+		// -1 == left, 1 == right
+		float wheelRotationDirection = e.getRotation()[1];
+		rotation -= wheelRotationDirection * 5;
 		
+		System.out.println(wheelRotationDirection);
 	}
 	
 	public static float getMouseX() {
@@ -81,4 +86,5 @@ public class MouseInput implements MouseListener {
 	public static float getMouseY() {
 		return y;
 	}
+
 }
