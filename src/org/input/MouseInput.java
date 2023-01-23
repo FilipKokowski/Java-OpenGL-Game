@@ -1,5 +1,6 @@
 package org.input;
 
+import org.graphics.Graphics;
 import org.graphics.Renderer;
 import org.scene.entities.Camera;
 
@@ -10,6 +11,9 @@ public class MouseInput implements MouseListener {
 
 	public static float x = 0;
 	public static float y = 0;
+	
+	public static float initialX = 0;
+	public static float initialY = 0;
 	
 	public static float lastCheckedX = 0;
 	public static float lastCheckedY = 0;
@@ -28,6 +32,9 @@ public class MouseInput implements MouseListener {
 
 	@Override
 	public void mouseDragged(MouseEvent e) {
+		
+		Graphics.drawLine(initialX, initialY, e.getX(), e.getY());
+		
 		pressed = true;
 		mouseMoved(e);
 	}
@@ -60,6 +67,8 @@ public class MouseInput implements MouseListener {
 
 	@Override
 	public void mousePressed(MouseEvent e) {
+		initialX = e.getX();
+		initialY = e.getY();
 	}
 
 	@Override

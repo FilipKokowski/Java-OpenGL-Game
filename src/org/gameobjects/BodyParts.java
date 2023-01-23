@@ -8,10 +8,6 @@ import java.net.URL;
 import javax.imageio.ImageIO;
 
 import org.engine.AnimationHandler;
-import org.engine.GameLoop;
-import org.graphics.Graphics;
-import org.graphics.Renderer;
-import org.input.MouseInput;
 
 public class BodyParts extends Entities{
 	BufferedImage texture;

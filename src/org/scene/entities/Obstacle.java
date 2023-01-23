@@ -19,9 +19,4 @@ public class Obstacle extends GameObject{
 		Graphics.fillRect(x, y, width, height);
 		Graphics.setColor(1, 1, 1, 1);
 	}
-	
-
-	
-
-	
 }

@@ -7,8 +7,8 @@ import org.scene.entities.Camera;
 
 public class Entities extends GameObject {
 	
-	public static float HEIGHT;
-	public static float WIDTH;
+	public float HEIGHT;
+	public float WIDTH;
 	
 	public boolean crouched = false;
 	public boolean forceCrouch = false;
@@ -25,13 +25,13 @@ public class Entities extends GameObject {
 	public float mass = 3;
 	public float G = 9.81f;
 	
-	public static Camera camera = new Camera();
-	public static int cameraID = -1;
+	public Camera camera = new Camera();
+	public int cameraID = -1;
 	
-	public static boolean collisionR = false;
-	public static boolean collisionL = false;
-	public static boolean collisionU = false;
-	public static boolean collisionD = false;
+	public boolean collisionR = false;
+	public boolean collisionL = false;
+	public boolean collisionU = false;
+	public boolean collisionD = false;
 	
 	public Entities(float x, float y, float width, float height, String animationPath) {
 		super(x, y, width, height, animationPath);
@@ -99,7 +99,7 @@ public class Entities extends GameObject {
 							}
 						}
 						
-						if(y + height / 2 >= tempObj.getY() - tempObj.getHeight() / 2 && y + height / 2 <= tempObj.getY() - tempObj.getHeight() / 2 + .5f) {
+						if(y + height / 2 >= tempObj.getY() - tempObj.getHeight() / 2 && y + height / 2 <= tempObj.getY() - tempObj.getHeight() / 2 + .125f) {
 							
 							//When entity is under object set forceCrouch and up collision to true
 							if(x + width / 2 > tempObj.getX() - tempObj.getWidth() / 2 && x - width / 2 < tempObj.getX() + tempObj.getWidth() / 2) {

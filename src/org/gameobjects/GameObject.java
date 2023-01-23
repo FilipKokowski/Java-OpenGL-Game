@@ -1,5 +1,6 @@
 package org.gameobjects;
 
+import java.awt.event.KeyEvent;
 import java.io.IOException;
 import java.util.Iterator;
 
@@ -7,6 +8,7 @@ import org.engine.AnimationHandler;
 import org.engine.Handler;
 import org.graphics.Graphics;
 import org.graphics.Renderer;
+import org.input.KeyInput;
 import org.input.MouseInput;
 import org.scene.entities.Camera;
 
@@ -99,6 +101,15 @@ public class GameObject {
 		return false;
 	}
 	
+	public void drawBounds() {
+		
+		Graphics.drawLine(x, y, x + width, y);
+		Graphics.drawLine(x + width, y, x + width, y + height);
+		Graphics.drawLine(x + width, y + height, x, y + height);
+		Graphics.drawLine(x, y + height, x, y);
+		
+	}
+	
 	public void draggable() {
 		if((MouseInput.getMouseX() > x - width / 2 && MouseInput.getMouseX() < x + width / 2
 				&& MouseInput.getMouseY() > y - height / 2 && MouseInput.getMouseY() < y + height / 2 && MouseInput.pressed && !MouseInput.draggingSmth) || dragged) {
@@ -110,7 +121,6 @@ public class GameObject {
 			dragged = true;
 			MouseInput.draggingSmth = true;
 			MouseInput.rotation = 0;
-			//System.out.println("Over player");
 		}
 		if(!MouseInput.pressed) {
 			dragged = false;

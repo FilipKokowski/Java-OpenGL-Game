@@ -31,10 +31,9 @@ public class Main {
 		obstacle4.setColor(1f, .25f, .58f, .5f);
 		Handler.addGO(obstacle4);
 		
-		Obstacle obstacle5 = new Obstacle(0, onGround(.125f) + 3, 2, .125f);
+		Obstacle obstacle5 = new Obstacle(0, onGround(.125f) + 3, 2, .25f);
 		obstacle5.setColor(1f, .25f, .58f, .5f);
 		Handler.addGO(obstacle5);
-		
 	}
 	
 	public static float onGround(float height) { return(-Renderer.unitsTall + height) / 2; }

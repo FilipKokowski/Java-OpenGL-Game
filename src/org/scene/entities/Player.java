@@ -263,6 +263,8 @@ public class Player extends Entities{
 		
 		forceCrouch = false;
 		
+		//drawBounds();
+		
 		clearCollision();
 
 		
