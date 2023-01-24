@@ -25,6 +25,7 @@ public class MouseInput implements MouseListener {
 	public static boolean draggingSmth;
 	
 	public static float rotation = 0;
+	public static float rotationSpeed = 5;
 	
 	@Override
 	public void mouseClicked(MouseEvent e) {
@@ -83,7 +84,7 @@ public class MouseInput implements MouseListener {
 	public void mouseWheelMoved(MouseEvent e) {
 		// -1 == left, 1 == right
 		float wheelRotationDirection = e.getRotation()[1];
-		rotation -= wheelRotationDirection * 5;
+		rotation -= wheelRotationDirection * rotationSpeed;
 		
 		System.out.println(wheelRotationDirection);
 	}

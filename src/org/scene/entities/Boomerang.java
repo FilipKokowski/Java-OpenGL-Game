@@ -80,6 +80,8 @@ public class Boomerang extends Entities{
 		
 		System.out.println(cooldown);
 		
+		drawBounds();
+		
 	}
 
 	public void setX(float x) { this.x0 = x; }

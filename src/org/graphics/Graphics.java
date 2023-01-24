@@ -1,5 +1,6 @@
 package org.graphics;
 
+
 import org.resource.ImageResource;
 import org.scene.entities.Camera;
 
@@ -89,6 +90,10 @@ public class Graphics {
 			gl.glVertex2f(x2, y2);
 		gl.glEnd();
 		gl.glFlush();
+	}
+	
+	public static void drawString() {
+		
 	}
 	
 	public static void Rotate(float rotate) {

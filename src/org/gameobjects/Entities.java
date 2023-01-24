@@ -189,8 +189,8 @@ public class Entities extends GameObject {
 							forceCrouch = true;
 						}
 						else {
-							System.out.println(y - height / 2 + HEIGHT + " >= " + (tempObj.getY() - tempObj.getHeight() / 2));
-							System.out.println(y - height / 2 + HEIGHT + " <= "  + (tempObj.getY() - tempObj.getHeight() / 2 + .5f) + "\n\n");
+							//System.out.println(y - height / 2 + HEIGHT + " >= " + (tempObj.getY() - tempObj.getHeight() / 2));
+							//System.out.println(y - height / 2 + HEIGHT + " <= "  + (tempObj.getY() - tempObj.getHeight() / 2 + .5f) + "\n\n");
 					
 						}
 					}

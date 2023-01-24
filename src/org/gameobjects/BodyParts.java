@@ -29,14 +29,14 @@ public class BodyParts extends Entities{
 		
 		//Default width and height
 		WIDTH = width;
-		HEIGHT = height;
-		
+		HEIGHT = height;	
 	}
 	
 	public void update() {
 		
 		applyPhysics(true, true);
 		draggable();
+		drawBounds();
 		
 		//System.out.println("Body part collisionD = " + collisionD);
 		

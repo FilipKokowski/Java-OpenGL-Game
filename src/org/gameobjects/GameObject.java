@@ -36,6 +36,8 @@ public class GameObject {
 	public AnimationHandler animation;
 	public int currentAnimation = 0;
 	
+	public boolean showBounds;
+	
 	public ID id = null;
 	
 	public GameObject(float x, float y, float width, float height, String animationPath) {
@@ -60,6 +62,9 @@ public class GameObject {
 		Graphics.Rotate(-rotation);
 		Graphics.drawImage(animation.get(currentAnimation).getImage(), x, y, width, height);
 		Graphics.Rotate(0);
+		
+		if(showBounds)
+			drawBounds();
 	}
 	
 	public float getWorldX() {return ((Renderer.unitsWide / Renderer.getWindowWidth()) * x - Renderer.unitsWide/2) + Camera.x;}
@@ -84,8 +89,8 @@ public class GameObject {
 	
 	public float[] getBounds() {
 		float[] bounds = new float[4];
-		bounds[0] = x;
-		bounds[1] = y;
+		bounds[0] = (float)(x * Math.cos(rotation) - y * Math.sin(rotation));
+		bounds[1] = (float)(x * Math.sin(rotation) + y * Math.cos(rotation));
 		bounds[2] = width;
 		bounds[3] = height;
 		
@@ -102,12 +107,19 @@ public class GameObject {
 	}
 	
 	public void drawBounds() {
+		showBounds = true;
+		float[] bounds = getBounds();
+		float x1 = bounds[0] - bounds[2] / 2;
+		float x2 = bounds[0] + bounds[2] / 2;
+		float y1 = bounds[1] - bounds[3] / 2;
+		float y2 = bounds[1] + bounds[3] / 2;
 		
-		Graphics.drawLine(x, y, x + width, y);
-		Graphics.drawLine(x + width, y, x + width, y + height);
-		Graphics.drawLine(x + width, y + height, x, y + height);
-		Graphics.drawLine(x, y + height, x, y);
-		
+		Graphics.setColor(1, 0, 0, 1);
+		Graphics.drawLine(x1, y1, x2, y1);
+		Graphics.drawLine(x2, y1, x2, y2);
+		Graphics.drawLine(x2, y2, x1, y2);
+		Graphics.drawLine(x1, y2, x1, y1);
+		Graphics.setColor(1, 1, 1, 1);
 	}
 	
 	public void draggable() {
@@ -115,7 +127,16 @@ public class GameObject {
 				&& MouseInput.getMouseY() > y - height / 2 && MouseInput.getMouseY() < y + height / 2 && MouseInput.pressed && !MouseInput.draggingSmth) || dragged) {
 			x = MouseInput.getMouseX();
 			y = MouseInput.getMouseY();
+			
 			rotation += MouseInput.rotation;
+			
+			if(KeyInput.getKey(KeyEvent.VK_K)) {
+				rotation -= MouseInput.rotationSpeed;
+			}
+			else if(KeyInput.getKey(KeyEvent.VK_L)) {
+				rotation += MouseInput.rotationSpeed;
+			}
+			
 			velocityY = 0;
 			velocityX = 0;
 			dragged = true;

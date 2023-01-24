@@ -13,8 +13,6 @@ public class Main {
 		
 		Handler.addGO(new Background("/res/org/scene/background/bg.jpg"));
 		
-		Handler.addGO(new Player());
-		
 		Obstacle obstacle = new Obstacle(-3, onGround(1) + 1, 2, 1);
 		obstacle.setColor(1f, .25f, .58f, .5f);
 		Handler.addGO(obstacle);
@@ -31,9 +29,7 @@ public class Main {
 		obstacle4.setColor(1f, .25f, .58f, .5f);
 		Handler.addGO(obstacle4);
 		
-		Obstacle obstacle5 = new Obstacle(0, onGround(.125f) + 3, 2, .25f);
-		obstacle5.setColor(1f, .25f, .58f, .5f);
-		Handler.addGO(obstacle5);
+		Handler.addGO(new Player());
 	}
 	
 	public static float onGround(float height) { return(-Renderer.unitsTall + height) / 2; }
