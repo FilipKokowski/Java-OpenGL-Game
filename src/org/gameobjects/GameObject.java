@@ -89,8 +89,8 @@ public class GameObject {
 	
 	public float[] getBounds() {
 		float[] bounds = new float[4];
-		bounds[0] = (float)(x * Math.cos(rotation) - y * Math.sin(rotation));
-		bounds[1] = (float)(x * Math.sin(rotation) + y * Math.cos(rotation));
+		bounds[0] = x;
+		bounds[1] = y;
 		bounds[2] = width;
 		bounds[3] = height;
 		
@@ -125,6 +125,10 @@ public class GameObject {
 	public void draggable() {
 		if((MouseInput.getMouseX() > x - width / 2 && MouseInput.getMouseX() < x + width / 2
 				&& MouseInput.getMouseY() > y - height / 2 && MouseInput.getMouseY() < y + height / 2 && MouseInput.pressed && !MouseInput.draggingSmth) || dragged) {
+			
+			System.out.println("MouseInput.getMouseX() = " + MouseInput.getMouseX());
+			System.out.println("x = " + x + "\n\n");
+			
 			x = MouseInput.getMouseX();
 			y = MouseInput.getMouseY();
 			

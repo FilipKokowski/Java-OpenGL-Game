@@ -3,6 +3,7 @@ package org.engine;
 import org.scene.background.Background;
 import org.scene.entities.Obstacle;
 import org.scene.entities.Player;
+import org.gameobjects.Entities;
 import org.graphics.Renderer;
 
 public class Main {
@@ -12,6 +13,8 @@ public class Main {
 		GameLoop.start();
 		
 		Handler.addGO(new Background("/res/org/scene/background/bg.jpg"));
+		
+		Handler.addGO(new Player());
 		
 		Obstacle obstacle = new Obstacle(-3, onGround(1) + 1, 2, 1);
 		obstacle.setColor(1f, .25f, .58f, .5f);
@@ -29,7 +32,7 @@ public class Main {
 		obstacle4.setColor(1f, .25f, .58f, .5f);
 		Handler.addGO(obstacle4);
 		
-		Handler.addGO(new Player());
+		Entities.physicsOn = true;
 	}
 	
 	public static float onGround(float height) { return(-Renderer.unitsTall + height) / 2; }
