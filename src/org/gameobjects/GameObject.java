@@ -88,20 +88,58 @@ public class GameObject {
 	}
 	
 	public float[] getBounds() {
-		float[] bounds = new float[4];
-		bounds[0] = x;
-		bounds[1] = y;
-		bounds[2] = width;
-		bounds[3] = height;
+		float[] bounds = new float[8];
+		//x1 & y1
+		bounds[0] = (float)((-width / 2) * Math.cos(Math.toRadians(-rotation)) - (height / 2) * Math.sin(Math.toRadians(-rotation)) + x);
+		bounds[1] = (float)((-width / 2) * Math.sin(Math.toRadians(-rotation)) + (height / 2) * Math.cos(Math.toRadians(-rotation)) + y);
+		
+		//x2 & y2
+		bounds[2] = (float)((width / 2) * Math.cos(Math.toRadians(-rotation)) - (height / 2) * Math.sin(Math.toRadians(-rotation)) + x);
+		bounds[3] = (float)((width / 2) * Math.sin(Math.toRadians(-rotation)) + (height / 2) * Math.cos(Math.toRadians(-rotation)) + y);
+		
+		//x3 & y3
+		bounds[4] = (float)((width / 2) * Math.cos(Math.toRadians(-rotation)) - (-height / 2) * Math.sin(Math.toRadians(-rotation)) + x);
+		bounds[5] = (float)((width / 2) * Math.sin(Math.toRadians(-rotation)) + (-height / 2) * Math.cos(Math.toRadians(-rotation)) + y);
+		
+		//x4 & y4
+		bounds[6] = (float)((-width / 2) * Math.cos(Math.toRadians(-rotation)) - (-height / 2) * Math.sin(Math.toRadians(-rotation)) + x);
+		bounds[7] = (float)((-width / 2) * Math.sin(Math.toRadians(-rotation)) + (-height / 2) * Math.cos(Math.toRadians(-rotation)) + y);
 		
 		return bounds;
 	}
 	
 	public boolean doOverlap(float[] rec1, float[] rec2) {
-		if(rec1[0] + rec1[2] / 2 >= rec2[0] - rec2[2] / 2 && rec1[0] - rec1[2] <= rec2[0] + rec2[2] / 2 - rec1[2] / 2 
+	
+		System.out.println(
+			"Player {" +
+			" x1: " + rec1[0] + 
+			" y1: " + rec1[1] + 
+			" x2: " + rec1[2] + 
+			" y2: " + rec1[3] + 
+			" x3: " + rec1[4] + 
+			" y3: " + rec1[5] + 
+			" x4: " + rec1[6] + 
+			" y4: " + rec1[7] +
+		"}");
+		
+		System.out.println("\n\n");		
+		
+		System.out.println(
+			"Obstacle {" +
+			"x1: " + rec2[0] + 
+			" y1: " + rec2[1] + 
+			" x2: " + rec2[2] + 
+			" y2: " + rec2[3] + 
+			" x3: " + rec2[4] + 
+			" y3: " + rec2[5] + 
+			" x4: " + rec2[6] + 
+			" y4: " + rec2[7] +
+		"}");
+		
+		/*if(rec1[0] + rec1[2] / 2 >= rec2[0] - rec2[2] / 2 && rec1[0] - rec1[2] <= rec2[0] + rec2[2] / 2 - rec1[2] / 2 
 				&& rec1[1] - rec1[3] / 2 <= rec2[1] + rec2[3] / 2 && rec1[1] + rec1[3] / 2 >= rec2[1] - rec2[3] / 2) {
 			return true;
-		}
+		}*/
 		
 		return false;
 	}
@@ -109,16 +147,23 @@ public class GameObject {
 	public void drawBounds() {
 		showBounds = true;
 		float[] bounds = getBounds();
-		float x1 = bounds[0] - bounds[2] / 2;
-		float x2 = bounds[0] + bounds[2] / 2;
-		float y1 = bounds[1] - bounds[3] / 2;
-		float y2 = bounds[1] + bounds[3] / 2;
+		float x1 = bounds[0];
+		float y1 = bounds[1];
+		
+		float x2 = bounds[2];
+		float y2 = bounds[3];
+		
+		float x3 = bounds[4];
+		float y3 = bounds[5];
+		
+		float x4 = bounds[6];
+		float y4 = bounds[7];
 		
 		Graphics.setColor(1, 0, 0, 1);
-		Graphics.drawLine(x1, y1, x2, y1);
-		Graphics.drawLine(x2, y1, x2, y2);
-		Graphics.drawLine(x2, y2, x1, y2);
-		Graphics.drawLine(x1, y2, x1, y1);
+		Graphics.drawLine(x1, y1, x2, y2);
+		Graphics.drawLine(x2, y2, x3, y3);
+		Graphics.drawLine(x3, y3, x4, y4);
+		Graphics.drawLine(x4, y4, x1, y1);
 		Graphics.setColor(1, 1, 1, 1);
 	}
 	

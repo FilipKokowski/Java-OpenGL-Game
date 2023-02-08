@@ -20,7 +20,7 @@ public class Main {
 		obstacle.setColor(1f, .25f, .58f, .5f);
 		Handler.addGO(obstacle);
 		
-		Obstacle obstacle2 = new Obstacle(-5, onGround(1) + 1, 2, 1);
+		/*Obstacle obstacle2 = new Obstacle(-5, onGround(1) + 1, 2, 1);
 		obstacle2.setColor(1f, .25f, .58f, .5f);
 		Handler.addGO(obstacle2);
 		
@@ -30,7 +30,7 @@ public class Main {
 		
 		Obstacle obstacle4 = new Obstacle(-7.5f, onGround(1) + 2.25f, 2, 1);
 		obstacle4.setColor(1f, .25f, .58f, .5f);
-		Handler.addGO(obstacle4);
+		Handler.addGO(obstacle4);*/
 		
 		Entities.physicsOn = true;
 	}
