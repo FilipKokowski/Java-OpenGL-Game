@@ -48,13 +48,19 @@ public class BodyPart extends Entities{
 	
 	public void update() {
 		
-		applyPhysics(true, true);
+		applyPhysics(false, true);
 		draggable();
 		drawBounds();
 		
-		x = parentX;
-		y = parentY;
-		rotation = parentAngle;
+		System.out.println(
+			"ID: " + partID +
+			"x = " + (parentX - x) +
+			"y = " + (parentY +- y)
+		);
+		
+		x = parentX + Float.valueOf(xOffset);
+		y = parentY+ Float.valueOf(yOffset);
+		//rotation = parentAngle;
 		
 		//System.out.println("Body part collisionD = " + collisionD);
 		

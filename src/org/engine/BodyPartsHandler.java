@@ -63,9 +63,7 @@ public class BodyPartsHandler {
 							//System.out.println(tmp);
 							
 							BodyPart newPart = new BodyPart(tmp.get("src").toString(), parts.get("id").toString(), tmp.get("id").toString(), tmp.get("x").toString(), tmp.get("y").toString());
-
 							bodyParts.add(newPart);
-							
 							
 						} catch(ClassCastException e) {
 							//System.out.println(part.get("src").toString());
@@ -73,6 +71,8 @@ public class BodyPartsHandler {
 							try {
 								BodyPart newPart = new BodyPart(part.get("src").toString(), parts.get("id").toString(), part.get("id").toString(), part.get("x").toString(), part.get("y").toString());
 								bodyParts.add(newPart);
+
+								
 							} catch (IOException e1) {
 								// TODO Auto-generated catch block
 								e1.printStackTrace();

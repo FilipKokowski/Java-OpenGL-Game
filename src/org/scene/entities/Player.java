@@ -59,10 +59,10 @@ public class Player extends Entities{
 		
 	}
 	
-	/*public void render() {
-		Graphics.setColor(1, 1, 1, 1);
+	public void render() {
+		Graphics.setColor(1, 1, 1, .1f);
 		Graphics.fillRect(x, y, width, height);
-	}*/
+	}
 	
 	
 	@Override

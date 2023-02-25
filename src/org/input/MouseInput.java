@@ -76,7 +76,7 @@ public class MouseInput implements MouseListener {
 	public void mouseReleased(MouseEvent e) {
 		pressed = false;
 		rotation = 0;
-		System.out.println("Released");
+		//System.out.println("Released");
 		
 	}
 
@@ -86,7 +86,7 @@ public class MouseInput implements MouseListener {
 		float wheelRotationDirection = e.getRotation()[1];
 		rotation -= wheelRotationDirection * rotationSpeed;
 		
-		System.out.println(wheelRotationDirection);
+		//System.out.println(wheelRotationDirection);
 	}
 	
 	public static float getMouseX() {
