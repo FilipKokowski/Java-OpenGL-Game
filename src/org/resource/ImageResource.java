@@ -40,4 +40,12 @@ public class ImageResource {
 		return texture;
 	}
 	
+	public float getWidth() {
+		return img.getWidth();
+	}
+	
+	public float getHeight() {
+		return img.getHeight();
+	}
+	
 }

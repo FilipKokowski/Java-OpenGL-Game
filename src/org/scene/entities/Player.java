@@ -3,9 +3,10 @@ package org.scene.entities;
 
 import java.io.IOException;
 
+import org.engine.BodyPartsHandler;
 import org.engine.GameLoop;
 import org.engine.Handler;
-import org.gameobjects.BodyParts;
+import org.gameobjects.BodyPart;
 import org.gameobjects.Entities;
 import org.gameobjects.GameObject;
 import org.gameobjects.ID;
@@ -30,7 +31,9 @@ public class Player extends Entities{
 	private Boomerang boomer = new Boomerang(x, y, .1875f, .375f);
 	private boolean boomerDeployed;
 	
-	private static String animationPath = "/res/org/animations/Player.txt";
+	BodyPartsHandler bodyParts;
+	
+	private static String animationPath = "/res/org/scene/entities/Player/Idle/idle.png";
 	
 	public Player(){
 		super(0, 0, initialWidth, initialHeight, animationPath);
@@ -52,33 +55,8 @@ public class Player extends Entities{
 		reloadCrouchJumpForce();
 		reloadCrouchSpeedCap();
 		
-		String paths[] = new String[14];
-		paths[0] = "/res/org/scene/entities/Skeleton/Parts/Front/FrontBody.png";
-		paths[1] = "/res/org/scene/entities/Skeleton/Parts/Front/FrontHead.png";
-		paths[2] = "/res/org/scene/entities/Skeleton/Parts/Front/FrontLeftArmDown.png";
-		paths[3] = "/res/org/scene/entities/Skeleton/Parts/Front/FrontLeftArmUp.png";
-		paths[4] = "/res/org/scene/entities/Skeleton/Parts/Front/FrontLeftHand.png";
-		paths[5] = "/res/org/scene/entities/Skeleton/Parts/Front/FrontLeftFoot.png";
-		paths[6] = "/res/org/scene/entities/Skeleton/Parts/Front/FrontLeftLegDown.png";
-		paths[7] = "/res/org/scene/entities/Skeleton/Parts/Front/FrontLeftLegUp.png";
-		paths[8] = "/res/org/scene/entities/Skeleton/Parts/Front/FrontRightArmDown.png";
-		paths[9] = "/res/org/scene/entities/Skeleton/Parts/Front/FrontRightArmUp.png";
-		paths[10] = "/res/org/scene/entities/Skeleton/Parts/Front/FrontRightHand.png";
-		paths[11] = "/res/org/scene/entities/Skeleton/Parts/Front/FrontRightLegDown.png";
-		paths[12] = "/res/org/scene/entities/Skeleton/Parts/Front/FrontRightLegUp.png";
-		paths[13] = "/res/org/scene/entities/Skeleton/Parts/Front/FrontRightFoot.png";
+		bodyParts = new BodyPartsHandler("/res/org/Entities/Skeleton.json");
 		
-		try {
-			for(int i=0; i < 14; i++) {
-				BodyParts bodyPart = new BodyParts(paths[i]);
-				bodyPart.setX(i);
-				bodyPart.currentAnimation = i;
-				Handler.addGO(bodyPart);
-			}
-		} catch (IOException e) {
-			// TODO Auto-generated catch block
-			e.printStackTrace();
-		}
 	}
 	
 	/*public void render() {
@@ -89,6 +67,8 @@ public class Player extends Entities{
 	
 	@Override
 	public void update() {
+		
+		bodyParts.passPosition(x, y, rotation);
 		
 		//If player's not moving play idle animation
 		if(!KeyInput.getKey(KeyEvent.VK_A) && !KeyInput.getKey(KeyEvent.VK_D)) { 

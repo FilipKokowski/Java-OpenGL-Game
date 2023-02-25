@@ -5,11 +5,13 @@ import java.io.IOException;
 import java.util.Iterator;
 
 import org.engine.AnimationHandler;
+import org.engine.BodyPartsHandler;
 import org.engine.Handler;
 import org.graphics.Graphics;
 import org.graphics.Renderer;
 import org.input.KeyInput;
 import org.input.MouseInput;
+import org.resource.ImageResource;
 import org.scene.entities.Camera;
 
 public class GameObject {
@@ -36,31 +38,39 @@ public class GameObject {
 	public AnimationHandler animation;
 	public int currentAnimation = 0;
 	
+	public String animationPath;
+	
+	public ImageResource txt;
+	
 	public boolean showBounds;
 	
 	public ID id = null;
 	
-	public GameObject(float x, float y, float width, float height, String animationPath) {
+	public GameObject(float x, float y, float width, float height, String src) {
 		this.x = x;
 		this.y = y;
 		this.width = width;
 		this.height = height;
+		this.animationPath = src;
+		this.txt = new ImageResource(src);
 		
-		try {
+		
+		/*try {
 			animation = new AnimationHandler(animationPath);
 		} catch (IOException e) {
 			
-		}
+		}*/
 	}
 		
 	public void update() {};
 
 	public void render() {
 		
-		animation.get(currentAnimation).play();
+		//animation.get(currentAnimation).play();
 		
 		Graphics.Rotate(-rotation);
-		Graphics.drawImage(animation.get(currentAnimation).getImage(), x, y, width, height);
+		//Graphics.drawImage(animation.get(currentAnimation).getImage(), x, y, width, height);
+		Graphics.drawImage(txt, x, y, width, height);
 		Graphics.Rotate(0);
 		
 		if(showBounds)
@@ -110,7 +120,7 @@ public class GameObject {
 	
 	public boolean doOverlap(float[] rec1, float[] rec2) {
 	
-		System.out.println(
+		/*System.out.println(
 			"Player {" +
 			" x1: " + rec1[0] + 
 			" y1: " + rec1[1] + 
@@ -134,7 +144,7 @@ public class GameObject {
 			" y3: " + rec2[5] + 
 			" x4: " + rec2[6] + 
 			" y4: " + rec2[7] +
-		"}");
+		"}");*/
 		
 		/*if(rec1[0] + rec1[2] / 2 >= rec2[0] - rec2[2] / 2 && rec1[0] - rec1[2] <= rec2[0] + rec2[2] / 2 - rec1[2] / 2 
 				&& rec1[1] - rec1[3] / 2 <= rec2[1] + rec2[3] / 2 && rec1[1] + rec1[3] / 2 >= rec2[1] - rec2[3] / 2) {
@@ -171,8 +181,8 @@ public class GameObject {
 		if((MouseInput.getMouseX() > x - width / 2 && MouseInput.getMouseX() < x + width / 2
 				&& MouseInput.getMouseY() > y - height / 2 && MouseInput.getMouseY() < y + height / 2 && MouseInput.pressed && !MouseInput.draggingSmth) || dragged) {
 			
-			System.out.println("MouseInput.getMouseX() = " + MouseInput.getMouseX());
-			System.out.println("x = " + x + "\n\n");
+			//System.out.println("MouseInput.getMouseX() = " + MouseInput.getMouseX());
+			//System.out.println("x = " + x + "\n\n");
 			
 			x = MouseInput.getMouseX();
 			y = MouseInput.getMouseY();

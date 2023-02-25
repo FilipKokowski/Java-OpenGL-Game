@@ -35,8 +35,8 @@ public class Entities extends GameObject {
 	public boolean collisionU = false;
 	public boolean collisionD = false;
 	
-	public Entities(float x, float y, float width, float height, String animationPath) {
-		super(x, y, width, height, animationPath);
+	public Entities(float x, float y, float width, float height, String textureSrc) {
+		super(x, y, width, height, textureSrc);
 		// TODO Auto-generated constructor stub
 	}
 	
