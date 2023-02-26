@@ -5,6 +5,7 @@ import java.util.Random;
 
 import org.engine.GameLoop;
 import org.engine.Handler;
+import org.graphics.Graphics;
 import org.resource.ImageResource;
 
 public class BodyPart extends Entities{
@@ -46,10 +47,7 @@ public class BodyPart extends Entities{
 		WIDTH = width;
 		HEIGHT = height;	
 		
-		if(Integer.parseInt(sideID) == 0)
-			Handler.addGO(this);
-		
-		System.out.println("\nxOffset = " + xOffset + "\nyOffset = " + yOffset);
+		//System.out.println("\nxOffset = " + xOffset + "\nyOffset = " + yOffset);
 	}
 	
 	public void update() {
@@ -78,6 +76,11 @@ public class BodyPart extends Entities{
 		
 	}
 	
+	/*public void render() {
+		Graphics.setColor(1, 1, 1, 1);
+		Graphics.fillRect(x, y, width, height);
+	}*/
+	
 	public void setX(float x) {
 		this.x = x;
 	}
@@ -95,12 +98,8 @@ public class BodyPart extends Entities{
 	
 	public void setVelocity(float velocityX, float velocityY) {
 		
-		Random rand = new Random();
-		
-		Random direction = new Random();
-		
-		this.velocityX = rand.nextFloat(-4, 4);
-		this.velocityY = rand.nextFloat(5, 8);
+		this.velocityX = (float) (-4 + Math.random() * (4 + 4));
+		this.velocityY = (float) (5 + Math.random() * (8 - 5));
 		
 		System.out.println("dawda");
 	}

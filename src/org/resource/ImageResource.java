@@ -2,6 +2,7 @@ package org.resource;
 
 import java.awt.image.BufferedImage;
 import java.io.IOException;
+import java.io.InputStream;
 import java.net.URL;
 
 import javax.imageio.ImageIO;
@@ -16,8 +17,10 @@ public class ImageResource {
 	private Texture texture = null;
 	private BufferedImage img = null;
 	
+	String trest = null;
+	
 	public ImageResource(String path) {
-		URL url = ImageResource.class.getResource(path);
+		InputStream url = getClass().getClassLoader().getResourceAsStream(path);
 		
 		try {
 			img = ImageIO.read(url);

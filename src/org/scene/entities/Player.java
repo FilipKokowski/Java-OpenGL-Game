@@ -33,7 +33,7 @@ public class Player extends Entities{
 	
 	BodyPartsHandler bodyParts;
 	
-	private static String animationPath = "/res/org/scene/entities/Player/Idle/idle.png";
+	private static String animationPath = "res/org/scene/entities/Player/Idle/idle.png";
 	
 	public Player(){
 		super(0, 0, initialWidth, initialHeight, animationPath);
@@ -55,7 +55,7 @@ public class Player extends Entities{
 		reloadCrouchJumpForce();
 		reloadCrouchSpeedCap();
 		
-		bodyParts = new BodyPartsHandler("/res/org/Entities/Skeleton.json");
+		bodyParts = new BodyPartsHandler("res/org/Entities/Skeleton.json");
 		
 	}
 	

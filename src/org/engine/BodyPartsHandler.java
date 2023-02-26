@@ -1,9 +1,14 @@
 package org.engine;
 
+import java.io.BufferedReader;
 import java.io.FileReader;
 import java.io.IOException;
+import java.io.InputStream;
+import java.io.InputStreamReader;
 import java.net.URL;
+import java.nio.charset.StandardCharsets;
 import java.util.ArrayList;
+import java.util.stream.Collectors;
 
 import org.gameobjects.BodyPart;
 import org.json.simple.JSONObject;
@@ -19,15 +24,15 @@ public class BodyPartsHandler {
 	private float parentVelocityX;
 	private float parentVelocityY;
 	
-	public ArrayList<BodyPart> bodyParts = new ArrayList<BodyPart>();;
+	public ArrayList<BodyPart> bodyParts = new ArrayList<BodyPart>();
 	
 	public BodyPartsHandler(String path) {
-		URL url = BodyPartsHandler.class.getResource(path);
-		String urlStr = url.getPath();
+		InputStream url = getClass().getClassLoader().getResourceAsStream(path);
+		
 	
 		try {
 			
-			Object jsonFile = new JSONParser().parse(new FileReader(urlStr));
+			Object jsonFile = new JSONParser().parse(new InputStreamReader(url));
 			JSONObject jsonObject = (JSONObject) jsonFile;
 			
 			iterateThroughJSON(jsonObject);
@@ -38,7 +43,8 @@ public class BodyPartsHandler {
 		}
 		
 		for(BodyPart part : bodyParts) {
-			//part.printValues();
+			if(Integer.valueOf(part.sideID) == 0)
+				Handler.addGO(part);
 		}
 	}
 	
@@ -98,25 +104,6 @@ public class BodyPartsHandler {
 				}
 				
 			}
-			
-			/*for(Object part : parts.keySet()) {
-				
-			
-				
-				try {
-					JSONObject bodyPart = (JSONObject) parts.get(part);
-					
-					//System.out.println(part + ": " + bodyPart);
-					
-					iterateThroughJSON(bodyPart);
-					
-				} catch(ClassCastException e) {
-					System.out.println(parts.get(part));
-				}
-				
-			}*/
-			
-			
 		}
 	}
 	

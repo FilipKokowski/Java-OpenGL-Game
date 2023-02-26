@@ -11,7 +11,7 @@ import org.graphics.Renderer;
 
 public class Boomerang extends Entities{
 	
-	private static String animationPath = "/res/org/scene/entities/Boomerang/boomer.png";
+	private static String animationPath = "res/org/scene/entities/Boomerang/boomer.png";
 	
 	private float rotationSpeed = 15f;
 	
