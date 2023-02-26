@@ -1,19 +1,12 @@
 package org.scene.entities;
 
-
-import java.io.IOException;
-
 import org.engine.BodyPartsHandler;
 import org.engine.GameLoop;
 import org.engine.Handler;
-import org.gameobjects.BodyPart;
 import org.gameobjects.Entities;
-import org.gameobjects.GameObject;
 import org.gameobjects.ID;
 import org.graphics.Graphics;
-import org.graphics.Renderer;
 import org.input.KeyInput;
-import org.input.MouseInput;
 
 import com.jogamp.newt.event.KeyEvent;
 
@@ -33,7 +26,7 @@ public class Player extends Entities{
 	
 	BodyPartsHandler bodyParts;
 	
-	private static String animationPath = "res/org/scene/entities/Player/Idle/idle.png";
+	private static String animationPath = "";
 	
 	public Player(){
 		super(0, 0, initialWidth, initialHeight, animationPath);
@@ -42,7 +35,7 @@ public class Player extends Entities{
 		WIDTH = initialWidth;
 		
 		jumpForce = 7;
-		mass = 3;
+		mass = 5;
 		
 		id = ID.Player;
 		
@@ -71,9 +64,33 @@ public class Player extends Entities{
 		bodyParts.passPosition(x, y, velocityX, velocityY, rotation);
 		
 		if(KeyInput.getKey(KeyEvent.VK_G)) {
-			System.out.println("collapse");
+			//System.out.println("collapse");
 			bodyParts.collapse();
 		}
+		
+		if(KeyInput.getKey(KeyEvent.VK_H)) {
+			//System.out.println("collapse");
+			bodyParts.assemble();
+		}
+		
+		float shiftX = 0;
+		float shiftY = 0;
+		
+		if(KeyInput.getKey(KeyEvent.VK_5)) {
+			shiftX = .5f;
+		}
+		else if(KeyInput.getKey(KeyEvent.VK_6)) {
+			shiftX = -.5f;
+		}
+
+		if(KeyInput.getKey(KeyEvent.VK_7)) {
+			shiftY = -.5f;
+		}
+		else if(KeyInput.getKey(KeyEvent.VK_8)) {
+			shiftY = .5f;
+		}
+		
+		bodyParts.moveJoint(shiftY, shiftX, "1");
 		
 		//If player's not moving play idle animation
 		if(!KeyInput.getKey(KeyEvent.VK_A) && !KeyInput.getKey(KeyEvent.VK_D)) { 
@@ -86,8 +103,6 @@ public class Player extends Entities{
 					currentAnimation = 5;
 			}
 		}
-		
-
 		
 		//Applying gravity and collision detection
 		applyPhysics(true, true);
@@ -206,7 +221,6 @@ public class Player extends Entities{
 		Camera.x += (x - Camera.x) * speed * GameLoop.updateDelta();
 		
 		draggable();
-		drawBounds();
 		
 		//System.out.println("x = " + x + " y = " + y);
 		//System.out.println("mouseX = " + MouseInput.getMouseX() + " mouseY = " + MouseInput.getMouseY());

@@ -4,10 +4,6 @@ import org.scene.background.Background;
 import org.scene.entities.Obstacle;
 import org.scene.entities.Player;
 
-import java.awt.GraphicsEnvironment;
-import java.io.Console;
-import java.io.IOException;
-
 import org.gameobjects.Entities;
 import org.graphics.Renderer;
 

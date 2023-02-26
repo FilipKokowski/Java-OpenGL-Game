@@ -1,11 +1,9 @@
 package org.gameobjects;
 
 import java.awt.event.KeyEvent;
-import java.io.IOException;
 import java.util.Iterator;
 
 import org.engine.AnimationHandler;
-import org.engine.BodyPartsHandler;
 import org.engine.Handler;
 import org.graphics.Graphics;
 import org.graphics.Renderer;
@@ -44,6 +42,10 @@ public class GameObject {
 	public ImageResource txt;
 	
 	public boolean showBounds;
+	public boolean showJoints;
+	
+	public float jointPointX;
+	public float jointPointY;
 	
 	public ID id = null;
 	
@@ -54,28 +56,21 @@ public class GameObject {
 		this.height = height;
 		this.animationPath = src;
 		this.txt = new ImageResource(src);
-		
-		
-		/*try {
-			animation = new AnimationHandler(animationPath);
-		} catch (IOException e) {
-			
-		}*/
 	}
 		
 	public void update() {};
 
 	public void render() {
 		
-		//animation.get(currentAnimation).play();
-		
 		Graphics.Rotate(-rotation);
-		//Graphics.drawImage(animation.get(currentAnimation).getImage(), x, y, width, height);
 		Graphics.drawImage(txt, x, y, width, height);
 		Graphics.Rotate(0);
 		
 		if(showBounds)
 			drawBounds();
+		
+		if(showJoints)
+			drawJoints();
 	}
 	
 	public float getWorldX() {return ((Renderer.unitsWide / Renderer.getWindowWidth()) * x - Renderer.unitsWide/2) + Camera.x;}
@@ -176,6 +171,14 @@ public class GameObject {
 		Graphics.drawLine(x3, y3, x4, y4);
 		Graphics.drawLine(x4, y4, x1, y1);
 		Graphics.setColor(1, 1, 1, 1);
+	}
+	
+	public void drawJoints() {
+		showJoints = true;
+		Graphics.setColor(1, .1f, .66f, 1);
+		Graphics.drawCircle(jointPointX, jointPointY, .01f);
+		Graphics.setColor(1, 1, 1, 1);
+
 	}
 	
 	public void draggable() {

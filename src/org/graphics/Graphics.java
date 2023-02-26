@@ -18,9 +18,6 @@ public class Graphics {
 	//In degrees
 	private static float rotation = 0;
 	
-	private static int screenW = Renderer.getWindowWidth();
-	private static int screenH = Renderer.getWindowHeight();
-	
 	public static void drawImage(ImageResource img, float x, float y, float width, float height) {
 		GL2 gl = EventListener.gl;
 		
@@ -79,6 +76,19 @@ public class Graphics {
 		
 		gl.glTranslatef(-x, -y, 0);
 		gl.glRotatef(rotation, 0, 0, 1);
+	}
+	
+	public static void drawCircle(float x, float y, float radius) {
+		GL2 gl = EventListener.gl;
+		
+		gl.glColor4f(red, green, blue, alpha);
+	    gl.glBegin(GL2.GL_POINTS);
+	    
+	    for(double k = 0; k <= 360; k += 0.1){
+	    	gl.glVertex2f((float)(x + radius *Math.cos(Math.toRadians(k))),(float)(y - radius * Math.sin(Math.toRadians(k))));
+	    }
+	    gl.glEnd();
+	    
 	}
 	
 	public static void drawLine(float x1, float y1, float x2, float y2) {

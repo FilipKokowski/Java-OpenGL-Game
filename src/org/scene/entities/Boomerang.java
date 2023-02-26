@@ -15,7 +15,6 @@ public class Boomerang extends Entities{
 	
 	private float rotationSpeed = 15f;
 	
-	private float horizontalRotationRadius = 1f;
 	private float verticalRotationRadius = 1f;
 	
 	//Angle of the path

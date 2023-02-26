@@ -1,14 +1,9 @@
 package org.engine;
 
-import java.io.BufferedReader;
-import java.io.FileReader;
 import java.io.IOException;
 import java.io.InputStream;
 import java.io.InputStreamReader;
-import java.net.URL;
-import java.nio.charset.StandardCharsets;
 import java.util.ArrayList;
-import java.util.stream.Collectors;
 
 import org.gameobjects.BodyPart;
 import org.json.simple.JSONObject;
@@ -43,8 +38,10 @@ public class BodyPartsHandler {
 		}
 		
 		for(BodyPart part : bodyParts) {
-			if(Integer.valueOf(part.sideID) == 0)
+			if(Integer.valueOf(part.sideID) == 0) {
 				Handler.addGO(part);
+				part.printValues();
+			}
 		}
 	}
 	
@@ -70,14 +67,14 @@ public class BodyPartsHandler {
 							//System.out.println(tmp.get("src").toString());
 							//System.out.println(tmp);
 							
-							BodyPart newPart = new BodyPart(tmp.get("src").toString(), parts.get("id").toString(), tmp.get("id").toString(), tmp.get("x").toString(), tmp.get("y").toString());
+							BodyPart newPart = new BodyPart(tmp.get("src").toString(), parts.get("id").toString(), tmp.get("id").toString(), tmp.get("x").toString(), tmp.get("y").toString(), tmp.get("jointWith").toString(), tmp.get("jointX").toString(), tmp.get("jointY").toString());
 							bodyParts.add(newPart);
 							
 						} catch(ClassCastException e) {
 							//System.out.println(part.get("src").toString());
 							
 							try {
-								BodyPart newPart = new BodyPart(part.get("src").toString(), parts.get("id").toString(), part.get("id").toString(), part.get("x").toString(), part.get("y").toString());
+								BodyPart newPart = new BodyPart(part.get("src").toString(), parts.get("id").toString(), part.get("id").toString(), part.get("x").toString(), part.get("y").toString(), part.get("jointWith").toString(), part.get("jointX").toString(), part.get("jointY").toString());
 								bodyParts.add(newPart);
 
 								
@@ -128,6 +125,25 @@ public class BodyPartsHandler {
 				bodyPart.setVelocity(parentVelocityX, parentVelocityY);
 				bodyPart.collapse = true;
 				bodyPart.isDraggable = true;
+			}
+		}
+	}
+	
+	public void assemble() {
+		for(BodyPart bodyPart : bodyParts) {
+			if(bodyPart.collapse) {
+				bodyPart.collapse = false;
+				bodyPart.isDraggable = false;
+			}
+		}
+	}
+	
+	public void moveJoint(float xShift, float yShift, String ID) {
+		
+		for(BodyPart bodyPart : bodyParts) {
+			if(bodyPart.partID.equals(ID)) {
+				bodyPart.jointOffsetX += xShift * GameLoop.updateDelta();
+				bodyPart.jointOffsetY += yShift * GameLoop.updateDelta();
 			}
 		}
 	}

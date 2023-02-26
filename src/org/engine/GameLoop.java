@@ -20,8 +20,8 @@ public class GameLoop {
 				
 				lastUpdateTime = System.nanoTime();
 				
-				int FPS = 0;
-				long lastFPSCheck = System.nanoTime();
+				//int FPS = 0;
+				//long lastFPSCheck = System.nanoTime();
 				
 				while(running) {
 					long currentTime = System.nanoTime();

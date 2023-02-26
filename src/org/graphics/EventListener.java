@@ -1,8 +1,5 @@
 package org.graphics;
 
-import java.awt.Color;
-import java.awt.Font;
-
 import org.engine.GameLoop;
 import org.engine.Handler;
 import org.scene.entities.Camera;

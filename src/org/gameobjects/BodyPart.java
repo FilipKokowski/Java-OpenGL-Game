@@ -1,11 +1,8 @@
 package org.gameobjects;
 
 import java.io.IOException;
-import java.util.Random;
 
 import org.engine.GameLoop;
-import org.engine.Handler;
-import org.graphics.Graphics;
 import org.resource.ImageResource;
 
 public class BodyPart extends Entities{
@@ -22,9 +19,14 @@ public class BodyPart extends Entities{
 	public float parentY;
 	public float parentAngle;
 	
+	public String jointWithID;
+	public float jointOffsetX;
+	public float jointOffsetY;
+	public boolean jointRelocating;
+	
 	public boolean collapse;
 	
-	public BodyPart(String src, String sideID, String partID, String xOffset, String yOffset) throws IOException {
+	public BodyPart(String src, String sideID, String partID, String xOffset, String yOffset, String jointWithID, String jointOffsetX, String jointOffsetY) throws IOException {
 		super(0, 0, 0, 0, src);
 		
 		this.texture = new ImageResource(src);
@@ -33,6 +35,9 @@ public class BodyPart extends Entities{
 		this.partID = partID;
 		this.xOffset = xOffset;
 		this.yOffset = yOffset;
+		this.jointWithID = jointWithID;
+		//this.jointOffsetX = jointOffsetX;
+		//this.jointOffsetY = jointOffsetY;
 		
 		isDraggable = false;
 
@@ -53,27 +58,31 @@ public class BodyPart extends Entities{
 	public void update() {
 		
 		applyPhysics(true, true);
-		draggable();
-		drawBounds();
+		//draggable();
+		drawJoints();
+		//drawBounds();
 		
-		/*System.out.println(
-			"ID: " + partID +
-			"x = " + (parentX - x) +
-			"y = " + (parentY +- y)
-		);*/
+		if(partID.equals("0")) {
+			System.out.println(
+				"ID: " + partID +
+				"jointOffsetX = " + jointOffsetX +
+				"jointOffsetY = " + jointOffsetY
+			);
+		}
 		
 		if(!collapse) {
-			rotation += 2.5f;
+			//rotation += 2.5f;
 			x = parentX - Float.valueOf(xOffset);
 			y = parentY - Float.valueOf(yOffset);
 		}
 		else {
 			x -= velocityX * GameLoop.updateDelta();
 		}
+
+		jointPointX = x + jointOffsetX;
+		jointPointY = y + jointOffsetY;
+		
 		//rotation = parentAngle;
-		
-	
-		
 	}
 	
 	/*public void render() {
@@ -87,21 +96,20 @@ public class BodyPart extends Entities{
 	
 	public void printValues() {
 		System.out.println(
-			"x = " + xOffset +
+			"\nx = " + xOffset +
 			"\ny = " + yOffset +
 			"\nside ID = " + sideID +
 			"\npart ID = " + partID + 
 			"\ntexture src = " + textureSrc +
-			"\nParent position (" + parentX + "/" + parentY + "/" + parentAngle + ")\n"
+			"\nParent position (" + parentX + "/" + parentY + "/" + parentAngle + ")" +
+			"\nJoint with " + jointWithID +
+			"\nJoint offset x =" + jointOffsetX +
+			"\nJoint offset y =" + jointOffsetY 
 		);
 	}
 	
 	public void setVelocity(float velocityX, float velocityY) {
-		
-		this.velocityX = (float) (-4 + Math.random() * (4 + 4));
+		this.velocityX = (float) (-2 + Math.random() * (2 + 2));
 		this.velocityY = (float) (5 + Math.random() * (8 - 5));
-		
-		System.out.println("dawda");
 	}
-	
 }
