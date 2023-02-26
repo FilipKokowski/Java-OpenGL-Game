@@ -60,7 +60,7 @@ public class Player extends Entities{
 	}
 	
 	public void render() {
-		Graphics.setColor(1, 1, 1, .1f);
+		Graphics.setColor(1, 1, 1, .05f);
 		Graphics.fillRect(x, y, width, height);
 	}
 	
@@ -68,7 +68,12 @@ public class Player extends Entities{
 	@Override
 	public void update() {
 		
-		bodyParts.passPosition(x, y, rotation);
+		bodyParts.passPosition(x, y, velocityX, velocityY, rotation);
+		
+		if(KeyInput.getKey(KeyEvent.VK_G)) {
+			System.out.println("collapse");
+			bodyParts.collapse();
+		}
 		
 		//If player's not moving play idle animation
 		if(!KeyInput.getKey(KeyEvent.VK_A) && !KeyInput.getKey(KeyEvent.VK_D)) { 
@@ -82,24 +87,7 @@ public class Player extends Entities{
 			}
 		}
 		
-		if(velocityX <= friction && velocityX >= -friction) velocityX = 0;
-		else if(velocityX != 0)	{
-			velocityX += (velocityX >= 0) ? (-friction) : (friction);
-			
-			if(!KeyInput.getKey(KeyEvent.VK_A) && !KeyInput.getKey(KeyEvent.VK_D)) {
-				if(crouched) {
-					if(lastFacing) currentAnimation = 9;
-					else currentAnimation = 8;
-				}
-				else
-					currentAnimation = 3;
-			}
-		}
-			
-		
-		if(velocityY <= friction && velocityY >= -friction) velocityY = 0;	
-		else if(velocityY != 0) 
-			velocityY += (velocityY >= 0) ? (-friction) : (friction);
+
 		
 		//Applying gravity and collision detection
 		applyPhysics(true, true);

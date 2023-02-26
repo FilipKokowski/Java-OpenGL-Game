@@ -16,6 +16,8 @@ public class BodyPartsHandler {
 	private float parentX;
 	private float parentY;
 	private float parentAngle;
+	private float parentVelocityX;
+	private float parentVelocityY;
 	
 	public ArrayList<BodyPart> bodyParts = new ArrayList<BodyPart>();;
 	
@@ -118,16 +120,28 @@ public class BodyPartsHandler {
 		}
 	}
 	
-	public void passPosition(float x, float y, float rotation) {
+	public void passPosition(float x, float y, float velocityX, float velocityY, float rotation) {
 		
 		parentX = x;
 		parentY = y;
 		parentAngle = rotation;
+		parentVelocityX = velocityX;
+		parentVelocityY = velocityY;
 		
 		for(BodyPart bodyPart : bodyParts) {
 			bodyPart.parentX = x;
 			bodyPart.parentY = y;
 			bodyPart.parentAngle = rotation;
+		}
+	}
+	
+	public void collapse() {
+		for(BodyPart bodyPart : bodyParts) {
+			if(!bodyPart.collapse) {
+				bodyPart.setVelocity(parentVelocityX, parentVelocityY);
+				bodyPart.collapse = true;
+				bodyPart.isDraggable = true;
+			}
 		}
 	}
 	

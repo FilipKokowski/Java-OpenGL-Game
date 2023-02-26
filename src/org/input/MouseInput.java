@@ -63,7 +63,7 @@ public class MouseInput implements MouseListener {
 		lastCheckedX = x;
 		lastCheckedY = y;
 		
-		//System.out.println("mouseVelocityX = " + mouseVelocityX + " mouseVelocityY = " + mouseVelocityY);
+		//System.out.println("mouseX: " + x + " mouseY: " + y);
 	}
 
 	@Override

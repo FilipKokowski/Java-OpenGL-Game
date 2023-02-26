@@ -1,7 +1,9 @@
 package org.gameobjects;
 
 import java.io.IOException;
+import java.util.Random;
 
+import org.engine.GameLoop;
 import org.engine.Handler;
 import org.resource.ImageResource;
 
@@ -19,6 +21,8 @@ public class BodyPart extends Entities{
 	public float parentY;
 	public float parentAngle;
 	
+	public boolean collapse;
+	
 	public BodyPart(String src, String sideID, String partID, String xOffset, String yOffset) throws IOException {
 		super(0, 0, 0, 0, src);
 		
@@ -28,6 +32,8 @@ public class BodyPart extends Entities{
 		this.partID = partID;
 		this.xOffset = xOffset;
 		this.yOffset = yOffset;
+		
+		isDraggable = false;
 
 		float pixelWidth = texture.getWidth();
 		float pixelHeight = texture.getHeight();
@@ -48,21 +54,27 @@ public class BodyPart extends Entities{
 	
 	public void update() {
 		
-		applyPhysics(false, true);
+		applyPhysics(true, true);
 		draggable();
 		drawBounds();
 		
-		System.out.println(
+		/*System.out.println(
 			"ID: " + partID +
 			"x = " + (parentX - x) +
 			"y = " + (parentY +- y)
-		);
+		);*/
 		
-		x = parentX + Float.valueOf(xOffset);
-		y = parentY+ Float.valueOf(yOffset);
+		if(!collapse) {
+			rotation += 2.5f;
+			x = parentX - Float.valueOf(xOffset);
+			y = parentY - Float.valueOf(yOffset);
+		}
+		else {
+			x -= velocityX * GameLoop.updateDelta();
+		}
 		//rotation = parentAngle;
 		
-		//System.out.println("Body part collisionD = " + collisionD);
+	
 		
 	}
 	
@@ -79,6 +91,18 @@ public class BodyPart extends Entities{
 			"\ntexture src = " + textureSrc +
 			"\nParent position (" + parentX + "/" + parentY + "/" + parentAngle + ")\n"
 		);
+	}
+	
+	public void setVelocity(float velocityX, float velocityY) {
+		
+		Random rand = new Random();
+		
+		Random direction = new Random();
+		
+		this.velocityX = rand.nextFloat(-4, 4);
+		this.velocityY = rand.nextFloat(5, 8);
+		
+		System.out.println("dawda");
 	}
 	
 }

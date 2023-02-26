@@ -34,6 +34,7 @@ public class GameObject {
 	public float rotation = 0;
 	
 	public boolean dragged;
+	public boolean isDraggable = true;
 	
 	public AnimationHandler animation;
 	public int currentAnimation = 0;
@@ -178,11 +179,11 @@ public class GameObject {
 	}
 	
 	public void draggable() {
-		if((MouseInput.getMouseX() > x - width / 2 && MouseInput.getMouseX() < x + width / 2
+		if(isDraggable && (MouseInput.getMouseX() > x - width / 2 && MouseInput.getMouseX() < x + width / 2
 				&& MouseInput.getMouseY() > y - height / 2 && MouseInput.getMouseY() < y + height / 2 && MouseInput.pressed && !MouseInput.draggingSmth) || dragged) {
 			
-			//System.out.println("MouseInput.getMouseX() = " + MouseInput.getMouseX());
-			//System.out.println("x = " + x + "\n\n");
+			System.out.println("MouseInput.getMouseX() = " + MouseInput.getMouseX());
+			System.out.println("x = " + x + "\n\n");
 			
 			x = MouseInput.getMouseX();
 			y = MouseInput.getMouseY();

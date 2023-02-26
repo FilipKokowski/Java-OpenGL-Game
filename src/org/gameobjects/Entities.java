@@ -60,6 +60,18 @@ public class Entities extends GameObject {
 	
 	public void applyPhysics(boolean GravityEnabled, boolean CollisionEnabled){
 		if(physicsOn) {
+
+			if(velocityX <= friction && velocityX >= -friction) velocityX = 0;
+			else if(velocityX != 0)	{
+				velocityX += (velocityX >= 0) ? (-friction) : (friction);
+				
+			}
+				
+			
+			if(velocityY <= friction && velocityY >= -friction) velocityY = 0;	
+			else if(velocityY != 0) 
+				velocityY += (velocityY >= 0) ? (-friction) : (friction);
+			
 			if(y > (-Renderer.unitsTall + height) / 2) { 
 				if(GravityEnabled)
 					gravity();
