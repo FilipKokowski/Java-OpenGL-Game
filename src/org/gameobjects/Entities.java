@@ -62,10 +62,8 @@ public class Entities extends GameObject {
 		if(physicsOn) {
 
 			if(velocityX <= friction && velocityX >= -friction) velocityX = 0;
-			else if(velocityX != 0 && onGround)	{
+			else if(velocityX != 0 && onGround)	
 				velocityX += (velocityX >= 0) ? (-friction) : (friction);
-				
-			}
 
 			if(y > (-Renderer.unitsTall + height) / 2) { 
 				if(GravityEnabled)

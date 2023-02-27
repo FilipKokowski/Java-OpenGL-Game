@@ -20,9 +20,15 @@ public class BodyPart extends Entities{
 	public float parentAngle;
 	
 	public String jointWithID;
+	public String jointWithX;
+	public String jointWithY;
 	public float jointOffsetX;
 	public float jointOffsetY;
 	public boolean jointRelocating;
+	public boolean hasJoints = true;
+	
+	private static boolean basePart;
+	private static String basePartID;
 	
 	public boolean collapse;
 	
@@ -39,7 +45,7 @@ public class BodyPart extends Entities{
 		//this.jointOffsetX = jointOffsetX;
 		//this.jointOffsetY = jointOffsetY;
 		
-		isDraggable = false;
+		isDraggable = true;
 
 		float pixelWidth = texture.getWidth();
 		float pixelHeight = texture.getHeight();
@@ -55,33 +61,41 @@ public class BodyPart extends Entities{
 		//System.out.println("\nxOffset = " + xOffset + "\nyOffset = " + yOffset);
 	}
 	
+	private boolean spawned;
+	
 	public void update() {
 		
 		applyPhysics(true, true);
-		//draggable();
+		draggable();
+		
 		drawJoints();
+		if(!hasJoints) showJoints = false;
+
 		//drawBounds();
 		
-		if(partID.equals("0")) {
-			System.out.println(
-				"ID: " + partID +
-				"jointOffsetX = " + jointOffsetX +
-				"jointOffsetY = " + jointOffsetY
-			);
-		}
-		
-		if(!collapse) {
+		if(!collapse && !spawned) {
 			//rotation += 2.5f;
-			x = parentX - Float.valueOf(xOffset);
-			y = parentY - Float.valueOf(yOffset);
+			x = parentX + Float.valueOf(xOffset);
+			y = parentY + Float.valueOf(yOffset);
 		}
 		else {
 			x -= velocityX * GameLoop.updateDelta();
 		}
+		
+		spawned = true;
 
 		jointPointX = x + jointOffsetX;
 		jointPointY = y + jointOffsetY;
 		
+		//if(partID.equals("3B2")) {
+			System.out.println(
+				"ID: " + partID +
+				//"jointOffsetX = " + jointOffsetX +
+				//"jointOffsetY = " + jointOffsetY +
+				" \"x\":\"" + (parentX - x) + "\"  /  \"y\":\"" + (parentY - y) + "\""+
+				"  parent pos =  " + parentX + "  /  " + parentY
+			);	
+		//}
 		//rotation = parentAngle;
 	}
 	
@@ -106,6 +120,19 @@ public class BodyPart extends Entities{
 			"\nJoint offset x =" + jointOffsetX +
 			"\nJoint offset y =" + jointOffsetY 
 		);
+	}
+	
+	public String getBasePartID() {
+		return basePartID;
+	}
+	
+	public void setBasePart() {
+		if(!basePart) {
+			basePart = true;
+			basePartID = partID;
+		}
+		else
+			System.out.println("Part with ID " + basePartID + " is base part");
 	}
 	
 	public void setVelocity(float velocityX, float velocityY) {

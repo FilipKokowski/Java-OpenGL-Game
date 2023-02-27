@@ -220,7 +220,7 @@ public class Player extends Entities{
 		//Camera follow player
 		Camera.x += (x - Camera.x) * speed * GameLoop.updateDelta();
 		
-		draggable();
+		//draggable();
 		
 		//System.out.println("x = " + x + " y = " + y);
 		//System.out.println("mouseX = " + MouseInput.getMouseX() + " mouseY = " + MouseInput.getMouseY());

@@ -41,6 +41,9 @@ public class BodyPartsHandler {
 			if(Integer.valueOf(part.sideID) == 0) {
 				Handler.addGO(part);
 				part.printValues();
+				
+				if(part.partID.equals("0"))
+					part.setBasePart();
 			}
 		}
 	}
@@ -112,10 +115,35 @@ public class BodyPartsHandler {
 		parentVelocityX = velocityX;
 		parentVelocityY = velocityY;
 		
+		BodyPart basePart = null;
+		
 		for(BodyPart bodyPart : bodyParts) {
-			bodyPart.parentX = x;
-			bodyPart.parentY = y;
-			bodyPart.parentAngle = rotation;
+			if(bodyPart.getBasePartID().equals(bodyPart.partID)) {
+				basePart = bodyPart;
+				
+				bodyPart.hasJoints = false;
+				bodyPart.parentX = x;
+				bodyPart.parentY = y;
+				bodyPart.parentAngle = rotation;
+				bodyPart.isDraggable = false;
+			}
+		}
+		
+		if(basePart == null){
+			System.out.println("No base part found!");
+			return;
+		}
+		
+		for(BodyPart bodyPart : bodyParts) {
+			if(!bodyPart.getBasePartID().equals(bodyPart.partID)) {
+				for(BodyPart parentPart : bodyParts) {
+					if(bodyPart.jointWithID.equals(parentPart.partID)) {
+						bodyPart.parentX = parentPart.getX();
+						bodyPart.parentY = parentPart.getY();
+						bodyPart.parentAngle = parentPart.rotation;
+					}
+				}
+			}
 		}
 	}
 	

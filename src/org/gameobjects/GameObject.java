@@ -178,7 +178,6 @@ public class GameObject {
 		Graphics.setColor(1, .1f, .66f, 1);
 		Graphics.drawCircle(jointPointX, jointPointY, .01f);
 		Graphics.setColor(1, 1, 1, 1);
-
 	}
 	
 	public void draggable() {
