@@ -54,8 +54,14 @@ public class MouseInput implements MouseListener {
 
 	@Override
 	public void mouseMoved(MouseEvent e) {
-		x = (e.getX() - Renderer.getWindowWidth() / 2) / (Renderer.getWindowWidth() / Renderer.unitsWide) + Camera.x;
-		y = -((e.getY() - Renderer.getWindowHeight() / 2) / (Renderer.getWindowHeight() / Renderer.unitsTall)) + Camera.y;
+		x = ((Renderer.unitsWide / Renderer.getWindowWidth()) * e.getX() - Renderer.unitsWide/2) + Camera.x;
+		
+		float unitsTall = Renderer.unitsWide * (float) ((float)Renderer.getWindowHeight() / (float)Renderer.getWindowWidth());
+		
+		y = -(unitsTall / Renderer.getWindowHeight() * e.getY() - unitsTall/2) + Camera.y;
+		
+		//x = (e.getX() - Renderer.getWindowWidth() / 2) / (Renderer.getWindowWidth() / Renderer.unitsWide) + Camera.x;
+		//y = -((e.getY() - Renderer.getWindowHeight() / 2) / (Renderer.getWindowHeight() / Renderer.unitsTall)) + Camera.y;
 		
 		mouseVelocityX = (x - lastCheckedX) / .1f;
 		mouseVelocityY = (y - lastCheckedY) / .1f;
@@ -65,11 +71,13 @@ public class MouseInput implements MouseListener {
 		
 		//System.out.println("mouseX: " + x + " mouseY: " + y);
 	}
-
+	
 	@Override
 	public void mousePressed(MouseEvent e) {
 		initialX = e.getX();
 		initialY = e.getY();
+			
+		mouseMoved(e);
 	}
 
 	@Override

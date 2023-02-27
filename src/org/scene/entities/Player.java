@@ -210,7 +210,6 @@ public class Player extends Entities{
 			boomerDeployed = false;
 		}
 		
-		
 		//Change x based on velocity
 		x += velocityX * GameLoop.updateDelta();
 		
@@ -220,9 +219,9 @@ public class Player extends Entities{
 		//Camera follow player
 		Camera.x += (x - Camera.x) * speed * GameLoop.updateDelta();
 		
-		//draggable();
-		
-		//System.out.println("x = " + x + " y = " + y);
+		draggable();
+	
+		//System.out.println("rotation: " + rotation);
 		//System.out.println("mouseX = " + MouseInput.getMouseX() + " mouseY = " + MouseInput.getMouseY());
 		
 		//System.out.println("Player down collision = " + collisionD);
@@ -245,12 +244,9 @@ public class Player extends Entities{
 		);*/
 		
 		forceCrouch = false;
-		
 		//drawBounds();
 		
-		clearCollision();
-
-		
+		clearCollision();	
 	}
 	
 }

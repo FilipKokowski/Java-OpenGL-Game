@@ -45,7 +45,7 @@ public class BodyPart extends Entities{
 		//this.jointOffsetX = jointOffsetX;
 		//this.jointOffsetY = jointOffsetY;
 		
-		isDraggable = true;
+		isDraggable = false;
 
 		float pixelWidth = texture.getWidth();
 		float pixelHeight = texture.getHeight();
@@ -57,11 +57,8 @@ public class BodyPart extends Entities{
 		//Default width and height
 		WIDTH = width;
 		HEIGHT = height;	
-		
 		//System.out.println("\nxOffset = " + xOffset + "\nyOffset = " + yOffset);
 	}
-	
-	private boolean spawned;
 	
 	public void update() {
 		
@@ -73,29 +70,30 @@ public class BodyPart extends Entities{
 
 		//drawBounds();
 		
-		if(!collapse && !spawned) {
+		rotation = parentAngle;
+		
+		if(!collapse) {
 			//rotation += 2.5f;
-			x = parentX + Float.valueOf(xOffset);
-			y = parentY + Float.valueOf(yOffset);
+			x = parentX - Float.valueOf(xOffset);
+			y = parentY - Float.valueOf(yOffset);
 		}
 		else {
 			x -= velocityX * GameLoop.updateDelta();
 		}
-		
-		spawned = true;
 
 		jointPointX = x + jointOffsetX;
 		jointPointY = y + jointOffsetY;
 		
-		//if(partID.equals("3B2")) {
-			System.out.println(
-				"ID: " + partID +
+		if(partID.equals("2A")) {
+			//System.out.println(
+				//"ID: " + partID +
+				//"velocityX : " + velocityX
 				//"jointOffsetX = " + jointOffsetX +
 				//"jointOffsetY = " + jointOffsetY +
-				" \"x\":\"" + (parentX - x) + "\"  /  \"y\":\"" + (parentY - y) + "\""+
-				"  parent pos =  " + parentX + "  /  " + parentY
-			);	
-		//}
+				//" \"x\":\"" + (xOffset) + "\"  /  \"y\":\"" + (yOffset) + "\""+
+				//"  parent pos =  " + parentX + "  /  " + parentY
+			//);	
+		}
 		//rotation = parentAngle;
 	}
 	

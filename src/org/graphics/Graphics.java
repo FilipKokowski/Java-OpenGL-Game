@@ -17,7 +17,7 @@ public class Graphics {
 	
 	//In degrees
 	private static float rotation = 0;
-	
+
 	public static void drawImage(ImageResource img, float x, float y, float width, float height) {
 		GL2 gl = EventListener.gl;
 		
@@ -99,7 +99,7 @@ public class Graphics {
 			gl.glVertex2f(x1, y1);
 			gl.glVertex2f(x2, y2);
 		gl.glEnd();
-		gl.glFlush();
+		gl.glFlush(); 
 	}
 	
 	public static void drawString() {

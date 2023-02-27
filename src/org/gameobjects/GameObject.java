@@ -30,7 +30,7 @@ public class GameObject {
 	public float alpha = 1;
 	
 	public float rotation = 0;
-	
+
 	public boolean dragged;
 	public boolean isDraggable = true;
 	
@@ -54,6 +54,9 @@ public class GameObject {
 		this.y = y;
 		this.width = width;
 		this.height = height;
+		
+		if(src.equals("")) src = "res/org/scene/defaultTexture.png";
+		
 		this.animationPath = src;
 		this.txt = new ImageResource(src);
 	}
@@ -184,8 +187,9 @@ public class GameObject {
 		if(isDraggable && (MouseInput.getMouseX() > x - width / 2 && MouseInput.getMouseX() < x + width / 2
 				&& MouseInput.getMouseY() > y - height / 2 && MouseInput.getMouseY() < y + height / 2 && MouseInput.pressed && !MouseInput.draggingSmth) || dragged) {
 			
-			System.out.println("MouseInput.getMouseX() = " + MouseInput.getMouseX());
-			System.out.println("x = " + x + "\n\n");
+			//System.out.println("MouseInput.getMouseX() = " + MouseInput.getMouseX());
+			//System.out.println("x = " + x);
+			//System.out.println("MouseInput.rotationSpeed = " + MouseInput.rotationSpeed + "\n\n");
 			
 			x = MouseInput.getMouseX();
 			y = MouseInput.getMouseY();

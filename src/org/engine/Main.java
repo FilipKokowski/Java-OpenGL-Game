@@ -33,7 +33,7 @@ public class Main {
 		obstacle4.setColor(1f, .25f, .58f, .5f);
 		Handler.addGO(obstacle4);*/
 		
-		Entities.physicsOn = false;
+		Entities.physicsOn = true;
 	}
 	
 	public static float onGround(float height) { return(-Renderer.unitsTall + height) / 2; }
