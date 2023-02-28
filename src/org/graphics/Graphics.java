@@ -1,10 +1,14 @@
 package org.graphics;
 
 
+import java.awt.Font;
+
+import org.engine.GameLoop;
 import org.resource.ImageResource;
 import org.scene.entities.Camera;
 
 import com.jogamp.opengl.GL2;
+import com.jogamp.opengl.util.awt.TextRenderer;
 import com.jogamp.opengl.util.texture.Texture;
 
 public class Graphics {
@@ -15,6 +19,10 @@ public class Graphics {
 	private static float blue = 1;
 	private static float alpha = 1;
 	
+	private static float textRed = 255;
+	private static float textGreen = 255;
+	private static float textBlue = 255;
+	private static float textAlpha = 255;	
 	//In degrees
 	private static float rotation = 0;
 
@@ -102,8 +110,13 @@ public class Graphics {
 		gl.glFlush(); 
 	}
 	
-	public static void drawString() {
-		
+	public static void setFont(Font font) {
+		EventListener.textRenderer = new TextRenderer(font);
+	}
+	
+	public static void drawString(float x, float y, String text) {
+		EventListener.textRenderer.setColor(textRed, textGreen, textBlue, textAlpha);
+		EventListener.textRenderer.draw(text, (int)(Renderer.getWindowWidth() / Renderer.unitsWide * (x - Camera.x) + Renderer.getWindowWidth() / 2), (int)(Renderer.getWindowHeight() / Renderer.unitsTall * (y - Camera.y) + Renderer.getWindowHeight() / 2));
 	}
 	
 	public static void Rotate(float rotate) {
@@ -115,5 +128,12 @@ public class Graphics {
 		green = Math.max(0, Math.min(1, g));
 		blue = Math.max(0, Math.min(1, b));
 		alpha = Math.max(0, Math.min(1, a));
+	}
+	
+	public static void setTextColor(float r, float g, float b, float a) {
+		textRed = Math.max(0, Math.min(1, r)) * 255;
+		textGreen = Math.max(0, Math.min(1, g)) * 255;
+		textBlue = Math.max(0, Math.min(1, b)) * 255;
+		textAlpha = Math.max(0, Math.min(1, a)) * 255;
 	}
 }

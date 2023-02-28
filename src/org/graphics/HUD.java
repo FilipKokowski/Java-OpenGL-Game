@@ -7,6 +7,11 @@ public class HUD extends GameObject {
 	public HUD(float x, float y, float width, float height) {
 		super(x, y, width, height, "");
 		// TODO Auto-generated constructor stub
+		
+		red = .5f;
+		green = .5f;
+		blue = .5f;
+		alpha = .75f;
 	}
 	
 	public void render() {

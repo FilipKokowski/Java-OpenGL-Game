@@ -1,10 +1,13 @@
 package org.gameobjects;
 
+import java.awt.Font;
 import java.awt.event.KeyEvent;
+import java.awt.geom.Rectangle2D;
 import java.util.Iterator;
 
 import org.engine.AnimationHandler;
 import org.engine.Handler;
+import org.graphics.EventListener;
 import org.graphics.Graphics;
 import org.graphics.Renderer;
 import org.input.KeyInput;
@@ -41,6 +44,13 @@ public class GameObject {
 	
 	public ImageResource txt;
 	
+	public Font font = new Font("Comic Sans MS", Font.BOLD, 12);
+	public String text = "";
+	public float textWidth = 0;
+	public float textHeight = 0;
+	public float textOffsetX = 0;
+	public float textOffsetY = 0;
+
 	public boolean showBounds;
 	public boolean showJoints;
 	
@@ -74,6 +84,27 @@ public class GameObject {
 		
 		if(showJoints)
 			drawJoints();
+	}
+	
+	public void renderText() {
+		Graphics.Rotate(-rotation);
+		//Graphics.setFont(font);
+		Graphics.drawString(x + textOffsetX, y + textOffsetY, text);
+		Graphics.Rotate(0);
+	}
+	
+	public void centerTextHorizontally() {
+		Rectangle2D bounds = EventListener.textRenderer.getBounds(text);
+		textWidth = (float)(Renderer.unitsWide / Renderer.getWindowWidth() * bounds.getWidth());
+		
+		textOffsetX = -textWidth / 2;
+	}
+	
+	public void centerTextVertically() {
+		Rectangle2D bounds = EventListener.textRenderer.getBounds(text);
+		textHeight = (float)(Renderer.unitsTall / Renderer.getWindowHeight() * bounds.getHeight());
+		
+		textOffsetY = height / 1.75f;
 	}
 	
 	public float getWorldX() {return ((Renderer.unitsWide / Renderer.getWindowWidth()) * x - Renderer.unitsWide/2) + Camera.x;}

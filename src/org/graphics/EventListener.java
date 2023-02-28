@@ -1,5 +1,7 @@
 package org.graphics;
 
+import java.awt.Font;
+
 import org.engine.GameLoop;
 import org.engine.Handler;
 import org.scene.entities.Camera;
@@ -8,10 +10,13 @@ import com.jogamp.opengl.GL;
 import com.jogamp.opengl.GL2;
 import com.jogamp.opengl.GLAutoDrawable;
 import com.jogamp.opengl.GLEventListener;
+import com.jogamp.opengl.util.awt.TextRenderer;
 
 public class EventListener implements GLEventListener{
 
 	public static GL2 gl = null;
+	
+	public static TextRenderer textRenderer;
 	
 	@Override
 	public void display(GLAutoDrawable drawable) {
@@ -25,6 +30,9 @@ public class EventListener implements GLEventListener{
 		
 		gl.glTranslatef(-Camera.x, 0, 0);
 		Handler.render();
+		textRenderer.beginRendering(drawable.getSurfaceWidth(), drawable.getSurfaceHeight());
+		Handler.renderText();
+		textRenderer.endRendering();
 		gl.glTranslatef(Camera.x, 0, 0);
 		
 		Handler.renderHUD();
@@ -45,6 +53,8 @@ public class EventListener implements GLEventListener{
 		gl.glEnable(GL2.GL_BLEND);
 		
 		gl.glBlendFunc(GL.GL_SRC_ALPHA, GL2.GL_ONE_MINUS_SRC_ALPHA);
+		
+		textRenderer = new TextRenderer(new Font("Comic Sans MS", Font.BOLD, 12));
 	}
 
 	@Override

@@ -14,6 +14,13 @@ public class Obstacle extends GameObject{
 		id = ID.Obstacle;
 	}
 	
+	public void update() {
+		centerTextHorizontally();
+		centerTextVertically();
+		
+		text = "("+ x + "/" + y +")";
+	}
+	
 	public void render() {
 		Graphics.setColor(red, green, blue, alpha);
 		Graphics.fillRect(x, y, width, height);

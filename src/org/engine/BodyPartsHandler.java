@@ -40,7 +40,7 @@ public class BodyPartsHandler {
 		for(BodyPart part : bodyParts) {
 			if(Integer.valueOf(part.sideID) == 0) {
 				Handler.addGO(part);
-				part.printValues();
+				//part.printValues();
 				
 				if(part.partID.equals("0"))
 					part.setBasePart();

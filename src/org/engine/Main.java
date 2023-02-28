@@ -5,6 +5,7 @@ import org.scene.entities.Obstacle;
 import org.scene.entities.Player;
 
 import org.gameobjects.Entities;
+import org.graphics.HUD;
 import org.graphics.Renderer;
 
 public class Main {
@@ -20,6 +21,8 @@ public class Main {
 		Obstacle obstacle = new Obstacle(-3, onGround(1) + 1, 2, 1);
 		obstacle.setColor(1f, .25f, .58f, .5f);
 		Handler.addGO(obstacle);
+		
+		Handler.addHUD(new HUD(-Renderer.unitsWide / 2 + .5f,Renderer.unitsTall / 2 - .5f,1,1));
         
 		/*Obstacle obstacle2 = new Obstacle(-5, onGround(1) + 1, 2, 1);
 		obstacle2.setColor(1f, .25f, .58f, .5f);

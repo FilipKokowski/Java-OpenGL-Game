@@ -13,6 +13,8 @@ public class GameLoop {
 	private static int targetFPS = 60;
 	private static int targetTime = 1000000000 / targetFPS;
 	
+	public static int FPS = 0;
+	
 	public static void start() {
 		Thread thread = new Thread() {
 			public void run() {
@@ -20,8 +22,8 @@ public class GameLoop {
 				
 				lastUpdateTime = System.nanoTime();
 				
-				//int FPS = 0;
-				//long lastFPSCheck = System.nanoTime();
+				int FPSCounter = 0;
+				long lastFPSCheck = System.nanoTime();
 				
 				while(running) {
 					long currentTime = System.nanoTime();
@@ -39,12 +41,13 @@ public class GameLoop {
 					Renderer.render();
 					
 					
-					/*FPS++;
+					FPSCounter++;
 					if(System.nanoTime() >= lastFPSCheck + 1000000000) {
-						System.out.println(FPS);
-						FPS = 0;
+						System.out.println(FPSCounter);
+						FPS = FPSCounter;
+						FPSCounter = 0;
 						lastFPSCheck = System.nanoTime();
-					}*/
+					}
 					
 					long timeTaken = System.nanoTime() - currentTime;
 					

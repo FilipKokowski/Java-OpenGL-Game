@@ -19,6 +19,12 @@ public class Handler {
 		}
 	}
 	
+	public static void renderText() {
+		for(GameObject go : gameObjects){
+			go.renderText();
+		}
+	}
+	
 	public static void renderHUD() {
 		for(HUD hud : HUDs){
 			hud.render();
