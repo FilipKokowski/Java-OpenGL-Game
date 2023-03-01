@@ -1,5 +1,6 @@
 package org.scene.entities;
 
+import org.engine.GameLoop;
 import org.gameobjects.GameObject;
 import org.gameobjects.ID;
 import org.graphics.Graphics;
@@ -18,7 +19,7 @@ public class Obstacle extends GameObject{
 		centerTextHorizontally();
 		centerTextVertically();
 		
-		text = "("+ x + "/" + y +")";
+		text = "FPS: " + GameLoop.FPS;
 	}
 	
 	public void render() {

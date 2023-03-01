@@ -22,8 +22,7 @@ public class BodyPartsHandler {
 	public ArrayList<BodyPart> bodyParts = new ArrayList<BodyPart>();
 	
 	public BodyPartsHandler(String path) {
-		InputStream url = getClass().getClassLoader().getResourceAsStream(path);
-		
+		InputStream url = getClass().getClassLoader().getResourceAsStream(path);	
 	
 		try {
 			

@@ -1,6 +1,7 @@
 package org.graphics;
 
 import java.awt.Font;
+import java.util.HashMap;
 
 import org.engine.GameLoop;
 import org.engine.Handler;
@@ -30,12 +31,32 @@ public class EventListener implements GLEventListener{
 		
 		gl.glTranslatef(-Camera.x, 0, 0);
 		Handler.render();
-		textRenderer.beginRendering(drawable.getSurfaceWidth(), drawable.getSurfaceHeight());
-		Handler.renderText();
-		textRenderer.endRendering();
+		
+		HashMap<String, TextRenderer> textInfo = Handler.getTextInfo();
+		
+		for (String objectID : textInfo.keySet()) {
+			textRenderer = textInfo.get(objectID);
+			
+			textRenderer.beginRendering(drawable.getSurfaceWidth(), drawable.getSurfaceHeight());
+			Handler.renderText(objectID);
+			textRenderer.endRendering();	
+			//System.out.println(objectID + " " + renderer);
+		}
 		gl.glTranslatef(Camera.x, 0, 0);
 		
 		Handler.renderHUD();
+		
+		HashMap<String, TextRenderer> HUDtextInfo = Handler.getHUDTextInfo();
+		
+		for (String objectID : HUDtextInfo.keySet()) {
+			textRenderer = HUDtextInfo.get(objectID);
+			
+			textRenderer.beginRendering(drawable.getSurfaceWidth(), drawable.getSurfaceHeight());
+			Handler.renderHUDText(objectID);
+			textRenderer.endRendering();	
+			//System.out.println(objectID + " " + renderer);
+		}
+
 	}
 
 	@Override

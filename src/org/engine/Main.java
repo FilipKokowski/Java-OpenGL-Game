@@ -5,7 +5,6 @@ import org.scene.entities.Obstacle;
 import org.scene.entities.Player;
 
 import org.gameobjects.Entities;
-import org.graphics.HUD;
 import org.graphics.Renderer;
 
 public class Main {
@@ -22,9 +21,9 @@ public class Main {
 		obstacle.setColor(1f, .25f, .58f, .5f);
 		Handler.addGO(obstacle);
 		
-		Handler.addHUD(new HUD(-Renderer.unitsWide / 2 + .5f,Renderer.unitsTall / 2 - .5f,1,1));
+		//Handler.addHUD(new HUD(-Renderer.unitsWide / 2 + .5f,Renderer.unitsTall / 2 - .5f,1,1));
         
-		/*Obstacle obstacle2 = new Obstacle(-5, onGround(1) + 1, 2, 1);
+		Obstacle obstacle2 = new Obstacle(-5, onGround(1) + 1, 2, 1);
 		obstacle2.setColor(1f, .25f, .58f, .5f);
 		Handler.addGO(obstacle2);
 		
@@ -34,7 +33,7 @@ public class Main {
 		
 		Obstacle obstacle4 = new Obstacle(-7.5f, onGround(1) + 2.25f, 2, 1);
 		obstacle4.setColor(1f, .25f, .58f, .5f);
-		Handler.addGO(obstacle4);*/
+		Handler.addGO(obstacle4);
 		
 		Entities.physicsOn = true;
 	}

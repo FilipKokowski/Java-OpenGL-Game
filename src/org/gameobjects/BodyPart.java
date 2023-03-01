@@ -68,7 +68,7 @@ public class BodyPart extends Entities{
 		drawJoints();
 		if(!hasJoints) showJoints = false;
 
-		//drawBounds();
+		drawBounds();
 		
 		rotation = parentAngle;
 		

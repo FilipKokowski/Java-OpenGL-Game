@@ -1,6 +1,8 @@
 package org.graphics;
 
+import org.engine.GameLoop;
 import org.gameobjects.GameObject;
+import org.scene.entities.Camera;
 
 public class HUD extends GameObject {
 
@@ -17,6 +19,12 @@ public class HUD extends GameObject {
 	public void render() {
 		Graphics.setColor(red, green, blue, alpha);
 		Graphics.fillRect(x, y, width, height);
+	}
+	
+	public void update() {
+		textOffsetX = Camera.x;
+		textOffsetY = Camera.y;
+		text = "FPS: " + GameLoop.FPS;
 	}
 	
 	public void Color(float red, float green, float blue, float alpha) {

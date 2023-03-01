@@ -1,20 +1,14 @@
 package org.scene.entities;
 
-import java.awt.Font;
-import java.awt.geom.Rectangle2D;
-
 import org.engine.BodyPartsHandler;
 import org.engine.GameLoop;
 import org.engine.Handler;
 import org.gameobjects.Entities;
 import org.gameobjects.ID;
-import org.graphics.EventListener;
 import org.graphics.Graphics;
-import org.graphics.Renderer;
 import org.input.KeyInput;
 
 import com.jogamp.newt.event.KeyEvent;
-import com.jogamp.opengl.util.awt.TextRenderer;
 
 public class Player extends Entities{
 	
@@ -56,15 +50,15 @@ public class Player extends Entities{
 		
 		bodyParts = new BodyPartsHandler("res/org/Entities/Skeleton.json");
 		
-		//font = new Font("SansSerif", Font.BOLD, 24);
-		
+		fontSize = 16;
+		setCustomFont("res/org/fonts/pixelmix.ttf");
+		setTextColor(0,0,1,1);
 	}
 	
 	public void render() {
 		Graphics.setColor(1, 1, 1, .05f);
-		Graphics.setTextColor(1, 0, 0, 1);
 		Graphics.fillRect(x, y, width, height);
-		//Graphics.setTextColor(1, 0, 0, 1);
+		Graphics.setTextColor(1, 0, 0, 1);
 		//Graphics.drawString(x, y, "Player");
 	}
 	

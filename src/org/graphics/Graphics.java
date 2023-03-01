@@ -2,8 +2,8 @@ package org.graphics;
 
 
 import java.awt.Font;
+import java.awt.geom.Rectangle2D;
 
-import org.engine.GameLoop;
 import org.resource.ImageResource;
 import org.scene.entities.Camera;
 
@@ -68,7 +68,8 @@ public class Graphics {
 		gl.glTranslatef(-x, -y, 0);
 	}
 	
-	public static void fillRect(float x, float y, float w, float h) {
+	public static void fillRect(float x, float y, float width, float height) {
+		
 		GL2 gl = EventListener.gl;
 		
 		gl.glTranslatef(x, y, 0);
@@ -76,10 +77,10 @@ public class Graphics {
 		
 		gl.glColor4f(red, green, blue, alpha);
 		gl.glBegin(GL2.GL_QUADS);
-			gl.glVertex2f(-w / 2, -h / 2);
-			gl.glVertex2f(w / 2, -h / 2);
-			gl.glVertex2f(w / 2, h / 2);
-			gl.glVertex2f(-w / 2, h / 2);
+			gl.glVertex2f(-width / 2, -height / 2);
+			gl.glVertex2f(width / 2, -height / 2);
+			gl.glVertex2f(width / 2, height / 2);
+			gl.glVertex2f(-width / 2, height / 2);
 		gl.glEnd();
 		
 		gl.glTranslatef(-x, -y, 0);
@@ -87,6 +88,14 @@ public class Graphics {
 	}
 	
 	public static void drawCircle(float x, float y, float radius) {
+		if(x - radius - Camera.x > Renderer.unitsWide / 2 || x + radius - Camera.x < -Renderer.unitsWide / 2) {
+			return;
+		}
+		
+		if(y - radius - Camera.y > Renderer.unitsTall / 2 || y + radius - Camera.y < -Renderer.unitsTall / 2) {
+			return;
+		}
+		
 		GL2 gl = EventListener.gl;
 		
 		gl.glColor4f(red, green, blue, alpha);
@@ -115,8 +124,19 @@ public class Graphics {
 	}
 	
 	public static void drawString(float x, float y, String text) {
+		Rectangle2D textBounds = EventListener.textRenderer.getBounds(text);
+		
+		if(x - textBounds.getWidth() / 2 - Camera.x > Renderer.unitsWide / 2 || x + textBounds.getWidth() / 2 - Camera.x < -Renderer.unitsWide / 2) {
+			return;
+		}
+		
+		if(y - textBounds.getHeight() / 2 - Camera.y > Renderer.unitsTall / 2 || y + textBounds.getHeight() / 2 - Camera.y < -Renderer.unitsTall / 2) {
+			return;
+		}
+		
 		EventListener.textRenderer.setColor(textRed, textGreen, textBlue, textAlpha);
 		EventListener.textRenderer.draw(text, (int)(Renderer.getWindowWidth() / Renderer.unitsWide * (x - Camera.x) + Renderer.getWindowWidth() / 2), (int)(Renderer.getWindowHeight() / Renderer.unitsTall * (y - Camera.y) + Renderer.getWindowHeight() / 2));
+		//System.out.println(x + "/" + y + ": " + text + " | " + EventListener.textRenderer);
 	}
 	
 	public static void Rotate(float rotate) {

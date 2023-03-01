@@ -1,9 +1,12 @@
 package org.gameobjects;
 
 import java.awt.Font;
+import java.awt.FontFormatException;
 import java.awt.event.KeyEvent;
 import java.awt.geom.Rectangle2D;
+import java.io.IOException;
 import java.util.Iterator;
+import java.util.UUID;
 
 import org.engine.AnimationHandler;
 import org.engine.Handler;
@@ -14,6 +17,8 @@ import org.input.KeyInput;
 import org.input.MouseInput;
 import org.resource.ImageResource;
 import org.scene.entities.Camera;
+
+import com.jogamp.opengl.util.awt.TextRenderer;
 
 public class GameObject {
 	protected float x = 0;
@@ -32,6 +37,11 @@ public class GameObject {
 	public float blue = 1;
 	public float alpha = 1;
 	
+	public float textRed = 1;
+	public float textGreen = 0;
+	public float textBlue = 0;
+	public float textAlpha = 1;
+	
 	public float rotation = 0;
 
 	public boolean dragged;
@@ -45,6 +55,10 @@ public class GameObject {
 	public ImageResource txt;
 	
 	public Font font = new Font("Comic Sans MS", Font.BOLD, 12);
+	public TextRenderer textRenderer = new TextRenderer(font);
+	public Rectangle2D textBounds = null;
+	public float fontSize = 12;
+	
 	public String text = "";
 	public float textWidth = 0;
 	public float textHeight = 0;
@@ -58,6 +72,7 @@ public class GameObject {
 	public float jointPointY;
 	
 	public ID id = null;
+	public String uuid = UUID.randomUUID().toString().replaceAll("_", "");
 	
 	public GameObject(float x, float y, float width, float height, String src) {
 		this.x = x;
@@ -88,9 +103,22 @@ public class GameObject {
 	
 	public void renderText() {
 		Graphics.Rotate(-rotation);
-		//Graphics.setFont(font);
+		Graphics.setTextColor(textRed, textGreen, textBlue, textAlpha);
 		Graphics.drawString(x + textOffsetX, y + textOffsetY, text);
 		Graphics.Rotate(0);
+	}
+	
+	public void setFont(Font font) {
+		this.font = font;
+		textRenderer = new TextRenderer(font);
+	}
+	
+	public void setCustomFont(String path) {
+		try {
+			font = Font.createFont(Font.TRUETYPE_FONT, getClass().getClassLoader().getResourceAsStream(path)).deriveFont(fontSize);
+			
+			textRenderer = new TextRenderer(font);
+		} catch (FontFormatException | IOException e) {}
 	}
 	
 	public void centerTextHorizontally() {
@@ -125,6 +153,13 @@ public class GameObject {
 		green = Math.max(0, Math.min(1, g));
 		blue = Math.max(0, Math.min(1, b));
 		alpha = Math.max(0, Math.min(1, a));
+	}
+	
+	public void setTextColor(float r, float g, float b, float a) {
+		textRed = Math.max(0, Math.min(1, r));
+		textGreen = Math.max(0, Math.min(1, g));
+		textBlue = Math.max(0, Math.min(1, b));
+		textAlpha = Math.max(0, Math.min(1, a));
 	}
 	
 	public float[] getBounds() {
@@ -209,8 +244,8 @@ public class GameObject {
 	
 	public void drawJoints() {
 		showJoints = true;
-		Graphics.setColor(1, .1f, .66f, 1);
-		Graphics.drawCircle(jointPointX, jointPointY, .01f);
+		Graphics.setColor(.8f, .6f, .8f, 1);
+		Graphics.drawCircle(jointPointX, jointPointY, .02f);
 		Graphics.setColor(1, 1, 1, 1);
 	}
 	
