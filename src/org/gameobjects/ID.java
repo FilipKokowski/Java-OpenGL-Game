@@ -4,5 +4,7 @@ public enum ID {
 	Player(),
 	Entities(),
 	Obstacle(),
-	Projectile()
+	Projectile(),
+	HUD(),
+	GameObject()
 }

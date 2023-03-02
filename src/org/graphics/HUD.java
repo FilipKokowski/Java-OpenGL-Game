@@ -2,6 +2,8 @@ package org.graphics;
 
 import org.engine.GameLoop;
 import org.gameobjects.GameObject;
+import org.gameobjects.ID;
+import org.input.MouseInput;
 import org.scene.entities.Camera;
 
 public class HUD extends GameObject {
@@ -18,6 +20,8 @@ public class HUD extends GameObject {
 		green = 1;
 		blue = 1;
 		alpha = 1;
+		
+		id = ID.HUD;
 		
 		fontSize = 24;
 		setCustomFont("res/org/fonts/pixelmix.ttf");
@@ -36,7 +40,9 @@ public class HUD extends GameObject {
 		textOffsetY += Camera.y;
 		text = "FPS: " + GameLoop.FPS;
 		
-		if(interactable && mouseHoveringOver()) 
+		System.out.println(MouseInput.getMouseX() + "/" + MouseInput.getMouseY() + ": (" + x + "/" + y + ")");
+		
+		if(interactable && mouseHoveringOver())
 			drawBounds();
 		
 		else

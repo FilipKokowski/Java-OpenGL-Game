@@ -5,6 +5,7 @@ import java.awt.Font;
 import java.awt.geom.Rectangle2D;
 
 import org.gameobjects.GameObject;
+import org.gameobjects.ID;
 import org.resource.ImageResource;
 import org.scene.entities.Camera;
 
@@ -13,7 +14,7 @@ import com.jogamp.opengl.util.awt.TextRenderer;
 import com.jogamp.opengl.util.texture.Texture;
 
 public class Graphics {
-	
+	             
 	//From 0 to 1
 	private static float red = 1;
 	private static float green = 1;
@@ -27,16 +28,16 @@ public class Graphics {
 	//In degrees
 	private static float rotation = 0;
 
-	public static void drawImage(ImageResource img, float x, float y, float width, float height) {
+	public static void drawImage(ImageResource img, float x, float y, float width, float height, ID id) {
 		GL2 gl = EventListener.gl;
 		
 		Texture texture = img.getTexture();
 		
-		if(x - width / 2 - Camera.x > Renderer.unitsWide / 2 || x + width / 2 - Camera.x < -Renderer.unitsWide / 2) {
+		if((x - width / 2 - Camera.x > Renderer.unitsWide / 2 || x + width / 2 - Camera.x < -Renderer.unitsWide / 2)       && !id.equals(ID.HUD)) {
 			return;
 		}
 		
-		if(y - height / 2 - Camera.y > Renderer.unitsTall / 2 || y + height / 2 - Camera.y < -Renderer.unitsTall / 2) {
+		if((y - height / 2 - Camera.y > Renderer.unitsTall / 2 || y + height / 2 - Camera.y < -Renderer.unitsTall / 2) && !id.equals(ID.HUD)) {
 			return;
 		}
 		
@@ -88,12 +89,12 @@ public class Graphics {
 		gl.glRotatef(rotation, 0, 0, 1);
 	}
 	
-	public static void drawCircle(float x, float y, float radius) {
-		if(x - radius - Camera.x > Renderer.unitsWide / 2 || x + radius - Camera.x < -Renderer.unitsWide / 2) {
+	public static void drawCircle(float x, float y, float radius, ID id) {
+		if((x - radius - Camera.x > Renderer.unitsWide / 2 || x + radius - Camera.x < -Renderer.unitsWide / 2) && !id.equals(ID.HUD)) {
 			return;
 		}
 		
-		if(y - radius - Camera.y > Renderer.unitsTall / 2 || y + radius - Camera.y < -Renderer.unitsTall / 2) {
+		if((y - radius - Camera.y > Renderer.unitsTall / 2 || y + radius - Camera.y < -Renderer.unitsTall / 2) && !id.equals(ID.HUD)) {
 			return;
 		}
 		
@@ -109,18 +110,18 @@ public class Graphics {
 	    
 	}
 	
-	public static void drawLine(float x1, float y1, float x2, float y2) {
+	public static void drawLine(float x1, float y1, float x2, float y2, ID id) {
 		float furtherX = (x1 > x2) ? x1 : x2;
 		float furtherY = (y1 > y2) ? y1 : y2;
 		
 		float closerX = (x2 > x1) ? x1 : x2;
 		float closerY = (y2 > y1) ? y1 : y2;
 		
-		if(closerX - Camera.x > Renderer.unitsWide / 2 || furtherX - Camera.x < -Renderer.unitsWide / 2) {
+		if((closerX - Camera.x > Renderer.unitsWide / 2 || furtherX - Camera.x < -Renderer.unitsWide / 2) && !id.equals(ID.HUD)) {
 			return;
 		}
 		
-		if(closerY - Camera.y > Renderer.unitsTall / 2 || furtherY - Camera.y < -Renderer.unitsTall / 2) {
+		if((closerY - Camera.y > Renderer.unitsTall / 2 || furtherY - Camera.y < -Renderer.unitsTall / 2) && !id.equals(ID.HUD)) {
 			return;
 		}
 		
@@ -138,16 +139,16 @@ public class Graphics {
 		EventListener.textRenderer = new TextRenderer(font);
 	}
 	
-	public static void drawString(float x, float y, String text, GameObject object) {
+	public static void drawString(float x, float y, String text, GameObject object, ID id) {
 		Rectangle2D textBounds = EventListener.textRenderer.getBounds(text);
 		
 		object.textBounds = textBounds;
 		
-		if(x - textBounds.getWidth() / 2 - Camera.x > Renderer.unitsWide / 2 || x + textBounds.getWidth() / 2 - Camera.x < -Renderer.unitsWide / 2) {
+		if((x - textBounds.getWidth() / 2 - Camera.x > Renderer.unitsWide / 2 || x + textBounds.getWidth() / 2 - Camera.x < -Renderer.unitsWide / 2) && !id.equals(ID.HUD)) {
 			return;
 		}
 		
-		if(y - textBounds.getHeight() / 2 - Camera.y > Renderer.unitsTall / 2 || y + textBounds.getHeight() / 2 - Camera.y < -Renderer.unitsTall / 2) {
+		if((y - textBounds.getHeight() / 2 - Camera.y > Renderer.unitsTall / 2 || y + textBounds.getHeight() / 2 - Camera.y < -Renderer.unitsTall / 2) && !id.equals(ID.HUD)) {
 			return;
 		}
 		

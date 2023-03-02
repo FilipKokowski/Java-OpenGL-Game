@@ -70,7 +70,7 @@ public class GameObject {
 	public float jointPointX;
 	public float jointPointY;
 	
-	public ID id = null;
+	public ID id = ID.GameObject;
 	public String uuid = UUID.randomUUID().toString().replaceAll("_", "");
 	
 	public GameObject(float x, float y, float width, float height, String src) {
@@ -90,7 +90,7 @@ public class GameObject {
 	public void render() {
 		
 		Graphics.Rotate(-rotation);
-		Graphics.drawImage(txt, x, y, width, height);
+		Graphics.drawImage(txt, x, y, width, height, id);
 		Graphics.Rotate(0);
 		
 		if(showBounds)
@@ -103,7 +103,7 @@ public class GameObject {
 	public void renderText() {
 		Graphics.Rotate(-rotation);
 		Graphics.setTextColor(textRed, textGreen, textBlue, textAlpha);
-		Graphics.drawString(x + textOffsetX, y + textOffsetY, text, this);
+		Graphics.drawString(x + textOffsetX, y + textOffsetY, text, this, id);
 		Graphics.Rotate(0);
 	}
 	
@@ -244,10 +244,10 @@ public class GameObject {
 		float y4 = bounds[7];
 		
 		Graphics.setColor(1, 0, 0, 1);
-		Graphics.drawLine(x1, y1, x2, y2);
-		Graphics.drawLine(x2, y2, x3, y3);
-		Graphics.drawLine(x3, y3, x4, y4);
-		Graphics.drawLine(x4, y4, x1, y1);
+		Graphics.drawLine(x1, y1, x2, y2, id);
+		Graphics.drawLine(x2, y2, x3, y3, id);
+		Graphics.drawLine(x3, y3, x4, y4, id);
+		Graphics.drawLine(x4, y4, x1, y1, id);
 		Graphics.setColor(1, 1, 1, 1);
 	}
 	
@@ -256,7 +256,7 @@ public class GameObject {
 	public void drawJoints() {
 		showJoints = true;
 		Graphics.setColor(.8f, .6f, .8f, 1);
-		Graphics.drawCircle(jointPointX, jointPointY, .02f);
+		Graphics.drawCircle(jointPointX, jointPointY, .02f, id);
 		Graphics.setColor(1, 1, 1, 1);
 	}
 	

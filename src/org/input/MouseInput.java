@@ -1,5 +1,6 @@
 package org.input;
 
+import org.gameobjects.ID;
 import org.graphics.Graphics;
 import org.graphics.Renderer;
 import org.scene.entities.Camera;
@@ -11,6 +12,9 @@ public class MouseInput implements MouseListener {
 
 	public static float x = 0;
 	public static float y = 0;
+	
+	public static float worldX = 0;
+	public static float worldY = 0;
 	
 	public static float initialX = 0;
 	public static float initialY = 0;
@@ -28,7 +32,7 @@ public class MouseInput implements MouseListener {
 	@Override
 	public void mouseDragged(MouseEvent e) {
 		
-		Graphics.drawLine(initialX, initialY, e.getX(), e.getY());
+		Graphics.drawLine(initialX, initialY, e.getX(), e.getY(), ID.GameObject);
 		
 		pressed = true;
 		mouseMoved(e);
@@ -49,10 +53,12 @@ public class MouseInput implements MouseListener {
 	@Override
 	public void mouseMoved(MouseEvent e) {
 	
-		x = ((Renderer.unitsWide / Renderer.getWindowWidth()) * e.getX() - Renderer.unitsWide/2) + Camera.x;
+		worldX = ((Renderer.unitsWide / Renderer.getWindowWidth()) * e.getX() - Renderer.unitsWide/2) + Camera.x;
+		x = ((Renderer.unitsWide / Renderer.getWindowWidth()) * e.getX() - Renderer.unitsWide/2);
 		
 		float unitsTall = Renderer.unitsWide * (float) ((float)Renderer.getWindowHeight() / (float)Renderer.getWindowWidth());
-		y = -(unitsTall / Renderer.getWindowHeight() * e.getY() - unitsTall/2) + Camera.y;
+		worldY = -(unitsTall / Renderer.getWindowHeight() * e.getY() - unitsTall/2) + Camera.y;
+		y = -(unitsTall / Renderer.getWindowHeight() * e.getY() - unitsTall/2);
 	
 	}
 	
@@ -79,6 +85,14 @@ public class MouseInput implements MouseListener {
 		rotation -= wheelRotationDirection * rotationSpeed;
 		
 		//System.out.println(wheelRotationDirection);
+	}
+	
+	public static float getMouseWorldX() {
+		return worldX;
+	}
+	
+	public static float getMouseWorldY() {
+		return worldY;
 	}
 	
 	public static float getMouseX() {

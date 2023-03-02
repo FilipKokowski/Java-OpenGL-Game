@@ -2,12 +2,9 @@ package org.scene.entities;
 
 import org.engine.GameLoop;
 import org.engine.Handler;
-import org.engine.Main;
 import org.gameobjects.Entities;
 import org.gameobjects.GameObject;
 import org.gameobjects.ID;
-import org.graphics.HUD;
-import org.graphics.Renderer;
 
 public class Boomerang extends Entities{
 	
