@@ -5,22 +5,29 @@ import org.gameobjects.GameObject;
 import org.scene.entities.Camera;
 
 public class HUD extends GameObject {
+	
+	public boolean interactable;
 
-	public HUD(float x, float y, float width, float height) {
+	public HUD(float x, float y, float width, float height, boolean interactable) {
 		super(x, y, width, height, "");
 		// TODO Auto-generated constructor stub
 		
-		red = .5f;
-		green = .5f;
-		blue = .5f;
-		alpha = .75f;
+		this.interactable = interactable;
+		
+		red = 1;
+		green = 1;
+		blue = 1;
+		alpha = 1;
 		
 		fontSize = 24;
 		setCustomFont("res/org/fonts/pixelmix.ttf");
 		setTextColor(0,0,0,1);
 	}
 	
-	public void render() {}
+	/*public void render() {
+		Graphics.setColor(red, green, blue, alpha);
+		Graphics.fillRect(x, y, width, height);
+	}*/
 	
 	public void update() {
 		centerTextHorizontally();
@@ -28,6 +35,12 @@ public class HUD extends GameObject {
 		textOffsetX += Camera.x;
 		textOffsetY += Camera.y;
 		text = "FPS: " + GameLoop.FPS;
+		
+		if(interactable && mouseHoveringOver()) 
+			drawBounds();
+		
+		else
+			hideBounds();
 	}
 	
 	public void Color(float red, float green, float blue, float alpha) {

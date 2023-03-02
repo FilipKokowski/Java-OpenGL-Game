@@ -64,7 +64,7 @@ public class GameObject {
 	public float textOffsetX = 0;
 	public float textOffsetY = 0;
 
-	public boolean showBounds;
+	private boolean showBounds;
 	public boolean showJoints;
 	
 	public float jointPointX;
@@ -251,11 +251,18 @@ public class GameObject {
 		Graphics.setColor(1, 1, 1, 1);
 	}
 	
+	public void hideBounds() { showBounds = false; }
+	
 	public void drawJoints() {
 		showJoints = true;
 		Graphics.setColor(.8f, .6f, .8f, 1);
 		Graphics.drawCircle(jointPointX, jointPointY, .02f);
 		Graphics.setColor(1, 1, 1, 1);
+	}
+	
+	public boolean mouseHoveringOver() {
+		return (MouseInput.getMouseX() > x - width / 2 && MouseInput.getMouseX() < x + width / 2 && 
+				MouseInput.getMouseY() < y + height / 2 && MouseInput.getMouseY() > y - height / 2);
 	}
 	
 	public void draggable() {

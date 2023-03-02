@@ -31,8 +31,8 @@ public class Boomerang extends Entities{
 	
 	public float cooldown = 5;
 	
-	public HUD cooldownBarBottom = new HUD(-(Renderer.unitsWide / 2) + 1.125f, Main.onGround(.25f) + .125f, 2, .25f);
-	public HUD cooldownBarTop = new HUD(-(Renderer.unitsWide / 2) + 1.125f, Main.onGround(.25f) + .125f, 1, .25f);
+	//public HUD cooldownBarBottom = new HUD(-(Renderer.unitsWide / 2) + 1.125f, Main.onGround(.25f) + .125f, 2, .25f);
+	//public HUD cooldownBarTop = new HUD(-(Renderer.unitsWide / 2) + 1.125f, Main.onGround(.25f) + .125f, 1, .25f);
 
 	public Boomerang(float x, float y, float width, float height) {
 		super(x, y, width, height, animationPath);
@@ -44,8 +44,8 @@ public class Boomerang extends Entities{
 		
 		speed = .1f;
 		
-		cooldownBarBottom.Color(.25f, .25f, .25f, .8f);
-		cooldownBarTop.Color(.25f, 1, .25f, .8f);
+		//cooldownBarBottom.Color(.25f, .25f, .25f, .8f);
+		//cooldownBarTop.Color(.25f, 1, .25f, .8f);
 		
 		//Handler.addHUD(cooldownBarBottom);
 		//Handler.addHUD(cooldownBarTop);
