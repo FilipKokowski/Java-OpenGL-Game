@@ -23,7 +23,7 @@ public class Obstacle extends GameObject{
 		centerTextHorizontally();
 		placeTextAbove();
 		
-		text = "FPS: " + GameLoop.FPS;
+		text = "(" + x + "/" + y + ")";
 	}
 	
 	public void render() {

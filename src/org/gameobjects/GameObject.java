@@ -267,15 +267,15 @@ public class GameObject {
 	
 	public void draggable() {
 		
-		if(isDraggable && (MouseInput.getMouseX() > x - width / 2 && MouseInput.getMouseX() < x + width / 2
-				&& MouseInput.getMouseY() > y - height / 2 && MouseInput.getMouseY() < y + height / 2 && MouseInput.pressed && !MouseInput.draggingSmth) || dragged) {
+		if(isDraggable && (MouseInput.getMouseWorldX() > x - width / 2 && MouseInput.getMouseWorldX() < x + width / 2
+				&& MouseInput.getMouseWorldY() > y - height / 2 && MouseInput.getMouseWorldY() < y + height / 2 && MouseInput.pressed && !MouseInput.draggingSmth) || dragged) {
 			
 			//System.out.println("MouseInput.getMouseX() = " + MouseInput.getMouseX());
 			//System.out.println(this.getClass().getSimpleName());
 			//System.out.println("MouseInput.rotationSpeed = " + MouseInput.rotationSpeed + "\n\n");
 			
-			x = MouseInput.getMouseX();
-			y = MouseInput.getMouseY();
+			x = MouseInput.getMouseWorldX();
+			y = MouseInput.getMouseWorldY();
 			
 			rotation += MouseInput.rotation;
 			
