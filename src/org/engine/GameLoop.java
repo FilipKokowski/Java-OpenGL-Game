@@ -43,7 +43,7 @@ public class GameLoop {
 					
 					FPSCounter++;
 					if(System.nanoTime() >= lastFPSCheck + 1000000000) {
-						System.out.println(FPSCounter);
+						//System.out.println(FPSCounter);
 						FPS = FPSCounter;
 						FPSCounter = 0;
 						lastFPSCheck = System.nanoTime();

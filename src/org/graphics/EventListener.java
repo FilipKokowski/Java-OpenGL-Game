@@ -36,10 +36,10 @@ public class EventListener implements GLEventListener{
 		
 		for (String objectID : textInfo.keySet()) {
 			textRenderer = textInfo.get(objectID);
-			
+
 			textRenderer.beginRendering(drawable.getSurfaceWidth(), drawable.getSurfaceHeight());
 			Handler.renderText(objectID);
-			textRenderer.endRendering();	
+			textRenderer.endRendering();
 			//System.out.println(objectID + " " + renderer);
 		}
 		gl.glTranslatef(Camera.x, 0, 0);

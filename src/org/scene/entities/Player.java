@@ -66,7 +66,7 @@ public class Player extends Entities{
 	@Override
 	public void update() {
 		centerTextHorizontally();
-		centerTextVertically();
+		placeTextAbove();
 		
 		text = "("+ x + "/" + y +")";
 		

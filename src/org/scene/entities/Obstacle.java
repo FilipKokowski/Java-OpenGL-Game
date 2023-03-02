@@ -1,5 +1,7 @@
 package org.scene.entities;
 
+import java.awt.Font;
+
 import org.engine.GameLoop;
 import org.gameobjects.GameObject;
 import org.gameobjects.ID;
@@ -13,11 +15,13 @@ public class Obstacle extends GameObject{
 		super(x, y, width, height, animationPath);
 		
 		id = ID.Obstacle;
+		
+		setFont(new Font("SansSerif", Font.BOLD, (int)fontSize));
 	}
 	
 	public void update() {
 		centerTextHorizontally();
-		centerTextVertically();
+		placeTextAbove();
 		
 		text = "FPS: " + GameLoop.FPS;
 	}

@@ -10,7 +10,6 @@ import java.util.UUID;
 
 import org.engine.AnimationHandler;
 import org.engine.Handler;
-import org.graphics.EventListener;
 import org.graphics.Graphics;
 import org.graphics.Renderer;
 import org.input.KeyInput;
@@ -80,7 +79,7 @@ public class GameObject {
 		this.width = width;
 		this.height = height;
 		
-		if(src.equals("")) src = "res/org/scene/defaultTexture.png";
+		//if(src.equals("")) src = "res/org/scene/defaultTexture.png";
 		
 		this.animationPath = src;
 		this.txt = new ImageResource(src);
@@ -104,7 +103,7 @@ public class GameObject {
 	public void renderText() {
 		Graphics.Rotate(-rotation);
 		Graphics.setTextColor(textRed, textGreen, textBlue, textAlpha);
-		Graphics.drawString(x + textOffsetX, y + textOffsetY, text);
+		Graphics.drawString(x + textOffsetX, y + textOffsetY, text, this);
 		Graphics.Rotate(0);
 	}
 	
@@ -122,17 +121,27 @@ public class GameObject {
 	}
 	
 	public void centerTextHorizontally() {
-		Rectangle2D bounds = EventListener.textRenderer.getBounds(text);
-		textWidth = (float)(Renderer.unitsWide / Renderer.getWindowWidth() * bounds.getWidth());
+		if(textBounds != null) {
+			textWidth = (float)(Renderer.unitsWide / Renderer.getWindowWidth() * textBounds.getWidth());
 		
-		textOffsetX = -textWidth / 2;
+			textOffsetX = -textWidth / 2;
+		}
 	}
 	
 	public void centerTextVertically() {
-		Rectangle2D bounds = EventListener.textRenderer.getBounds(text);
-		textHeight = (float)(Renderer.unitsTall / Renderer.getWindowHeight() * bounds.getHeight());
+		if(textBounds != null) {
+			textHeight = (float)(Renderer.unitsTall / Renderer.getWindowHeight() * textBounds.getHeight());
 		
-		textOffsetY = height / 1.75f;
+			textOffsetY = -textHeight / 4;
+		}
+	}
+	
+	public void placeTextAbove() {
+		if(textBounds != null) {
+			textHeight = (float)(Renderer.unitsTall / Renderer.getWindowHeight() * textBounds.getHeight());
+		
+			textOffsetY = height / 1.75f;
+		}
 	}
 	
 	public float getWorldX() {return ((Renderer.unitsWide / Renderer.getWindowWidth()) * x - Renderer.unitsWide/2) + Camera.x;}
@@ -250,11 +259,12 @@ public class GameObject {
 	}
 	
 	public void draggable() {
+		
 		if(isDraggable && (MouseInput.getMouseX() > x - width / 2 && MouseInput.getMouseX() < x + width / 2
 				&& MouseInput.getMouseY() > y - height / 2 && MouseInput.getMouseY() < y + height / 2 && MouseInput.pressed && !MouseInput.draggingSmth) || dragged) {
 			
 			//System.out.println("MouseInput.getMouseX() = " + MouseInput.getMouseX());
-			//System.out.println("x = " + x);
+			//System.out.println(this.getClass().getSimpleName());
 			//System.out.println("MouseInput.rotationSpeed = " + MouseInput.rotationSpeed + "\n\n");
 			
 			x = MouseInput.getMouseX();

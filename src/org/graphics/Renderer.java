@@ -18,8 +18,6 @@ public class Renderer {
 	public static float unitsWide = 10;
 	public static float unitsTall = 0;
 	
-	
-	
 	public static void init() {
 		GLProfile.initSingleton();
 		profile = GLProfile.get(GLProfile.GL2);
@@ -30,6 +28,7 @@ public class Renderer {
 		window.setSize(screenW, screenH);
 		window.setTitle("JOGL");
 		window.setVisible(true);
+		window.setResizable(false);
 		window.addGLEventListener(new EventListener());
 		window.addMouseListener(new MouseInput());
 		window.addKeyListener(new KeyInput());

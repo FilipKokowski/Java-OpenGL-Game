@@ -15,12 +15,6 @@ public class MouseInput implements MouseListener {
 	public static float initialX = 0;
 	public static float initialY = 0;
 	
-	public static float lastCheckedX = 0;
-	public static float lastCheckedY = 0;
-	
-	public static float mouseVelocityX = 0;
-	public static float mouseVelocityY = 0;
-	
 	public static boolean pressed;
 	public static boolean draggingSmth;
 	
@@ -54,22 +48,12 @@ public class MouseInput implements MouseListener {
 
 	@Override
 	public void mouseMoved(MouseEvent e) {
+	
 		x = ((Renderer.unitsWide / Renderer.getWindowWidth()) * e.getX() - Renderer.unitsWide/2) + Camera.x;
 		
 		float unitsTall = Renderer.unitsWide * (float) ((float)Renderer.getWindowHeight() / (float)Renderer.getWindowWidth());
-		
 		y = -(unitsTall / Renderer.getWindowHeight() * e.getY() - unitsTall/2) + Camera.y;
-		
-		//x = (e.getX() - Renderer.getWindowWidth() / 2) / (Renderer.getWindowWidth() / Renderer.unitsWide) + Camera.x;
-		//y = -((e.getY() - Renderer.getWindowHeight() / 2) / (Renderer.getWindowHeight() / Renderer.unitsTall)) + Camera.y;
-		
-		mouseVelocityX = (x - lastCheckedX) / .1f;
-		mouseVelocityY = (y - lastCheckedY) / .1f;
-		
-		lastCheckedX = x;
-		lastCheckedY = y;
-		
-		//System.out.println("mouseX: " + x + " mouseY: " + y);
+	
 	}
 	
 	@Override

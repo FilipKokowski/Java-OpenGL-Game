@@ -4,6 +4,7 @@ package org.graphics;
 import java.awt.Font;
 import java.awt.geom.Rectangle2D;
 
+import org.gameobjects.GameObject;
 import org.resource.ImageResource;
 import org.scene.entities.Camera;
 
@@ -109,6 +110,20 @@ public class Graphics {
 	}
 	
 	public static void drawLine(float x1, float y1, float x2, float y2) {
+		float furtherX = (x1 > x2) ? x1 : x2;
+		float furtherY = (y1 > y2) ? y1 : y2;
+		
+		float closerX = (x2 > x1) ? x1 : x2;
+		float closerY = (y2 > y1) ? y1 : y2;
+		
+		if(closerX - Camera.x > Renderer.unitsWide / 2 || furtherX - Camera.x < -Renderer.unitsWide / 2) {
+			return;
+		}
+		
+		if(closerY - Camera.y > Renderer.unitsTall / 2 || furtherY - Camera.y < -Renderer.unitsTall / 2) {
+			return;
+		}
+		
 		GL2 gl = EventListener.gl;
 		
 		gl.glColor4f(red, green, blue, alpha);
@@ -123,8 +138,10 @@ public class Graphics {
 		EventListener.textRenderer = new TextRenderer(font);
 	}
 	
-	public static void drawString(float x, float y, String text) {
+	public static void drawString(float x, float y, String text, GameObject object) {
 		Rectangle2D textBounds = EventListener.textRenderer.getBounds(text);
+		
+		object.textBounds = textBounds;
 		
 		if(x - textBounds.getWidth() / 2 - Camera.x > Renderer.unitsWide / 2 || x + textBounds.getWidth() / 2 - Camera.x < -Renderer.unitsWide / 2) {
 			return;

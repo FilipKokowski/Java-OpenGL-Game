@@ -14,16 +14,19 @@ public class HUD extends GameObject {
 		green = .5f;
 		blue = .5f;
 		alpha = .75f;
+		
+		fontSize = 24;
+		setCustomFont("res/org/fonts/pixelmix.ttf");
+		setTextColor(0,0,0,1);
 	}
 	
-	public void render() {
-		Graphics.setColor(red, green, blue, alpha);
-		Graphics.fillRect(x, y, width, height);
-	}
+	public void render() {}
 	
 	public void update() {
-		textOffsetX = Camera.x;
-		textOffsetY = Camera.y;
+		centerTextHorizontally();
+		centerTextVertically();
+		textOffsetX += Camera.x;
+		textOffsetY += Camera.y;
 		text = "FPS: " + GameLoop.FPS;
 	}
 	
