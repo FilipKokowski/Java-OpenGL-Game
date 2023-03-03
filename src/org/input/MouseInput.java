@@ -66,6 +66,8 @@ public class MouseInput implements MouseListener {
 	public void mousePressed(MouseEvent e) {
 		initialX = e.getX();
 		initialY = e.getY();
+		
+		pressed = true;
 			
 		mouseMoved(e);
 	}

@@ -260,9 +260,16 @@ public class GameObject {
 		Graphics.setColor(1, 1, 1, 1);
 	}
 	
-	public boolean mouseHoveringOver() {
+	public boolean hover() {
 		return (MouseInput.getMouseX() > x - width / 2 && MouseInput.getMouseX() < x + width / 2 && 
 				MouseInput.getMouseY() < y + height / 2 && MouseInput.getMouseY() > y - height / 2);
+	}
+	
+	public boolean onClick() {
+		if(hover())
+			return MouseInput.pressed;
+		
+		return false;
 	}
 	
 	public void draggable() {

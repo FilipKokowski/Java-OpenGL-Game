@@ -9,6 +9,19 @@ import org.scene.entities.Camera;
 public class HUD extends GameObject {
 	
 	public boolean interactable;
+	
+	private float textRed = 0;
+	private float textGreen = 0;
+	private float textBlue = 0;
+	private float textAlpha = 1;
+	
+	private float textRedSelect = 0;
+	private float textGreenSelect = 0;
+	private float textBlueSelect = 1;
+	private float textAlphaSelect = 1;
+	
+	private boolean focused;
+	private boolean clicked;
 
 	public HUD(float x, float y, float width, float height, boolean interactable) {
 		super(x, y, width, height, "");
@@ -40,13 +53,32 @@ public class HUD extends GameObject {
 		textOffsetY += Camera.y;
 		text = "FPS: " + GameLoop.FPS;
 		
-		System.out.println(MouseInput.getMouseX() + "/" + MouseInput.getMouseY() + ": (" + x + "/" + y + ")");
+		//System.out.println(MouseInput.getMouseX() + "/" + MouseInput.getMouseY() + ": (" + x + "/" + y + ")");
 		
-		if(interactable && mouseHoveringOver())
+		if(interactable && onClick()) {
+			System.out.println("clicked: " + clicked);
+			if(clicked) {
+				setTextColor(textRed, textGreen, textBlue, textAlpha);
+				System.out.println("Unselect");
+			}
+			else	
+				setTextColor(textRedSelect, textGreenSelect, textBlueSelect, textAlphaSelect);
+			
+			clicked = !clicked;
+			MouseInput.pressed = false;
+		}
+		else if(interactable && hover()) {
 			drawBounds();
-		
-		else
+			focused = true;
+		}
+		else {
 			hideBounds();
+			focused = false;
+		}
+	}
+	
+	public void setTextColorOnSelect(){
+		
 	}
 	
 	public void Color(float red, float green, float blue, float alpha) {
