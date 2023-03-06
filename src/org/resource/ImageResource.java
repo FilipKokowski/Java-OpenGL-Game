@@ -1,6 +1,9 @@
 package org.resource;
 
+import java.awt.Color;
 import java.awt.image.BufferedImage;
+import java.awt.image.ColorModel;
+import java.awt.image.WritableRaster;
 import java.io.IOException;
 import java.io.InputStream;
 import javax.imageio.ImageIO;
@@ -15,6 +18,8 @@ public class ImageResource {
 	private Texture texture = null;
 	private BufferedImage img = null;
 	
+	private BufferedImage mask = null;
+	
 	String trest = null;
 	
 	public ImageResource(String path) {
@@ -22,14 +27,40 @@ public class ImageResource {
 		
 		try {
 			img = ImageIO.read(url);
+			mask = cloneBufferedImage(img);
+			
+			for(int y = 0; y < img.getHeight(); y++) {
+				for(int x = 0; x < img.getWidth(); x++) {
+					if(((img.getRGB(x, y) & 0xff000000) >>> 24) == 0){
+						mask.setRGB(x, y, -460552);
+					} else {
+						mask.setRGB(x, y, -16777215);
+					}
+					//System.out.println(img.getRGB(x, y));
+				}
+			}
+			//System.out.println("Width: " + img.getWidth() + " Height: " + img.getHeight());
+			
 		} catch (IOException e) {
 			e.printStackTrace();
+		} catch (NullPointerException e) {
+			System.out.println("abdwunawd");
 		}
 		
 		if(img != null) {
 			img.flush();
 		}
 	}
+	
+	public static BufferedImage cloneBufferedImage(BufferedImage bufferImage) {
+        ColorModel colorModel = bufferImage.getColorModel();
+        WritableRaster raster = bufferImage.copyData(null);
+        boolean isAlphaPremultiplied = colorModel.isAlphaPremultiplied();
+        return new BufferedImage(colorModel, raster, isAlphaPremultiplied, null);
+    }
+	
+	public BufferedImage getImage() {return img;}
+	public BufferedImage getMask() {return mask;}
 	
 	public Texture getTexture() {
 		if(img == null) return null;

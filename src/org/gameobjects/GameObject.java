@@ -157,6 +157,10 @@ public class GameObject {
 	public float getWidth() { return width; };
 	public float getHeight() { return height; };
 	
+	public void toggleMask() {
+		
+	}
+	
 	public void setColor(float r, float g, float b, float a) {
 		red = Math.max(0, Math.min(1, r));
 		green = Math.max(0, Math.min(1, g));

@@ -77,6 +77,8 @@ public class Player extends Entities{
 			bodyParts.collapse();
 		}
 		
+		
+		
 		if(KeyInput.getKey(KeyEvent.VK_H)) {
 			//System.out.println("collapse");
 			bodyParts.assemble();

@@ -74,6 +74,12 @@ public class Handler {
 		return textInfo;
 	}
 	
+	public static void toggleMasks() {
+		for(GameObject go : gameObjects){
+			go.toggleMask();
+		}
+	}
+	
 	public static void addGO(GameObject go) { gameObjects.offer(go); }
 	public static void removeGO(GameObject go) { gameObjects.remove(go); }
 	
