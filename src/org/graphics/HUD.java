@@ -20,7 +20,6 @@ public class HUD extends GameObject {
 	private float textBlueSelect = 1;
 	private float textAlphaSelect = 1;
 	
-	private boolean focused;
 	private boolean clicked;
 
 	public HUD(float x, float y, float width, float height, boolean interactable) {
@@ -74,11 +73,9 @@ public class HUD extends GameObject {
 		}
 		else if(interactable && hover()) {
 			drawBounds();
-			focused = true;
 		}
 		else {
 			hideBounds();
-			focused = false;
 		}
 	}
 	

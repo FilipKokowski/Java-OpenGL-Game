@@ -5,7 +5,6 @@ import java.awt.image.ColorModel;
 import java.awt.image.WritableRaster;
 import java.io.IOException;
 import java.io.InputStream;
-import java.net.URLConnection;
 
 import javax.imageio.ImageIO;
 

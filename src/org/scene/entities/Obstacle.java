@@ -2,7 +2,6 @@ package org.scene.entities;
 
 import java.awt.Font;
 
-import org.engine.GameLoop;
 import org.gameobjects.GameObject;
 import org.gameobjects.ID;
 import org.graphics.EventListener;
