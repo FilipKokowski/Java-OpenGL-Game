@@ -1,11 +1,12 @@
 package org.resource;
 
-import java.awt.Color;
 import java.awt.image.BufferedImage;
 import java.awt.image.ColorModel;
 import java.awt.image.WritableRaster;
 import java.io.IOException;
 import java.io.InputStream;
+import java.net.URLConnection;
+
 import javax.imageio.ImageIO;
 
 import org.graphics.Renderer;
@@ -18,34 +19,44 @@ public class ImageResource {
 	private Texture texture = null;
 	private BufferedImage img = null;
 	
+	private BufferedImage currentImg = null;
 	private BufferedImage mask = null;
 	
-	String trest = null;
 	
 	public ImageResource(String path) {
 		InputStream url = getClass().getClassLoader().getResourceAsStream(path);
 		
 		try {
 			img = ImageIO.read(url);
-			mask = cloneBufferedImage(img);
+			currentImg = img;
 			
-			for(int y = 0; y < img.getHeight(); y++) {
-				for(int x = 0; x < img.getWidth(); x++) {
-					if(((img.getRGB(x, y) & 0xff000000) >>> 24) == 0){
-						mask.setRGB(x, y, -460552);
-					} else {
-						mask.setRGB(x, y, -16777215);
+            String extension = "";
+            
+            if(path.lastIndexOf(".") > path.lastIndexOf("/")){
+            	extension = path.substring(path.lastIndexOf(".") + 1);
+            }
+            
+			if(extension.equals("png")) {
+				mask = cloneBufferedImage(img);
+				
+				for(int y = 0; y < img.getHeight(); y++) {
+					for(int x = 0; x < img.getWidth(); x++) {
+						if(((img.getRGB(x, y) & 0xff000000) >>> 24) == 0){
+							mask.setRGB(x, y, -460552);
+						} else {
+							mask.setRGB(x, y, -16777215);
+						}
 					}
-					//System.out.println(img.getRGB(x, y));
 				}
+				//System.out.println("Width: " + img.getWidth() + " Height: " + img.getHeight());
 			}
-			//System.out.println("Width: " + img.getWidth() + " Height: " + img.getHeight());
 			
-		} catch (IOException e) {
-			e.printStackTrace();
-		} catch (NullPointerException e) {
-			System.out.println("abdwunawd");
-		}
+			} catch (IOException e) {
+				e.printStackTrace();
+			} catch (NullPointerException e) {
+				System.out.println("abdwunawd");
+			}	
+		
 		
 		if(img != null) {
 			img.flush();
@@ -59,14 +70,21 @@ public class ImageResource {
         return new BufferedImage(colorModel, raster, isAlphaPremultiplied, null);
     }
 	
-	public BufferedImage getImage() {return img;}
-	public BufferedImage getMask() {return mask;}
+	public void switchViewMode() {
+		if(currentImg == img && mask != null) {
+			currentImg = mask;
+		}
+		else {
+			currentImg = img;
+		}
+		texture = null;
+	}
 	
 	public Texture getTexture() {
-		if(img == null) return null;
+		if(currentImg == null) return null;
 		
 		if(texture == null) {
-			texture = AWTTextureIO.newTexture(Renderer.getProfile(), img, true);
+			texture = AWTTextureIO.newTexture(Renderer.getProfile(), currentImg, true);
 		}
 		
 		return texture;

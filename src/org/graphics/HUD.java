@@ -49,6 +49,11 @@ public class HUD extends GameObject {
 	public void update() {
 		centerTextHorizontally();
 		centerTextVertically();
+		
+		if(EventListener.normalViewMode)
+			setTextColor(textRed,textGreen,textBlue,textAlpha);
+		else setTextColor(1,1,1,1);
+		
 		textOffsetX += Camera.x;
 		textOffsetY += Camera.y;
 		text = "FPS: " + GameLoop.FPS;
@@ -59,7 +64,7 @@ public class HUD extends GameObject {
 			System.out.println("clicked: " + clicked);
 			if(clicked) {
 				setTextColor(textRed, textGreen, textBlue, textAlpha);
-				System.out.println("Unselect");
+				//System.out.println("Unselect");
 			}
 			else	
 				setTextColor(textRedSelect, textGreenSelect, textBlueSelect, textAlphaSelect);

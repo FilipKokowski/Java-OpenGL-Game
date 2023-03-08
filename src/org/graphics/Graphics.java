@@ -33,7 +33,9 @@ public class Graphics {
 		
 		Texture texture = img.getTexture();
 		
-		if((x - width / 2 - Camera.x > Renderer.unitsWide / 2 || x + width / 2 - Camera.x < -Renderer.unitsWide / 2)       && !id.equals(ID.HUD)) {
+		if(texture == null) return;
+		
+		if((x - width / 2 - Camera.x > Renderer.unitsWide / 2 || x + width / 2 - Camera.x < -Renderer.unitsWide / 2) && !id.equals(ID.HUD)) {
 			return;
 		}
 		

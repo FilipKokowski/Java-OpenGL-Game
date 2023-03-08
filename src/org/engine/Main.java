@@ -12,9 +12,8 @@ public class Main {
 	
 	public static void main(String[] args) {
 		Renderer.init();
-		GameLoop.start();
 		
-		Handler.addGO(new Background("res/org/scene/background/bg.jpg"));
+		Handler.addGO(new Background("res/org/scene/background/bg.png"));
 		
 		Handler.addGO(new Player());
 		
@@ -24,6 +23,8 @@ public class Main {
 		
 		Handler.addHUD(new HUD(-Renderer.unitsWide / 2 + .5f,Renderer.unitsTall / 2 - .25f,1,.5f, false));
 		Handler.addHUD(new HUD(Renderer.unitsWide / 2 - .5f,Renderer.unitsTall / 2 - .25f,1,.5f, true));
+		
+		Handler.addHUD(new HUD(0,Renderer.unitsTall / 2 - .25f, 1, .5f, true));
         
 		Obstacle obstacle2 = new Obstacle(-5, onGround(1) + 1, 2, 1);
 		obstacle2.setColor(1f, .25f, .58f, .5f);
@@ -36,6 +37,8 @@ public class Main {
 		Obstacle obstacle4 = new Obstacle(-7.5f, onGround(1) + 2.25f, 2, 1);
 		obstacle4.setColor(1f, .25f, .58f, .5f);
 		Handler.addGO(obstacle4);
+
+		GameLoop.start();
 		
 		Entities.physicsOn = true;
 	}

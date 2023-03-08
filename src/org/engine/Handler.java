@@ -4,6 +4,7 @@ import java.util.HashMap;
 import java.util.concurrent.ConcurrentLinkedQueue;
 
 import org.gameobjects.GameObject;
+import org.graphics.EventListener;
 import org.graphics.HUD;
 import org.scene.background.Background;
 import org.scene.entities.Camera;
@@ -78,6 +79,7 @@ public class Handler {
 		for(GameObject go : gameObjects){
 			go.toggleMask();
 		}
+		EventListener.normalViewMode = !EventListener.normalViewMode;
 	}
 	
 	public static void addGO(GameObject go) { gameObjects.offer(go); }

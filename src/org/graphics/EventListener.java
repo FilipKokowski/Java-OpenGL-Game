@@ -5,8 +5,10 @@ import java.util.HashMap;
 
 import org.engine.GameLoop;
 import org.engine.Handler;
+import org.input.KeyInput;
 import org.scene.entities.Camera;
 
+import com.jogamp.newt.event.KeyEvent;
 import com.jogamp.opengl.GL;
 import com.jogamp.opengl.GL2;
 import com.jogamp.opengl.GLAutoDrawable;
@@ -18,6 +20,10 @@ public class EventListener implements GLEventListener{
 	public static GL2 gl = null;
 	
 	public static TextRenderer textRenderer;
+	
+	private static boolean buttonHeld = false;
+	
+	public static boolean normalViewMode = true;
 	
 	@Override
 	public void display(GLAutoDrawable drawable) {
@@ -56,6 +62,12 @@ public class EventListener implements GLEventListener{
 			textRenderer.endRendering();	
 			//System.out.println(objectID + " " + renderer);
 		}
+		
+		if(KeyInput.getKey(KeyEvent.VK_P) && !buttonHeld) {
+			Handler.toggleMasks();
+			buttonHeld = true;
+		}
+		else if(!KeyInput.getKey(KeyEvent.VK_P)) buttonHeld = false;
 
 	}
 

@@ -157,9 +157,7 @@ public class GameObject {
 	public float getWidth() { return width; };
 	public float getHeight() { return height; };
 	
-	public void toggleMask() {
-		
-	}
+	public void toggleMask() { txt.switchViewMode(); }
 	
 	public void setColor(float r, float g, float b, float a) {
 		red = Math.max(0, Math.min(1, r));
@@ -260,7 +258,7 @@ public class GameObject {
 	public void drawJoints() {
 		showJoints = true;
 		Graphics.setColor(.8f, .6f, .8f, 1);
-		Graphics.drawCircle(jointPointX, jointPointY, .02f, id);
+		Graphics.fillRect(jointPointX, jointPointY, .04f, .04f);
 		Graphics.setColor(1, 1, 1, 1);
 	}
 	

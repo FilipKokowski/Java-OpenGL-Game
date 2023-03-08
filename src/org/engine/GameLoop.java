@@ -14,6 +14,7 @@ public class GameLoop {
 	private static int targetTime = 1000000000 / targetFPS;
 	
 	public static int FPS = 0;
+	public static String FPSString = "";
 	
 	public static void start() {
 		Thread thread = new Thread() {
@@ -45,6 +46,7 @@ public class GameLoop {
 					if(System.nanoTime() >= lastFPSCheck + 1000000000) {
 						//System.out.println(FPSCounter);
 						FPS = FPSCounter;
+						FPSString = String.valueOf(FPS);
 						FPSCounter = 0;
 						lastFPSCheck = System.nanoTime();
 					}
