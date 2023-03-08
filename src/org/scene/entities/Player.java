@@ -56,7 +56,7 @@ public class Player extends Entities{
 	}
 	
 	public void render() {
-		Graphics.setColor(1, 1, 1, .05f);
+		Graphics.setColor(0,0,0,0);
 		Graphics.fillRect(x, y, width, height);
 		Graphics.setTextColor(1, 0, 0, 1);
 		//Graphics.drawString(x, y, "Player");
@@ -76,8 +76,6 @@ public class Player extends Entities{
 			//System.out.println("collapse");
 			bodyParts.collapse();
 		}
-		
-		
 		
 		if(KeyInput.getKey(KeyEvent.VK_H)) {
 			//System.out.println("collapse");

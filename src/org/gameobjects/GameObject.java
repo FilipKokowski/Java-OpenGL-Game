@@ -65,7 +65,7 @@ public class GameObject {
 	public float textOffsetX = 0;
 	public float textOffsetY = 0;
 
-	private boolean showBounds;
+	public boolean showBounds;
 	public boolean showJoints;
 	
 	public float jointPointX;

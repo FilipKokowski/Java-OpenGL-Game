@@ -58,17 +58,17 @@ public class BodyPart extends Entities{
 		WIDTH = width;
 		HEIGHT = height;	
 		//System.out.println("\nxOffset = " + xOffset + "\nyOffset = " + yOffset);
+		
+		if(!hasJoints) showJoints = false;
+		else showJoints = true;
+		
+		showBounds = true;
+		
 	}
 	
 	public void update() {
-		
 		applyPhysics(true, true);
 		draggable();
-		
-		drawJoints();
-		if(!hasJoints) showJoints = false;
-
-		drawBounds();
 		
 		rotation = parentAngle;
 		

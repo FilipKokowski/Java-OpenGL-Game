@@ -41,6 +41,8 @@ public class Boomerang extends Entities{
 		
 		speed = .1f;
 		
+		showBounds = true;
+		
 		//cooldownBarBottom.Color(.25f, .25f, .25f, .8f);
 		//cooldownBarTop.Color(.25f, 1, .25f, .8f);
 		
@@ -75,9 +77,6 @@ public class Boomerang extends Entities{
 		if((angle > 11 || angle < -1)) destroy = true;
 		
 		System.out.println(cooldown);
-		
-		drawBounds();
-		
 	}
 
 	public void setX(float x) { this.x0 = x; }
