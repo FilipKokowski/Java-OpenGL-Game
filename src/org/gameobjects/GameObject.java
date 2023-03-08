@@ -10,6 +10,7 @@ import java.util.UUID;
 
 import org.engine.AnimationHandler;
 import org.engine.Handler;
+import org.graphics.EventListener;
 import org.graphics.Graphics;
 import org.graphics.Renderer;
 import org.input.KeyInput;
@@ -93,10 +94,10 @@ public class GameObject {
 		Graphics.drawImage(txt, x, y, width, height, id);
 		Graphics.Rotate(0);
 		
-		if(showBounds)
+		if(EventListener.renderBounds && showBounds)
 			drawBounds();
 		
-		if(showJoints)
+		if(EventListener.renderJoints && showJoints)
 			drawJoints();
 	}
 	

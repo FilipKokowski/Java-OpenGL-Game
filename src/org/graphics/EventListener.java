@@ -23,6 +23,8 @@ public class EventListener implements GLEventListener{
 	
 	private static boolean buttonHeld = false;
 	
+	public static boolean renderBounds = false;
+	public static boolean renderJoints = false;
 	public static boolean normalViewMode = true;
 	
 	@Override
@@ -67,7 +69,18 @@ public class EventListener implements GLEventListener{
 			Handler.toggleMasks();
 			buttonHeld = true;
 		}
-		else if(!KeyInput.getKey(KeyEvent.VK_P)) buttonHeld = false;
+		
+		if(KeyInput.getKey(KeyEvent.VK_I) && !buttonHeld) {
+			renderBounds = !renderBounds;
+			buttonHeld = true;
+		}
+		
+		if(KeyInput.getKey(KeyEvent.VK_O) && !buttonHeld) {
+			renderJoints = !renderJoints;
+			buttonHeld = true;
+		}
+		
+		if(!KeyInput.getKey(KeyEvent.VK_P) && !KeyInput.getKey(KeyEvent.VK_I) && !KeyInput.getKey(KeyEvent.VK_O)) buttonHeld = false;
 
 	}
 
