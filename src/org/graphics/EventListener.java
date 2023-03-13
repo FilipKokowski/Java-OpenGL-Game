@@ -74,7 +74,7 @@ public class EventListener implements GLEventListener{
 			renderBounds = !renderBounds;
 			buttonHeld = true;
 		}
-		
+	 
 		if(KeyInput.getKey(KeyEvent.VK_O) && !buttonHeld) {
 			renderJoints = !renderJoints;
 			buttonHeld = true;

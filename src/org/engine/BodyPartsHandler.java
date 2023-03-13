@@ -124,7 +124,6 @@ public class BodyPartsHandler {
 				bodyPart.parentX = x;
 				bodyPart.parentY = y;
 				bodyPart.parentAngle = rotation;
-				bodyPart.isDraggable = false;
 			}
 		}
 		

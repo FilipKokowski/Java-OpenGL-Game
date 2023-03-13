@@ -18,6 +18,8 @@ public class Renderer {
 	public static float unitsWide = 10;
 	public static float unitsTall = 0;
 	
+	public static int pixelsPerUnit = screenW / 5;
+	
 	public static void init() {
 		GLProfile.initSingleton();
 		profile = GLProfile.get(GLProfile.GL2);

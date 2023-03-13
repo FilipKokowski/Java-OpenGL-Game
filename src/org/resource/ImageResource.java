@@ -5,6 +5,8 @@ import java.awt.image.ColorModel;
 import java.awt.image.WritableRaster;
 import java.io.IOException;
 import java.io.InputStream;
+import java.util.ArrayList;
+import java.util.HashMap;
 
 import javax.imageio.ImageIO;
 
@@ -20,7 +22,10 @@ public class ImageResource {
 	
 	private BufferedImage currentImg = null;
 	private BufferedImage mask = null;
+	private BufferedImage bounds = null;
 	
+	private ArrayList<ArrayList<Float>> boundsList = new ArrayList<ArrayList<Float>>();
+	ArrayList<Float> point = new ArrayList<Float>();
 	
 	public ImageResource(String path) {
 		InputStream url = getClass().getClassLoader().getResourceAsStream(path);
@@ -41,12 +46,65 @@ public class ImageResource {
 				for(int y = 0; y < img.getHeight(); y++) {
 					for(int x = 0; x < img.getWidth(); x++) {
 						if(((img.getRGB(x, y) & 0xff000000) >>> 24) == 0){
-							mask.setRGB(x, y, -460552);
+							mask.setRGB(x, y, 0xFFFFFFFF);
 						} else {
-							mask.setRGB(x, y, -16777215);
+							mask.setRGB(x, y, 0xFF000000);
 						}
 					}
 				}
+
+				bounds = new BufferedImage(mask.getWidth(), mask.getHeight(), BufferedImage.TYPE_INT_ARGB);
+				
+				ArrayList<ArrayList<Float>> boundsListNotSorted = new ArrayList<ArrayList<Float>>();
+				
+				// Perform edge detection on the mask
+				for (int y = 0; y < mask.getHeight() - 1; y++) {
+		            for (int x = 0; x < mask.getWidth() - 1; x++) {
+
+		                if (Math.abs(mask.getRGB(x, y) - mask.getRGB(x + 1, y + 1)) > 0 || ( y == 0 && mask.getRGB(x, y) == 0xFF000000) || ((x == 0 || x == mask.getWidth() - 1) && mask.getRGB(x, y) == 0xFF000000)) {
+		                    bounds.setRGB(x, y, 0xFFFF0000);
+		                    ArrayList<Float> coordinates = new ArrayList<Float>();
+		                    coordinates.add(((float) x - mask.getWidth() / 2) / Renderer.pixelsPerUnit);
+		                    coordinates.add(-((float) y - mask.getHeight() / 2) / Renderer.pixelsPerUnit);
+		                    boundsListNotSorted.add(coordinates);
+		                }
+
+		            }
+		        }
+				
+				ArrayList<Integer> checkedPoints = new ArrayList<Integer>();
+				
+				for(int coord = 0; coord < boundsListNotSorted.size(); coord++) {
+					int closestID = 0;
+					float closestDistance = 100;
+					for(int otherCoord = 0; otherCoord < boundsListNotSorted.size(); otherCoord++) {
+						
+						if(coord == otherCoord && !checkedPoints.contains(otherCoord)) continue;
+						
+						float x1 = boundsListNotSorted.get(coord).get(0);
+						float y1 = boundsListNotSorted.get(coord).get(1);
+						float x2 = boundsListNotSorted.get(otherCoord).get(0);
+						float y2 = boundsListNotSorted.get(otherCoord).get(1);
+						
+						float distance = (float) Math.sqrt(Math.pow(x2-x1, 2) + Math.pow(y2-y1, 2));
+						
+						//System.out.println("ClosestID: " + closestID + " Distance: " +  Math.sqrt(Math.pow(x2-x1, 2)+Math.pow(y2-y1, 2)));
+						if(distance < closestDistance) {
+							closestDistance = distance;
+							closestID = otherCoord;
+						}
+					}
+					
+					System.out.println(closestDistance);
+					checkedPoints.add(closestID);
+					
+					point.clear();
+					//System.out.println("ClosestID: " + closestID + " Distance: " + closestDistance);
+					point.add(boundsListNotSorted.get(closestID).get(0));
+					point.add(boundsListNotSorted.get(closestID).get(1));
+					boundsList.add(point);
+				}
+				
 				//System.out.println("Width: " + img.getWidth() + " Height: " + img.getHeight());
 			}
 			
@@ -71,7 +129,7 @@ public class ImageResource {
 	
 	public void switchViewMode() {
 		if(currentImg == img && mask != null) {
-			currentImg = mask;
+			currentImg = bounds;
 		}
 		else {
 			currentImg = img;
@@ -87,6 +145,10 @@ public class ImageResource {
 		}
 		
 		return texture;
+	}
+	
+	public ArrayList<ArrayList<Float>> getImageBounds(){
+		return boundsList;
 	}
 	
 	public float getWidth() {

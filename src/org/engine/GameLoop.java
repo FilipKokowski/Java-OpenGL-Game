@@ -22,7 +22,7 @@ public class GameLoop {
 				running = true;
 				
 				lastUpdateTime = System.nanoTime();
-				
+			    
 				int FPSCounter = 0;
 				long lastFPSCheck = System.nanoTime();
 				

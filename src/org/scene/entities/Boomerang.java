@@ -66,12 +66,12 @@ public class Boomerang extends Entities{
 		for(int i = 0; i < Handler.gameObjects.size(); i++) {
 			GameObject tempObj = getAt(i);
 			
-			if((tempObj.id == ID.Obstacle || tempObj.id == ID.Entities) && doOverlap(getBounds(), tempObj.getBounds())) {
+			/*if((tempObj.id == ID.Obstacle || tempObj.id == ID.Entities) && doOverlap(getBounds(), tempObj.getBounds())) {
 				destroy = true;
 			}
 			if((tempObj.id == ID.Player) && doOverlap(getBounds(), tempObj.getBounds())) {
 				//System.out.println("Collided with player at " + angle + " degrees");
-			}
+			}*/
 		}
 		
 		if((angle > 11 || angle < -1)) destroy = true;

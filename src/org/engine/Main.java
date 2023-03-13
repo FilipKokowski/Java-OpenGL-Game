@@ -13,7 +13,7 @@ public class Main {
 	public static void main(String[] args) {
 		Renderer.init();
 		
-		Handler.addGO(new Background("res/org/scene/background/bg.png"));
+		Handler.addGO(new Background("res/org/scene/background/bg.jpg"));
 		
 		Handler.addGO(new Player());
 		

@@ -49,10 +49,6 @@ public class HUD extends GameObject {
 		centerTextHorizontally();
 		centerTextVertically();
 		
-		if(EventListener.normalViewMode)
-			setTextColor(textRed,textGreen,textBlue,textAlpha);
-		else setTextColor(1,1,1,1);
-		
 		textOffsetX += Camera.x;
 		textOffsetY += Camera.y;
 		text = "FPS: " + GameLoop.FPS;

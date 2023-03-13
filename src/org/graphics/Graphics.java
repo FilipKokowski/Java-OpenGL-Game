@@ -3,6 +3,7 @@ package org.graphics;
 
 import java.awt.Font;
 import java.awt.geom.Rectangle2D;
+import java.util.ArrayList;
 
 import org.gameobjects.GameObject;
 import org.gameobjects.ID;
@@ -135,6 +136,33 @@ public class Graphics {
 			gl.glVertex2f(x2, y2);
 		gl.glEnd();
 		gl.glFlush(); 
+	}
+	
+	public static void drawPolygon(float x, float y, ArrayList<ArrayList<Float>> allCoordinates) {
+		GL2 gl = EventListener.gl;
+		
+		gl.glColor4f(red, green, blue, alpha);
+		gl.glBegin(GL2.GL_LINE_LOOP);
+			for(int coord = 0; coord < allCoordinates.size(); coord++) {
+				float x1, y1, x2, y2;
+				try {
+					x1 = x + allCoordinates.get(coord).get(0);
+					y1 = y + allCoordinates.get(coord).get(1);
+					x2 = x + allCoordinates.get(coord + 1).get(0);
+					y2 = y + allCoordinates.get(coord + 1).get(1);
+				} catch(IndexOutOfBoundsException e) {
+					x1 = x + allCoordinates.get(coord).get(0);
+					y1 = y + allCoordinates.get(coord).get(1);
+					x2 = x + allCoordinates.get(0).get(0);
+					y2 = y + allCoordinates.get(0).get(1);
+				}
+				
+				gl.glVertex2f(x1, y1);
+				gl.glVertex2f(x2, y2);
+			}
+		gl.glEnd();
+		gl.glFlush(); 
+
 	}
 	
 	public static void setFont(Font font) {

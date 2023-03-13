@@ -5,6 +5,8 @@ import java.awt.FontFormatException;
 import java.awt.event.KeyEvent;
 import java.awt.geom.Rectangle2D;
 import java.io.IOException;
+import java.util.ArrayList;
+import java.util.HashMap;
 import java.util.Iterator;
 import java.util.UUID;
 
@@ -64,6 +66,8 @@ public class GameObject {
 	public float textHeight = 0;
 	public float textOffsetX = 0;
 	public float textOffsetY = 0;
+	
+	public ArrayList<ArrayList<Float>> bounds;
 
 	public boolean showBounds;
 	public boolean showJoints;
@@ -84,6 +88,10 @@ public class GameObject {
 		
 		this.animationPath = src;
 		this.txt = new ImageResource(src);
+		
+		bounds = txt.getImageBounds();
+		
+		//System.out.println(this.getClass().getSimpleName() + ": " + bounds);
 	}
 		
 	public void update() {};
@@ -99,6 +107,8 @@ public class GameObject {
 		
 		if(EventListener.renderJoints && showJoints)
 			drawJoints();
+		
+		Graphics.drawPolygon(x, y, bounds);
 	}
 	
 	public void renderText() {
