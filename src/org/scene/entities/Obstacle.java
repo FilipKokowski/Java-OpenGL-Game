@@ -14,6 +14,11 @@ public class Obstacle extends GameObject{
 	
 	private boolean collider = false;
 	
+	public boolean verticallyCenteredText = false;
+	
+	private float textOffsetX = 0;
+	private float textOffsetY = 0;
+	
 	public Obstacle(float x, float y, float width, float height, String path) {
 		super(x, y, width, height, path);
 		
@@ -28,9 +33,22 @@ public class Obstacle extends GameObject{
 	
 	public void update() {
 		centerTextHorizontally();
-		placeTextAbove();
 		
-		text = this.getClass().getSimpleName();
+		if(!verticallyCenteredText)
+			placeTextAbove();
+		else {
+			centerTextVertically();
+		}
+		
+		//text = this.getClass().getSimpleName();
+		
+		super.textOffsetX += textOffsetX;
+		super.textOffsetY += textOffsetY;
+	}
+	
+	public void offsetText(float xOffset, float yOffset) {
+		textOffsetX = xOffset;
+		textOffsetY = yOffset;
 	}
 	
 	public void render() {
