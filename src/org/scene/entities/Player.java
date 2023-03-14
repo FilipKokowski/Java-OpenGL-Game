@@ -59,6 +59,7 @@ public class Player extends Entities{
 		Graphics.setColor(0,0,0,0);
 		Graphics.fillRect(x, y, width, height);
 		Graphics.setTextColor(1, 0, 0, 1);
+		Graphics.setColor(1,1,1,1);
 		//Graphics.drawString(x, y, "Player");
 	}
 	

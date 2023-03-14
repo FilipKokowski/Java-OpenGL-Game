@@ -4,6 +4,7 @@ import java.awt.Font;
 import java.awt.FontFormatException;
 import java.awt.event.KeyEvent;
 import java.awt.geom.Rectangle2D;
+import java.awt.image.BufferedImage;
 import java.io.IOException;
 import java.util.ArrayList;
 import java.util.HashMap;
@@ -91,6 +92,8 @@ public class GameObject {
 		
 		bounds = txt.getImageBounds();
 		
+		//System.out.println(bounds.size() + ": " + this.getClass().getSimpleName());
+		
 		//System.out.println(this.getClass().getSimpleName() + ": " + bounds);
 	}
 		
@@ -102,13 +105,29 @@ public class GameObject {
 		Graphics.drawImage(txt, x, y, width, height, id);
 		Graphics.Rotate(0);
 		
-		if(EventListener.renderBounds && showBounds)
-			drawBounds();
+		if(EventListener.renderBounds && showBounds) {
+			if(bounds.size() == 0) {
+				drawBounds();
+			}
+			else {
+				//System.out.println(this.getClass().getSimpleName() + " complex bounds rendering (UUID: " + uuid + ")");
+				
+				Graphics.setColor(1, 0, 0, 1);
+				
+				for(int point = 0; point < bounds.size(); point++) {
+					float x = (float)((bounds.get(point).get(0)) * Math.cos(Math.toRadians(-rotation)) - (bounds.get(point).get(1)) * Math.sin(Math.toRadians(-rotation)) + this.x);
+					float y = (float)((bounds.get(point).get(0)) * Math.sin(Math.toRadians(-rotation)) + (bounds.get(point).get(1)) * Math.cos(Math.toRadians(-rotation)) + this.y);
+					Graphics.fillRect(x, y, .01f, .01f);
+				}
+				
+				Graphics.setColor(1, 1, 1, 1);
+			}
+		}
 		
 		if(EventListener.renderJoints && showJoints)
 			drawJoints();
 		
-		Graphics.drawPolygon(x, y, bounds);
+		//Graphics.drawPolygon(x, y, bounds);
 	}
 	
 	public void renderText() {
@@ -182,6 +201,11 @@ public class GameObject {
 		textGreen = Math.max(0, Math.min(1, g));
 		textBlue = Math.max(0, Math.min(1, b));
 		textAlpha = Math.max(0, Math.min(1, a));
+	}
+	
+	public void scaleToImageSize() {
+		width = txt.getWidth() / Renderer.pixelsPerUnit;
+		height = txt.getWidth() / Renderer.pixelsPerUnit;
 	}
 	
 	public float[] getBounds() {
@@ -283,6 +307,10 @@ public class GameObject {
 			return MouseInput.pressed;
 		
 		return false;
+	}
+	
+	public void setImage(String path) {
+		this.txt = new ImageResource(path);
 	}
 	
 	public void draggable() {

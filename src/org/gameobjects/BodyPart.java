@@ -70,7 +70,7 @@ public class BodyPart extends Entities{
 		applyPhysics(true, true);
 		draggable();
 		
-		rotation = parentAngle;
+		
 		
 		if(!collapse) {
 			//rotation += 2.5f;

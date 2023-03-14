@@ -87,7 +87,7 @@ public class Graphics {
 			gl.glVertex2f(width / 2, height / 2);
 			gl.glVertex2f(-width / 2, height / 2);
 		gl.glEnd();
-		
+	
 		gl.glTranslatef(-x, -y, 0);
 		gl.glRotatef(rotation, 0, 0, 1);
 	}

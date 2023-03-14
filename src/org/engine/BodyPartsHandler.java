@@ -123,7 +123,7 @@ public class BodyPartsHandler {
 				bodyPart.hasJoints = false;
 				bodyPart.parentX = x;
 				bodyPart.parentY = y;
-				bodyPart.parentAngle = rotation;
+				//bodyPart.parentAngle = rotation;
 			}
 		}
 		
@@ -138,7 +138,7 @@ public class BodyPartsHandler {
 					if(bodyPart.jointWithID.equals(parentPart.partID)) {
 						bodyPart.parentX = parentPart.getX();
 						bodyPart.parentY = parentPart.getY();
-						bodyPart.parentAngle = parentPart.rotation;
+						//bodyPart.parentAngle = parentPart.rotation;
 					}
 				}
 			}
@@ -160,6 +160,7 @@ public class BodyPartsHandler {
 			if(bodyPart.collapse) {
 				bodyPart.collapse = false;
 				bodyPart.isDraggable = false;
+				bodyPart.rotation = 0;
 			}
 		}
 	}

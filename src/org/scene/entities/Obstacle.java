@@ -7,14 +7,19 @@ import org.gameobjects.ID;
 import org.graphics.EventListener;
 import org.graphics.Graphics;
 
+
 public class Obstacle extends GameObject{
 
-	private static String animationPath = "";
+	private String imagePath = "";
 	
-	public Obstacle(float x, float y, float width, float height) {
-		super(x, y, width, height, animationPath);
+	private boolean collider = false;
+	
+	public Obstacle(float x, float y, float width, float height, String path) {
+		super(x, y, width, height, path);
 		
 		id = ID.Obstacle;
+		
+		imagePath = path;
 		
 		setFont(new Font("SansSerif", Font.BOLD, (int)fontSize));
 	
@@ -29,14 +34,22 @@ public class Obstacle extends GameObject{
 	}
 	
 	public void render() {
-		Graphics.setColor(red, green, blue, alpha);
-		Graphics.fillRect(x, y, width, height);
-		Graphics.setColor(1, 1, 1, 1);
-		
-		if(EventListener.renderBounds && showBounds)
-			drawBounds();
-		
-		if(EventListener.renderJoints && showJoints)
-			drawJoints();
+		if(imagePath.equals("")) {
+			Graphics.setColor(red, green, blue, alpha);
+			Graphics.fillRect(x, y, width, height);
+			Graphics.setColor(1, 1, 1, 1);
+			
+			if(EventListener.renderBounds && showBounds)
+				drawBounds();
+			
+			if(EventListener.renderJoints && showJoints)
+				drawJoints();
+		}
+		else {
+			super.render();
+		}
 	}
+	
+	public void collisionOn() { collider = true; }
+	public void collisionOff() { collider = false; }
 }
