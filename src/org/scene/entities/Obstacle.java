@@ -29,21 +29,29 @@ public class Obstacle extends GameObject{
 		setFont(new Font("SansSerif", Font.BOLD, (int)fontSize));
 	
 		showBounds = true;
+		
+		text = uuid;
 	}
 	
 	public void update() {
-		centerTextHorizontally();
-		
-		if(!verticallyCenteredText)
-			placeTextAbove();
-		else {
-			centerTextVertically();
+		deactiveteWhenOutOfView();
+		if(!outOfView) {
+			centerTextHorizontally();
+			
+			//System.out.println("Updating " + uuid);
+			
+			
+			if(!verticallyCenteredText)
+				placeTextAbove();
+			else {
+				centerTextVertically();
+			}
+			
+			//text = this.getClass().getSimpleName();
+			
+			super.textOffsetX += textOffsetX;
+			super.textOffsetY += textOffsetY;
 		}
-		
-		//text = this.getClass().getSimpleName();
-		
-		super.textOffsetX += textOffsetX;
-		super.textOffsetY += textOffsetY;
 	}
 	
 	public void offsetText(float xOffset, float yOffset) {
@@ -54,7 +62,7 @@ public class Obstacle extends GameObject{
 	public void render() {
 		if(imagePath.equals("")) {
 			Graphics.setColor(red, green, blue, alpha);
-			Graphics.fillRect(x, y, width, height);
+			Graphics.drawRect(x, y, width, height);
 			Graphics.setColor(1, 1, 1, 1);
 			
 			if(EventListener.renderBounds && showBounds)

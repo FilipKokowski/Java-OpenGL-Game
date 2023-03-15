@@ -36,17 +36,22 @@ public class Graphics {
 		
 		if(texture == null) return;
 		
-		if((x - width / 2 - Camera.x > Renderer.unitsWide / 2 || x + width / 2 - Camera.x < -Renderer.unitsWide / 2) && !id.equals(ID.HUD)) {
+		float pos1 = width / 2;
+		float pos2 = height / 2;
+		
+		
+		if((x - pos1 - Camera.x > Renderer.unitsWide / 2 || x +pos1 - Camera.x < -Renderer.unitsWide / 2) && !id.equals(ID.HUD)) {
 			return;
 		}
 		
-		if((y - height / 2 - Camera.y > Renderer.unitsTall / 2 || y + height / 2 - Camera.y < -Renderer.unitsTall / 2) && !id.equals(ID.HUD)) {
+		if((y - pos2 - Camera.y > Renderer.unitsTall / 2 || y + pos2 - Camera.y < -Renderer.unitsTall / 2) && !id.equals(ID.HUD)) {
 			return;
 		}
 		
 		if(texture != null) {
 			gl.glBindTexture(GL2.GL_TEXTURE_2D, texture.getTextureObject());
 		}
+	
 		
 		gl.glTranslatef(x, y, 0);
 		gl.glRotatef(-rotation, 0, 0, 1);
@@ -54,16 +59,16 @@ public class Graphics {
 		gl.glColor4f(red, green, blue, alpha);
 		gl.glBegin(GL2.GL_QUADS);
 			gl.glTexCoord2f(0,1);
-			gl.glVertex2f(-width / 2, -height / 2);
+			gl.glVertex2f(-pos1, -pos2);
 			
 			gl.glTexCoord2f(1,1);
-			gl.glVertex2f(width / 2, -height / 2);
+			gl.glVertex2f(pos1, -pos2);
 			
 			gl.glTexCoord2f(1,0);
-			gl.glVertex2f(width / 2, height / 2);
+			gl.glVertex2f(pos1, pos2);
 			
 			gl.glTexCoord2f(0,0);
-			gl.glVertex2f(-width / 2, height / 2);
+			gl.glVertex2f(-pos1, pos2);
 		gl.glEnd();
 		gl.glFlush();
 		
@@ -73,7 +78,18 @@ public class Graphics {
 		gl.glTranslatef(-x, -y, 0);
 	}
 	
-	public static void fillRect(float x, float y, float width, float height) {
+	public static void drawRect(float x, float y, float width, float height) {
+		
+		float pos1 = width / 2;
+		float pos2 = height / 2;
+		
+		if((x - pos1 - Camera.x > Renderer.unitsWide / 2 || x + pos1 - Camera.x < -Renderer.unitsWide / 2)) {
+			return;
+		}
+		
+		if((y - pos2 - Camera.y > Renderer.unitsTall / 2 || y + pos2 - Camera.y < -Renderer.unitsTall / 2)) {
+			return;
+		}
 		
 		GL2 gl = EventListener.gl;
 		
@@ -82,10 +98,39 @@ public class Graphics {
 		
 		gl.glColor4f(red, green, blue, alpha);
 		gl.glBegin(GL2.GL_QUADS);
-			gl.glVertex2f(-width / 2, -height / 2);
-			gl.glVertex2f(width / 2, -height / 2);
-			gl.glVertex2f(width / 2, height / 2);
-			gl.glVertex2f(-width / 2, height / 2);
+			gl.glVertex2f(-pos1, -pos2);
+			gl.glVertex2f(pos1, -pos2);
+			gl.glVertex2f(pos1, pos2);
+			gl.glVertex2f(-pos1, pos2);
+		gl.glEnd();
+	
+		gl.glTranslatef(-x, -y, 0);
+		gl.glRotatef(rotation, 0, 0, 1);
+	}
+	
+	public static void fillTriangle(float x, float y, float width, float height) {
+		
+		float pos1 = width / 2;
+		float pos2 = height / 2;
+		
+		if((x - pos1 - Camera.x > Renderer.unitsWide / 2 || x + pos1 - Camera.x < -Renderer.unitsWide / 2)) {
+			return;
+		}
+		
+		if((y - pos2 - Camera.y > Renderer.unitsTall / 2 || y + pos2 - Camera.y < -Renderer.unitsTall / 2)) {
+			return;
+		}
+		
+		GL2 gl = EventListener.gl;
+		
+		gl.glTranslatef(x, y, 0);
+		gl.glRotatef(-rotation, 0, 0, 1);
+		
+		gl.glColor4f(red, green, blue, alpha);
+		gl.glBegin(GL2.GL_TRIANGLES);
+			gl.glVertex2f(-pos1, -pos2);
+			gl.glVertex2f(pos1, -pos2);
+			gl.glVertex2f(0, pos2);
 		gl.glEnd();
 	
 		gl.glTranslatef(-x, -y, 0);

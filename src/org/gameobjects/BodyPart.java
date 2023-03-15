@@ -67,11 +67,11 @@ public class BodyPart extends Entities{
 	}
 	
 	public void update() {
+		deactiveteWhenOutOfView();
 		applyPhysics(true, true);
+		if(!outOfView) {
 		draggable();
-		
-		
-		
+	
 		if(!collapse) {
 			//rotation += 2.5f;
 			x = parentX - Float.valueOf(xOffset);
@@ -95,6 +95,7 @@ public class BodyPart extends Entities{
 			//);	
 		}
 		//rotation = parentAngle;
+		}
 	}
 	
 	/*public void render() {

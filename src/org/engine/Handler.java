@@ -19,8 +19,13 @@ public class Handler {
 	
 	public static void render() {
 		for(GameObject go : gameObjects){
-			go.render();
+			if(!go.outOfView) {
+				go.render();
+				GameObject.updated++;
+			}
 		}
+		System.out.println("Updated and rendered: " + GameObject.updated);
+		GameObject.updated = 0;
 	}
 	
 	public static void renderText(String uuid) {
@@ -47,7 +52,7 @@ public class Handler {
 	
 	public static void update() {
 		for(GameObject go : gameObjects){
-			go.update();
+				go.update();
 		}
 		
 		for(HUD hud : HUDs){

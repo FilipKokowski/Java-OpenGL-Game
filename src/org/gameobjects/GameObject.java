@@ -69,6 +69,7 @@ public class GameObject {
 	public float textOffsetY = 0;
 	
 	public ArrayList<ArrayList<Float>> bounds;
+	public boolean outOfView = false;
 
 	public boolean showBounds;
 	public boolean showJoints;
@@ -78,6 +79,8 @@ public class GameObject {
 	
 	public ID id = ID.GameObject;
 	public String uuid = UUID.randomUUID().toString().replaceAll("_", "");
+	
+	public static int updated = 0;
 	
 	public GameObject(float x, float y, float width, float height, String src) {
 		this.x = x;
@@ -100,34 +103,33 @@ public class GameObject {
 	public void update() {};
 
 	public void render() {
-		
-		Graphics.Rotate(-rotation);
-		Graphics.drawImage(txt, x, y, width, height, id);
-		Graphics.Rotate(0);
-		
-		if(EventListener.renderBounds && showBounds) {
-			if(bounds.size() == 0) {
-				drawBounds();
-			}
-			else {
-				//System.out.println(this.getClass().getSimpleName() + " complex bounds rendering (UUID: " + uuid + ")");
-				
-				Graphics.setColor(1, 0, 0, 1);
-				
-				for(int point = 0; point < bounds.size(); point++) {
-					float x = (float)((bounds.get(point).get(0)) * Math.cos(Math.toRadians(-rotation)) - (bounds.get(point).get(1)) * Math.sin(Math.toRadians(-rotation)) + this.x);
-					float y = (float)((bounds.get(point).get(0)) * Math.sin(Math.toRadians(-rotation)) + (bounds.get(point).get(1)) * Math.cos(Math.toRadians(-rotation)) + this.y);
-					Graphics.fillRect(x, y, .01f, .01f);
+		if(!outOfView) {
+			Graphics.Rotate(-rotation);
+			Graphics.drawImage(txt, x, y, width, height, id);
+			Graphics.Rotate(0);
+			
+			if(EventListener.renderBounds && showBounds) {
+				if(bounds.size() == 0) {
+					drawBounds();
 				}
-				
-				Graphics.setColor(1, 1, 1, 1);
+				else {
+					//System.out.println(this.getClass().getSimpleName() + " complex bounds rendering (UUID: " + uuid + ")");
+					
+					Graphics.setColor(1, 0, 0, 1);
+					
+					for(int point = 0; point < bounds.size(); point += 3) {
+						float x = (float)((bounds.get(point).get(0)) * Math.cos(Math.toRadians(-rotation)) - (bounds.get(point).get(1)) * Math.sin(Math.toRadians(-rotation)) + this.x);
+						float y = (float)((bounds.get(point).get(0)) * Math.sin(Math.toRadians(-rotation)) + (bounds.get(point).get(1)) * Math.cos(Math.toRadians(-rotation)) + this.y);
+						Graphics.drawRect(x, y, .01f, .01f);
+					}
+					
+					Graphics.setColor(1, 1, 1, 1);
+				}
 			}
+			
+			if(EventListener.renderJoints && showJoints)
+				drawJoints();
 		}
-		
-		if(EventListener.renderJoints && showJoints)
-			drawJoints();
-		
-		//Graphics.drawPolygon(x, y, bounds);
 	}
 	
 	public void renderText() {
@@ -194,6 +196,15 @@ public class GameObject {
 		green = Math.max(0, Math.min(1, g));
 		blue = Math.max(0, Math.min(1, b));
 		alpha = Math.max(0, Math.min(1, a));
+	}
+	
+	public void deactiveteWhenOutOfView() {
+		if((x - width / 2 - Camera.x > Renderer.unitsWide / 2 || x + width / 2 - Camera.x < -Renderer.unitsWide / 2)
+				|| (y - height / 2 - Camera.y > Renderer.unitsTall / 2 || y + height / 2 - Camera.y < -Renderer.unitsTall / 2)) {
+			outOfView = true;
+		}
+		else 
+			outOfView = false;
 	}
 	
 	public void setTextColor(float r, float g, float b, float a) {
@@ -293,7 +304,7 @@ public class GameObject {
 	public void drawJoints() {
 		showJoints = true;
 		Graphics.setColor(.8f, .6f, .8f, 1);
-		Graphics.fillRect(jointPointX, jointPointY, .04f, .04f);
+		Graphics.drawRect(jointPointX, jointPointY, .04f, .04f);
 		Graphics.setColor(1, 1, 1, 1);
 	}
 	
