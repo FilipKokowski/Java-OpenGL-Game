@@ -33,6 +33,9 @@ public class GameObject {
 	protected float width = 1;
 	protected float height = 1;
 	
+	protected float offsetFromMiddleX = 0;
+	protected float offsetFromMiddleY = 0;
+	
 	protected float crouchHeight = (height / 3) * 2;
 	
 	public float red = 1;
@@ -88,6 +91,9 @@ public class GameObject {
 		this.width = width;
 		this.height = height;
 		
+		offsetFromMiddleX = width / 2;
+		offsetFromMiddleY = height / 2;
+		
 		//if(src.equals("")) src = "res/org/scene/defaultTexture.png";
 		
 		this.animationPath = src;
@@ -117,7 +123,7 @@ public class GameObject {
 					
 					Graphics.setColor(1, 0, 0, 1);
 					
-					for(int point = 0; point < bounds.size(); point += 3) {
+					for(int point = 0; point < bounds.size(); point++) {
 						float x = (float)((bounds.get(point).get(0)) * Math.cos(Math.toRadians(-rotation)) - (bounds.get(point).get(1)) * Math.sin(Math.toRadians(-rotation)) + this.x);
 						float y = (float)((bounds.get(point).get(0)) * Math.sin(Math.toRadians(-rotation)) + (bounds.get(point).get(1)) * Math.cos(Math.toRadians(-rotation)) + this.y);
 						Graphics.drawRect(x, y, .01f, .01f);

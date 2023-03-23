@@ -69,7 +69,6 @@ public class BodyPart extends Entities{
 	public void update() {
 		deactiveteWhenOutOfView();
 		applyPhysics(true, true);
-		if(!outOfView) {
 		draggable();
 	
 		if(!collapse) {
@@ -95,7 +94,6 @@ public class BodyPart extends Entities{
 			//);	
 		}
 		//rotation = parentAngle;
-		}
 	}
 	
 	/*public void render() {

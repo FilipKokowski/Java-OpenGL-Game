@@ -38,14 +38,14 @@ public class Main {
 		obstacle4.setColor(1f, .25f, .58f, .5f);
 		Handler.addGO(obstacle4);
 		
-		
-		Obstacle sign = new Obstacle(-1, onGround(.375f), .5f, .375f, "res/org/scene/objects/Sign/sign.png");
-		sign.verticallyCenteredText = true;
-		sign.offsetText(0, .05f);
-		sign.setTextColor(0, 0, 0, 1);
-		sign.text = "Ben";
-		Handler.addGO(sign);
-		
+		for(int i = 0; i < 50; i++) {
+			Obstacle sign = new Obstacle(-1 + i, onGround(.375f), .5f, .375f, "res/org/scene/objects/Sign/sign.png");
+			sign.verticallyCenteredText = true;
+			sign.offsetText(0, .05f);
+			sign.setTextColor(0, 0, 0, 1);
+			sign.text = "Ben";
+			Handler.addGO(sign);
+		}
 	
 		GameLoop.start();
 		

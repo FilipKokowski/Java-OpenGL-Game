@@ -24,7 +24,7 @@ public class Handler {
 				GameObject.updated++;
 			}
 		}
-		System.out.println("Updated and rendered: " + GameObject.updated);
+		//System.out.println("Updated and rendered: " + GameObject.updated);
 		GameObject.updated = 0;
 	}
 	

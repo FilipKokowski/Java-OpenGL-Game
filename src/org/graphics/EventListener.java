@@ -100,7 +100,7 @@ public class EventListener implements GLEventListener{
 		
 		gl.glBlendFunc(GL.GL_SRC_ALPHA, GL2.GL_ONE_MINUS_SRC_ALPHA);
 		
-		gl.setSwapInterval(0/1);
+		//gl.setSwapInterval(0/1);
 		
 		textRenderer = new TextRenderer(new Font("Comic Sans MS", Font.BOLD, 12));
 	}
