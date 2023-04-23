@@ -64,7 +64,7 @@ public class Boomerang extends Entities{
 		y = (float) (y0 + Math.sin(angle) * verticalRotationRadius);
 		
 		for(int i = 0; i < Handler.gameObjects.size(); i++) {
-			GameObject tempObj = getAt(i);
+			//GameObject tempObj = getAt(i);
 			
 			/*if((tempObj.id == ID.Obstacle || tempObj.id == ID.Entities) && doOverlap(getBounds(), tempObj.getBounds())) {
 				destroy = true;

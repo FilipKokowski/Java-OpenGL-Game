@@ -10,6 +10,7 @@ import java.util.HashMap;
 
 import javax.imageio.ImageIO;
 
+import org.gameobjects.Point;
 import org.graphics.Renderer;
 
 import com.jogamp.opengl.util.texture.Texture;
@@ -24,9 +25,9 @@ public class ImageResource {
 	private BufferedImage mask = null;
 	private BufferedImage bounds = null;
 	
-	private ArrayList<ArrayList<Float>> boundsList = new ArrayList<ArrayList<Float>>();
+	private ArrayList<Point> boundsList = new ArrayList<Point>();
 	
-	private static HashMap<String, ArrayList<ArrayList<Float>>> loadedImages = new HashMap<String, ArrayList<ArrayList<Float>>>();
+	private static HashMap<String, ArrayList<Point>> loadedImages = new HashMap<String, ArrayList<Point>>();
 	
 	public ImageResource(String path) {
 		
@@ -65,10 +66,8 @@ public class ImageResource {
 
 		                if (Math.abs(mask.getRGB(x, y) - mask.getRGB(x + 1, y + 1)) > 0 || ((y == 0 || y == mask.getHeight() - 2) && mask.getRGB(x, y) == 0xFF000000) || ((x == 0 || x == mask.getWidth() - 2) && mask.getRGB(x, y) == 0xFF000000)) {
 		                    bounds.setRGB(x, y, 0xFFFF0000);
-		                    ArrayList<Float> coordinates = new ArrayList<Float>();
-		                    coordinates.add(((float) x - mask.getWidth() / 2) / Renderer.pixelsPerUnit);
-		                    coordinates.add(-((float) y - mask.getHeight() / 2) / Renderer.pixelsPerUnit);
-		                    boundsList.add(coordinates);
+		                    Point point = new Point((float)(x - mask.getWidth() / 2) / Renderer.pixelsPerUnit, -(float)(y - mask.getHeight() / 2) / Renderer.pixelsPerUnit);
+		                    boundsList.add(point);
 		                }
 
 		            }
@@ -77,9 +76,9 @@ public class ImageResource {
 				//System.out.println("Width: " + img.getWidth() + " Height: " + img.getHeight());
 				
 				//Simplifying polygons
-				ArrayList<ArrayList<Float>> pickedCoords = new ArrayList<ArrayList<Float>>();
+				ArrayList<Point> pickedCoords = new ArrayList<Point>();
 		
-				for(int i=0; i < boundsList.size(); i += 4) {
+				for(int i=0; i < boundsList.size(); i += 2) {
 					pickedCoords.add(boundsList.get(i));
 				}
 				
@@ -90,8 +89,7 @@ public class ImageResource {
 				if(loadedImages.containsKey(path)) {
 					boundsList = loadedImages.get(path);
 				} else {
-					System.out.println(path);
-					ArrayList<ArrayList<Float>> checkedPoints = new ArrayList<ArrayList<Float>>();
+					ArrayList<Point> checkedPoints = new ArrayList<Point>();
 					
 					//Organizing points
 					int currentPointID = 0;
@@ -104,24 +102,29 @@ public class ImageResource {
 						for(int pointID = 0; pointID < boundsList.size(); pointID++) {
 							if(currentPointID == pointID) continue;
 							
-							double distance = Math.sqrt(Math.pow(boundsList.get(pointID).get(1) - boundsList.get(currentPointID).get(1), 2) + Math.pow(boundsList.get(pointID).get(0) - boundsList.get(currentPointID).get(0), 2));
+							double distance = Math.sqrt(Math.pow(boundsList.get(pointID).y - boundsList.get(currentPointID).y, 2) + Math.pow(boundsList.get(pointID).x - boundsList.get(currentPointID).x, 2));
 							
-							ArrayList<Float> point = new ArrayList<Float>();
-							point.add(boundsList.get(pointID).get(0));
-							point.add(boundsList.get(pointID).get(1));
-							
-							if(distance < closestDistance && !checkedPoints.contains(point)){
-								closestDistance = distance;
-								closestDistancePointID = pointID;
+							Point point = new Point(boundsList.get(pointID).x, boundsList.get(pointID).y);
+
+							if(distance < closestDistance){
+								boolean pointReckognized = false;
+								
+								for(Point checkedPoint : checkedPoints) {
+									if(checkedPoint.x == point.x && checkedPoint.y == point.y)
+										pointReckognized = true;
+								}
+								
+								if(!pointReckognized) {
+									closestDistance = distance;
+									closestDistancePointID = pointID;
+								}
 								//System.out.println(pointID);
 							}
 						}
 						
 						currentPointID = closestDistancePointID;
 						
-						ArrayList<Float> point = new ArrayList<Float>();
-						point.add(boundsList.get(closestDistancePointID).get(0));
-						point.add(boundsList.get(closestDistancePointID).get(1));
+						Point point = new Point(boundsList.get(closestDistancePointID).x, boundsList.get(closestDistancePointID).y);
 						checkedPoints.add(point);
 						
 						//System.out.println(closestDistancePointID);
@@ -171,7 +174,7 @@ public class ImageResource {
 		return texture;
 	}
 	
-	public ArrayList<ArrayList<Float>> getImageBounds(){
+	public ArrayList<Point> getImageBounds(){
 		return boundsList;
 	}
 	

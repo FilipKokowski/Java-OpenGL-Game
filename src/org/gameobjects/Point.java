@@ -1,0 +1,23 @@
+package org.gameobjects;
+
+public class Point {
+
+	public float x = 0;
+	public float y = 0;
+	
+	public Point() {}
+	
+	public Point(float x, float y) {
+		this.x = x;
+		this.y = y;
+	}
+	
+	public static float getDistance(Point p1, Point p2) {
+		return (float) Math.sqrt(Math.pow(p2.y - p1.y, 2) - Math.pow(p2.x - p1.x, 2));
+	}
+	
+	public Vertex getVertex(Point point) {
+		return new Vertex(x - point.x, y - point.y);
+	}
+	
+}

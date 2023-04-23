@@ -4,6 +4,8 @@ import org.scene.background.Background;
 import org.scene.entities.Obstacle;
 import org.scene.entities.Player;
 
+import java.util.Random;
+
 import org.gameobjects.Entities;
 import org.graphics.HUD;
 import org.graphics.Renderer;
@@ -13,11 +15,11 @@ public class Main {
 	public static void main(String[] args) {
 		Renderer.init();
 		
-		Handler.addGO(new Background("res/org/scene/background/bg.jpg"));
+		//Handler.addGO(new Background("res/org/scene/background/bg.jpg"));
 		
 		Handler.addGO(new Player());
 		
-		Obstacle obstacle = new Obstacle(-3, onGround(1) + 1, 2, 1, "");
+		/*Obstacle obstacle = new Obstacle(-3, onGround(1) + 1, 2, 1, "");
 		obstacle.setColor(1f, .25f, .58f, .5f);
 		Handler.addGO(obstacle);
 		
@@ -32,20 +34,18 @@ public class Main {
 		
 		Obstacle obstacle3 = new Obstacle(4.8f, onGround(.8f) + .2f, 8, .8f, "");
 		obstacle3.setColor(.89f, .5f, .32f, .5f);
-		Handler.addGO(obstacle3);
+		Handler.addGO(obstacle3);*/
 		
-		Obstacle obstacle4 = new Obstacle(-7.5f, onGround(1) + 2.25f, 2, 1, "");
+		/*Obstacle obstacle4 = new Obstacle(-7.5f, onGround(1) + 2.25f, 2, 1, "");
 		obstacle4.setColor(1f, .25f, .58f, .5f);
-		Handler.addGO(obstacle4);
+		Handler.addGO(obstacle4);*/
 		
-		for(int i = 0; i < 50; i++) {
-			Obstacle sign = new Obstacle(-1 + i, onGround(.375f), .5f, .375f, "res/org/scene/objects/Sign/sign.png");
-			sign.verticallyCenteredText = true;
-			sign.offsetText(0, .05f);
-			sign.setTextColor(0, 0, 0, 1);
-			sign.text = "Ben";
-			Handler.addGO(sign);
-		}
+		Obstacle sign = new Obstacle(-1, onGround(.375f), .5f, .375f, "res/org/scene/objects/Sign/sign.png");
+		sign.verticallyCenteredText = true;
+		sign.offsetText(0, .05f);
+		sign.setTextColor(0, 0, 0, 1);
+		sign.text = sign.uuid;
+		Handler.addGO(sign);
 	
 		GameLoop.start();
 		

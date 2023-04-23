@@ -70,7 +70,7 @@ public class BodyPart extends Entities{
 		deactiveteWhenOutOfView();
 		applyPhysics(true, true);
 		draggable();
-	
+		
 		if(!collapse) {
 			//rotation += 2.5f;
 			x = parentX - Float.valueOf(xOffset);
@@ -83,16 +83,7 @@ public class BodyPart extends Entities{
 		jointPointX = x + jointOffsetX;
 		jointPointY = y + jointOffsetY;
 		
-		if(partID.equals("2A")) {
-			//System.out.println(
-				//"ID: " + partID +
-				//"velocityX : " + velocityX
-				//"jointOffsetX = " + jointOffsetX +
-				//"jointOffsetY = " + jointOffsetY +
-				//" \"x\":\"" + (xOffset) + "\"  /  \"y\":\"" + (yOffset) + "\""+
-				//"  parent pos =  " + parentX + "  /  " + parentY
-			//);	
-		}
+		
 		//rotation = parentAngle;
 	}
 	

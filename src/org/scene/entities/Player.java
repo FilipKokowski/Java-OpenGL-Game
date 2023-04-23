@@ -48,7 +48,7 @@ public class Player extends Entities{
 		reloadCrouchJumpForce();
 		reloadCrouchSpeedCap();
 		
-		bodyParts = new BodyPartsHandler("res/org/Entities/Skeleton.json");
+		//bodyParts = new BodyPartsHandler("res/org/Entities/Skeleton.json");
 		
 		fontSize = 16;
 		setCustomFont("res/org/fonts/pixelmix.ttf");
@@ -56,31 +56,36 @@ public class Player extends Entities{
 	}
 	
 	public void render() {
-		Graphics.setColor(0,0,0,0);
+		Graphics.setColor(0,0,0,1);
 		Graphics.drawRect(x, y, width, height);
 		Graphics.setTextColor(1, 0, 0, 1);
 		Graphics.setColor(1,1,1,1);
 		//Graphics.drawString(x, y, "Player");
+		
+		super.render();
 	}
 	
 	
 	@Override
 	public void update() {
+		
+		//System.out.println(vertexes);
+		
 		centerTextHorizontally();
 		placeTextAbove();
 		
 		text = "("+ x + "/" + y +")";
 		
-		bodyParts.passPosition(x, y, velocityX, velocityY, rotation);
+		//bodyParts.passPosition(x, y, velocityX, velocityY, rotation);
 		
 		if(KeyInput.getKey(KeyEvent.VK_G)) {
 			//System.out.println("collapse");
-			bodyParts.collapse();
+			//bodyParts.collapse();
 		}
 		
 		if(KeyInput.getKey(KeyEvent.VK_H)) {
 			//System.out.println("collapse");
-			bodyParts.assemble();
+			//bodyParts.assemble();
 		}
 		
 		float shiftX = 0;
@@ -100,7 +105,7 @@ public class Player extends Entities{
 			shiftY = .5f;
 		}
 		
-		bodyParts.moveJoint(shiftY, shiftX, "1");
+		//bodyParts.moveJoint(shiftY, shiftX, "1");
 		
 		//If player's not moving play idle animation
 		if(!KeyInput.getKey(KeyEvent.VK_A) && !KeyInput.getKey(KeyEvent.VK_D)) { 

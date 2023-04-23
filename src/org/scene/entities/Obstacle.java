@@ -31,9 +31,12 @@ public class Obstacle extends GameObject{
 		showBounds = true;
 		
 		text = uuid;
+		
+		if(imagePath.equals("")) bounds = getBounds();
 	}
 	
 	public void update() {
+		
 		deactiveteWhenOutOfView();
 		if(!outOfView) {
 			centerTextHorizontally();
@@ -52,6 +55,8 @@ public class Obstacle extends GameObject{
 			super.textOffsetX += textOffsetX;
 			super.textOffsetY += textOffsetY;
 		}
+		
+		super.update();
 	}
 	
 	public void offsetText(float xOffset, float yOffset) {
@@ -70,6 +75,8 @@ public class Obstacle extends GameObject{
 			
 			if(EventListener.renderJoints && showJoints)
 				drawJoints();
+
+			updateVertices();
 		}
 		else {
 			super.render();
