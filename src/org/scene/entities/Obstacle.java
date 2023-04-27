@@ -76,7 +76,6 @@ public class Obstacle extends GameObject{
 			if(EventListener.renderJoints && showJoints)
 				drawJoints();
 
-			updateVertices();
 		}
 		else {
 			super.render();

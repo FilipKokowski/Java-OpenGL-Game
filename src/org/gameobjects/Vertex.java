@@ -14,13 +14,8 @@ public class Vertex {
 		return (float)(Math.sqrt(Math.pow(x, 2) + Math.pow(y, 2)));
 	}
 	
-	public float dotProduct(Vertex vertex, GameObject parentObject, GameObject otherParentObject) {
-		//System.out.println("parentX: " + parentObject.getX() + "parentY: " + parentObject.getY());
-		//System.out.println("otherParentObjectX: " + otherParentObject.getX() + "otherParentObjectY: " + otherParentObject.getY() + "\n\n\n");
-		
-		//System.out.println(parentObject.getClass().getSimpleName() + " " +  (float)((x) * (vertex.x) + (y) * (vertex.y)));
-		
-		return (float)((x + parentObject.getX()) * (vertex.x + otherParentObject.getX()) + (y + parentObject.getY()) * (vertex.y + otherParentObject.getY()));
+	public float dotProduct(Point point) {
+		return (float)(x * point.x + y * point.y);
 	}
 	
 	public Vertex clone() {

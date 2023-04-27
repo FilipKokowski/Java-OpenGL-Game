@@ -6,12 +6,10 @@ import java.awt.event.KeyEvent;
 import java.awt.geom.Rectangle2D;
 import java.io.IOException;
 import java.util.ArrayList;
-import java.util.Collections;
 import java.util.Iterator;
 import java.util.UUID;
 
 import org.engine.AnimationHandler;
-import org.engine.Collider;
 import org.engine.Handler;
 import org.graphics.EventListener;
 import org.graphics.Graphics;
@@ -20,6 +18,7 @@ import org.input.KeyInput;
 import org.input.MouseInput;
 import org.resource.ImageResource;
 import org.scene.entities.Camera;
+import org.engine.Collider;
 
 import com.jogamp.opengl.util.awt.TextRenderer;
 
@@ -74,6 +73,8 @@ public class GameObject {
 	public float textOffsetY = 0;
 	
 	public ArrayList<Point> bounds;
+	public ArrayList<Point> boundsOffsets;
+	
 	public Collider collider;
 	
 	public ArrayList<Vertex> verticesOffsets;
@@ -110,27 +111,19 @@ public class GameObject {
 		this.animationPath = src;
 		this.txt = new ImageResource(src);
 		
-		bounds = txt.getImageBounds();
+		boundsOffsets = txt.getImageBounds();
 		
-		if(bounds.size() == 0)
-			bounds = getBounds();
+		if(boundsOffsets.size() == 0)
+			boundsOffsets = getBounds();
 		
-		verticesOffsets = new ArrayList<Vertex>();
+		bounds = new ArrayList<Point>();
 		
-		for(int point = 0; point < bounds.size(); point++) {
-			float vertexX = (float)((bounds.get(point).x + 1) * Math.cos(Math.toRadians(-rotation)) - (bounds.get(point).y + 1) * Math.sin(Math.toRadians(-rotation)) + this.x);
-			float vertexY = (float)((bounds.get(point).y + 1) * Math.sin(Math.toRadians(-rotation)) + (bounds.get(point).y + 1) * Math.cos(Math.toRadians(-rotation)) + this.y);
-			Vertex vertex = new Vertex(vertexX, vertexY);
-			verticesOffsets.add(vertex);
-		}	
-		
-		vertices = new ArrayList<Vertex>();
-
-		for(Vertex vertex : verticesOffsets) {
-			vertices.add(vertex.clone());
+		for(Point point : boundsOffsets) {
+			bounds.add(point.clone());
 		}
 		
-		collider = new Collider(vertices, this);
+		collider = new Collider(bounds, this);
+		
 		//System.out.println(bounds.size() + ": " + this.getClass().getSimpleName());
 		
 		//System.out.println(this.getClass().getSimpleName() + ": " + bounds);
@@ -164,7 +157,6 @@ public class GameObject {
 			if(EventListener.renderJoints && showJoints)
 				drawJoints();
 			
-			updateVertices();
 		}
 	}
 	
@@ -263,20 +255,6 @@ public class GameObject {
 		bounds.add(new Point((float)((-width / 2) * Math.cos(Math.toRadians(-rotation)) - (-height / 2) * Math.sin(Math.toRadians(-rotation)) + x), (float)((-width / 2) * Math.sin(Math.toRadians(-rotation)) + (-height / 2) * Math.cos(Math.toRadians(-rotation)) + y)));
 		
 		return bounds;
-	}
-	
-	public void updateVertices() {
-		//if(verticesAngle != rotation || lastPos.x != x || lastPos.y != y) {
-			lastPos = new Point(x,y);
-			verticesAngle = rotation;
-
-			for(int vertex = 0; vertex < vertices.size(); vertex++) {
-				vertices.get(vertex).x = x + verticesOffsets.get(vertex).x;
-				vertices.get(vertex).y = y + verticesOffsets.get(vertex).y;
-			
-				System.out.println(this.getClass().getSimpleName() + "  " + vertices.get(vertex).x + "x" + vertices.get(vertex).y);
-			}
-		//}
 	}
 	
 	public boolean doOverlap(ArrayList<Point> rec1, ArrayList<Point> rec2) {

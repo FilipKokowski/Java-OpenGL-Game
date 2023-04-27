@@ -16,8 +16,8 @@ public class Point {
 		return (float) Math.sqrt(Math.pow(p2.y - p1.y, 2) - Math.pow(p2.x - p1.x, 2));
 	}
 	
-	public Vertex getVertex(Point point) {
-		return new Vertex(x - point.x, y - point.y);
+	public Point clone() {
+		return new Point(x,y);
 	}
 	
 }
