@@ -14,6 +14,7 @@ public class Collider {
 	
 	public Collider(ArrayList<Point> points, GameObject parentObject) {
 		this.parentObject = parentObject;
+		this.points = points;
 		
 		for(int point = 0; point < points.size(); point += 2) {
 			try {
@@ -36,9 +37,38 @@ public class Collider {
 	public boolean doOverlap(Collider collider) {
 		
 		for(Vertex axis : axes) {
+			float firstPolygonmin = axis.dotProduct(points.get(0));
+			float firstPolygonmax = firstPolygonmin;
 			
-		
+			float secondPolygonmin = axis.dotProduct(collider.points.get(0));
+			float secondPolygonmax = secondPolygonmin;
+			
+			for(Point point : points) {
+				float dot = axis.dotProduct(point);
+				
+				firstPolygonmin = Math.min(firstPolygonmin, dot);
+				firstPolygonmax = Math.max(firstPolygonmax, dot);
+			}
+			
+			for(Point point : collider.points) {
+				float dot = axis.dotProduct(point);
+				
+				secondPolygonmin = Math.min(secondPolygonmin, dot);
+				secondPolygonmax = Math.max(secondPolygonmax, dot);
+			}
+			
+			float polyOffset = axis.dotProduct(new Point(parentObject.getX() - collider.parentObject.getX(), parentObject.getY() - collider.parentObject.getY()));
+			
+			firstPolygonmin += polyOffset;
+			firstPolygonmax += polyOffset;
+			
+			System.out.println(firstPolygonmin + ">" + secondPolygonmax + " || " + secondPolygonmax +  ">" + firstPolygonmax);
+			
+			if (firstPolygonmin > secondPolygonmax || secondPolygonmax > firstPolygonmax){
+		      return true;
+		    }
 		}
+				
 		return false;
 	}
 }
