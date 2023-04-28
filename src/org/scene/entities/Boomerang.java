@@ -51,6 +51,9 @@ public class Boomerang extends Entities{
 	}
 	
 	public void update() {
+		
+		super.update();
+		
 		rotation += rotationSpeed;
 		
 		cooldown -= GameLoop.updateDelta();

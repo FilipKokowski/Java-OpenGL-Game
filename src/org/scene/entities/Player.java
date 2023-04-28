@@ -69,7 +69,7 @@ public class Player extends Entities{
 	@Override
 	public void update() {
 		
-		//System.out.println(vertexes);
+		super.update();
 		
 		centerTextHorizontally();
 		placeTextAbove();

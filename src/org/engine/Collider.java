@@ -8,13 +8,18 @@ import org.gameobjects.Vertex;
 
 public class Collider {
 
+	private ArrayList<Point> pointsOffsets = new ArrayList<Point>();
 	private ArrayList<Point> points = new ArrayList<Point>();
 	private ArrayList<Vertex> axes = new ArrayList<Vertex>();
 	private GameObject parentObject;
 	
-	public Collider(ArrayList<Point> points, GameObject parentObject) {
+	public Collider(ArrayList<Point> pointsOffsets, GameObject parentObject) {
 		this.parentObject = parentObject;
-		this.points = points;
+		this.pointsOffsets = pointsOffsets;
+		
+		for(Point pointOffset : pointsOffsets) {
+			this.points.add(pointOffset.clone());
+		}
 		
 		for(int point = 0; point < points.size(); point += 2) {
 			try {
@@ -34,8 +39,15 @@ public class Collider {
 		}
 	}
 	
+	public void update() {
+		for(int point = 0; point < points.size(); point++) {
+			points.get(point).x = pointsOffsets.get(point).x + parentObject.getX();
+			points.get(point).y = pointsOffsets.get(point).y + parentObject.getY();
+		}
+	}
+	
 	public boolean doOverlap(Collider collider) {
-		
+
 		for(Vertex axis : axes) {
 			float firstPolygonmin = axis.dotProduct(points.get(0));
 			float firstPolygonmax = firstPolygonmin;
@@ -44,14 +56,14 @@ public class Collider {
 			float secondPolygonmax = secondPolygonmin;
 			
 			for(Point point : points) {
-				float dot = axis.dotProduct(point);
+				float dot = axis.dotProduct(new Point(point.x + parentObject.getX(), point.y + parentObject.getY()));
 				
 				firstPolygonmin = Math.min(firstPolygonmin, dot);
 				firstPolygonmax = Math.max(firstPolygonmax, dot);
 			}
 			
 			for(Point point : collider.points) {
-				float dot = axis.dotProduct(point);
+				float dot = axis.dotProduct(new Point(point.x + collider.parentObject.getX(), point.y + collider.parentObject.getY()));
 				
 				secondPolygonmin = Math.min(secondPolygonmin, dot);
 				secondPolygonmax = Math.max(secondPolygonmax, dot);

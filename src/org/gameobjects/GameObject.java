@@ -26,8 +26,6 @@ public class GameObject {
 	protected float x = 0;
 	protected float y = 0;
 	
-	protected Point lastPos = new Point();
-	
 	protected float velocityX = 0;
 	protected float velocityY = 0;
 	
@@ -76,10 +74,8 @@ public class GameObject {
 	public ArrayList<Point> boundsOffsets;
 	
 	public Collider collider;
-	
-	public ArrayList<Vertex> verticesOffsets;
-	public ArrayList<Vertex> vertices;
-	public float verticesAngle = 0;
+	private Point lastColliderPos = new Point();
+	private float lastColliderRotation = 0;
 	
 	public boolean outOfView = false;
 
@@ -100,8 +96,8 @@ public class GameObject {
 		this.width = width;
 		this.height = height;
 		
-		lastPos.x = this.x;
-		lastPos.y = this.y;
+		lastColliderPos.x = this.x;
+		lastColliderPos.y = this.y;
 		
 		offsetFromMiddleX = width / 2;
 		offsetFromMiddleY = height / 2;
@@ -129,7 +125,15 @@ public class GameObject {
 		//System.out.println(this.getClass().getSimpleName() + ": " + bounds);
 	}
 	
-	public void update() {}
+	public void update() {
+		if(lastColliderPos.x != x || lastColliderPos.y != y || lastColliderRotation != rotation) {
+			lastColliderPos.x = x;
+			lastColliderPos.y = y;
+			lastColliderRotation = rotation;
+			
+			collider.update();
+		}
+	}
 
 	public void render() {
 		if(!outOfView) {
