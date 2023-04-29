@@ -169,7 +169,6 @@ public class Entities extends GameObject {
 						//System.out.println(this.getClass().getSimpleName() + " " + collider.minkowskiDiff(tempObj.collider, dir).x  +  " x " + collider.minkowskiDiff(tempObj.collider, dir).y);
 							
 						//System.out.println("Player: " + collider.parentObject.getX() + "/nObstacle: " + tempObj.collider.parentObject.getX() + ": " + collider.doCollide(tempObj.collider));
-						
 						if(tempObj.id == ID.Obstacle && collider.doOverlap(tempObj.collider)){
 							//System.out.println("Collide");
 							/*velocityX = 0;

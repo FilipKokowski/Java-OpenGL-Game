@@ -56,14 +56,16 @@ public class Collider {
 			float secondPolygonmax = secondPolygonmin;
 			
 			for(Point point : points) {
-				float dot = axis.dotProduct(new Point(point.x + parentObject.getX(), point.y + parentObject.getY()));
+				float dot = axis.dotProduct(new Point(point.x, point.y));
+				
+				System.out.println(dot);
 				
 				firstPolygonmin = Math.min(firstPolygonmin, dot);
 				firstPolygonmax = Math.max(firstPolygonmax, dot);
 			}
 			
 			for(Point point : collider.points) {
-				float dot = axis.dotProduct(new Point(point.x + collider.parentObject.getX(), point.y + collider.parentObject.getY()));
+				float dot = axis.dotProduct(new Point(point.x, point.y));
 				
 				secondPolygonmin = Math.min(secondPolygonmin, dot);
 				secondPolygonmax = Math.max(secondPolygonmax, dot);
@@ -74,9 +76,9 @@ public class Collider {
 			firstPolygonmin += polyOffset;
 			firstPolygonmax += polyOffset;
 			
-			System.out.println(firstPolygonmin + ">" + secondPolygonmax + " || " + secondPolygonmax +  ">" + firstPolygonmax);
+			//System.out.println(firstPolygonmin + ">" + secondPolygonmax + " || " + secondPolygonmin +  ">" + firstPolygonmax + (firstPolygonmin > secondPolygonmax || secondPolygonmin > firstPolygonmax));
 			
-			if (firstPolygonmin > secondPolygonmax || secondPolygonmax > firstPolygonmax){
+			if (firstPolygonmin > secondPolygonmax || secondPolygonmin > firstPolygonmax){
 		      return true;
 		    }
 		}

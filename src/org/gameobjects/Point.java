@@ -1,5 +1,7 @@
 package org.gameobjects;
 
+import java.util.ArrayList;
+
 public class Point {
 
 	public float x = 0;
@@ -18,6 +20,38 @@ public class Point {
 	
 	public Point clone() {
 		return new Point(x,y);
+	}
+	
+	public static Point findClosestPoint(ArrayList<Point> points) {
+		float smallestDistance = (float) Math.sqrt(Math.pow(points.get(0).x, 2) + Math.pow(points.get(0).y, 2));
+		Point closestPoint = points.get(0);
+		
+		for(Point point : points) {
+			float distance = (float) Math.sqrt(Math.pow(point.x, 2) + Math.pow(point.x, 2));
+			
+			if(distance < smallestDistance) {
+				closestPoint = point;
+				smallestDistance = distance;
+			}
+		}
+		
+		return closestPoint;
+	}
+	
+	public static Point findFurthestPoint(ArrayList<Point> points) {
+		float longesttDistance = (float) Math.sqrt(Math.pow(points.get(0).x, 2) + Math.pow(points.get(0).y, 2));
+		Point furthestPoint = points.get(0);
+		
+		for(Point point : points) {
+			float distance = (float) Math.sqrt(Math.pow(point.x, 2) + Math.pow(point.x, 2));
+			
+			if(distance > longesttDistance) {
+				furthestPoint = point;
+				longesttDistance = distance;
+			}
+		}
+		
+		return furthestPoint;
 	}
 	
 }
