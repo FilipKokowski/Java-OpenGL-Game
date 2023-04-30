@@ -5,6 +5,7 @@ import java.util.ArrayList;
 import org.gameobjects.GameObject;
 import org.gameobjects.Point;
 import org.gameobjects.Vertex;
+import org.graphics.Graphics;
 
 public class Collider {
 
@@ -20,6 +21,17 @@ public class Collider {
 		for(Point pointOffset : pointsOffsets) {
 			this.points.add(pointOffset.clone());
 		}
+		
+		update();
+	}
+	
+	public void update() {
+		for(int point = 0; point < points.size(); point++) {
+			points.get(point).x = pointsOffsets.get(point).x + parentObject.getX();
+			points.get(point).y = pointsOffsets.get(point).y + parentObject.getY();
+		}
+		
+		axes.clear();
 		
 		for(int point = 0; point < points.size(); point += 2) {
 			try {
@@ -37,16 +49,14 @@ public class Collider {
 				axis.y *= 1 / magnitude;
 			}
 		}
-	}
-	
-	public void update() {
-		for(int point = 0; point < points.size(); point++) {
-			points.get(point).x = pointsOffsets.get(point).x + parentObject.getX();
-			points.get(point).y = pointsOffsets.get(point).y + parentObject.getY();
-		}
+		
 	}
 	
 	public boolean doOverlap(Collider collider) {
+		
+		ArrayList<Vertex> axes = new ArrayList<Vertex>();
+		axes.addAll(this.axes);
+		axes.addAll(collider.axes);
 
 		for(Vertex axis : axes) {
 			float firstPolygonmin = axis.dotProduct(points.get(0));
@@ -58,14 +68,19 @@ public class Collider {
 			for(Point point : points) {
 				float dot = axis.dotProduct(new Point(point.x, point.y));
 				
-				System.out.println(dot);
-				
+				//System.out.println(parentObject.getClass().getSimpleName() + " - " + dot);
+				//System.out.println(axis.x + " * " + point.x + " + " + axis.y + " * " + point.y + " = " + (axis.x * point.x + axis.y * point.y));
+
 				firstPolygonmin = Math.min(firstPolygonmin, dot);
 				firstPolygonmax = Math.max(firstPolygonmax, dot);
 			}
 			
 			for(Point point : collider.points) {
 				float dot = axis.dotProduct(new Point(point.x, point.y));
+				
+				//System.out.println(collider.parentObject.getClass().getSimpleName() + " - " + dot);
+				
+				//System.out.println(axis.x + " * " + point.x + " + " + axis.y + " * " + point.y + " = " + (axis.x * point.x + axis.y * point.y));
 				
 				secondPolygonmin = Math.min(secondPolygonmin, dot);
 				secondPolygonmax = Math.max(secondPolygonmax, dot);
