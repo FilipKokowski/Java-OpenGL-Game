@@ -5,6 +5,7 @@ import java.util.ArrayList;
 import org.gameobjects.GameObject;
 import org.gameobjects.Point;
 import org.gameobjects.Vertex;
+import org.graphics.Graphics;
 
 public class Collider {
 
@@ -49,7 +50,7 @@ public class Collider {
 			}
 			
 			//System.out.println(axis.x + " x " + axis.y);
-		}
+		}        
 		
 	}
 	
@@ -100,7 +101,7 @@ public class Collider {
 			System.out.println(firstPolygonmin + ">" + secondPolygonmax + " || " + secondPolygonmin +  ">" + firstPolygonmax + (firstPolygonmin > secondPolygonmax || secondPolygonmin > firstPolygonmax));
 			
 			if (firstPolygonmin > secondPolygonmax || secondPolygonmin > firstPolygonmax){
-		      //return true;
+		      return true;
 		    }
 		}
 				

@@ -92,7 +92,6 @@ public class BodyPart extends Entities{
 		
 		if(partID.equals("1")) {
 			id = ID.BodyPart;
-			text = "("+ x + "/" + y +")";
 		}
 		
 		//rotation = parentAngle;
