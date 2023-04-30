@@ -21,4 +21,8 @@ public class Vertex {
 	public Vertex clone() {
 		return new Vertex(x,y);
     }
+	
+	public void print() {
+		System.out.println("x: " + this.x + " y: " + this.y);
+	}
 }

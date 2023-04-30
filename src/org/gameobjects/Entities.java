@@ -39,7 +39,6 @@ public class Entities extends GameObject {
 	
 	public Entities(float x, float y, float width, float height, String textureSrc) {
 		super(x, y, width, height, textureSrc);
-		// TODO Auto-generated constructor stub
 	}
 	
 	public void gravity() { velocityY -= mass/G; };
@@ -88,7 +87,7 @@ public class Entities extends GameObject {
 						
 						//Check if objects ID is ID.Obstacle and is intersecting with entity
 						if(tempObj.id == ID.Obstacle && collider.doOverlap(tempObj.collider)){
-							//System.out.println("Collide");
+							System.out.println("Collide");
 							//System.out.println("Collision with " + tempObj.getClass().getSimpleName() + " " + tempObj.uuid);
 							/*//If entity is more to the left side of obstacle, trigger left collisionW
 							if(x < tempObj.getX()) {
@@ -170,7 +169,7 @@ public class Entities extends GameObject {
 							
 						//System.out.println("Player: " + collider.parentObject.getX() + "/nObstacle: " + tempObj.collider.parentObject.getX() + ": " + collider.doCollide(tempObj.collider));
 						if(tempObj.id == ID.Obstacle && collider.doOverlap(tempObj.collider)){
-							//System.out.println("Collide");
+							System.out.println("Collide");
 							/*velocityX = 0;
 							//System.out.println("Touching");
 							

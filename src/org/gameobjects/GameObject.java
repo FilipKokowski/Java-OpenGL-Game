@@ -151,9 +151,9 @@ public class GameObject {
 					float x = (float)((bounds.get(point).x) * Math.cos(Math.toRadians(-rotation)) - (bounds.get(point).y) * Math.sin(Math.toRadians(-rotation)) + this.x);
 					float y = (float)((bounds.get(point).x) * Math.sin(Math.toRadians(-rotation)) + (bounds.get(point).y) * Math.cos(Math.toRadians(-rotation)) + this.y);
 					Graphics.drawRect(x, y, .01f, .01f);
-					
 					//Graphics.drawLine(x + bounds.get(point).x, y + bounds.get(point).y, x + bounds.get(point + 1).x , y + bounds.get(point + 1).y, id);
 				}
+				
 				
 				Graphics.setColor(1, 1, 1, 1);
 			}

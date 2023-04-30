@@ -69,12 +69,12 @@ public class Player extends Entities{
 	@Override
 	public void update() {
 		
-		super.update();
+		//super.update();
 		
 		centerTextHorizontally();
 		placeTextAbove();
 		
-		text = "("+ x + "/" + y +")";
+		//text = "("+ x + "/" + y +")";
 		
 		//bodyParts.passPosition(x, y, velocityX, velocityY, rotation);
 		

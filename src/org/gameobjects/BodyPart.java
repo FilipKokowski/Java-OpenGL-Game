@@ -3,6 +3,7 @@ package org.gameobjects;
 import java.io.IOException;
 
 import org.engine.GameLoop;
+import org.engine.Handler;
 import org.resource.ImageResource;
 
 public class BodyPart extends Entities{
@@ -67,8 +68,14 @@ public class BodyPart extends Entities{
 	}
 	
 	public void update() {
+		
+		super.update();
+		
 		deactiveteWhenOutOfView();
-		applyPhysics(true, true);
+		
+		//If Player is in one piece, gravity for body parts is disabledd
+		applyPhysics(collapse, true);
+		
 		draggable();
 		
 		if(!collapse) {
@@ -83,6 +90,10 @@ public class BodyPart extends Entities{
 		jointPointX = x + jointOffsetX;
 		jointPointY = y + jointOffsetY;
 		
+		if(partID.equals("1")) {
+			id = ID.BodyPart;
+			text = "("+ x + "/" + y +")";
+		}
 		
 		//rotation = parentAngle;
 	}

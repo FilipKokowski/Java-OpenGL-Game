@@ -6,5 +6,6 @@ public enum ID {
 	Obstacle(),
 	Projectile(),
 	HUD(),
-	GameObject()
+	GameObject(),
+	BodyPart()
 }
