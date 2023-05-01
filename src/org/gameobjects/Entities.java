@@ -86,7 +86,7 @@ public class Entities extends GameObject {
 						//System.out.println(collider.doCollide(tempObj.collider) + " " + tempObj.id);
 						
 						//Check if objects ID is ID.Obstacle and is intersecting with entity
-						if(tempObj.id == ID.Obstacle && id == ID.BodyPart && collider.doOverlap(tempObj.collider)){
+						if(tempObj.id == ID.Obstacle && collider.doOverlap(tempObj.collider)){
 							//System.out.println("Collide");
 							//System.out.println("Collision with " + tempObj.getClass().getSimpleName() + " " + tempObj.uuid);
 							/*//If entity is more to the left side of obstacle, trigger left collisionW
@@ -168,7 +168,7 @@ public class Entities extends GameObject {
 						//System.out.println(this.getClass().getSimpleName() + " " + collider.minkowskiDiff(tempObj.collider, dir).x  +  " x " + collider.minkowskiDiff(tempObj.collider, dir).y);
 							
 						//System.out.println("Player: " + collider.parentObject.getX() + "/nObstacle: " + tempObj.collider.parentObject.getX() + ": " + collider.doCollide(tempObj.collider));
-						if(tempObj.id == ID.Obstacle && id == ID.BodyPart && collider.doOverlap(tempObj.collider)){
+						if(tempObj.id == ID.Obstacle && collider.doOverlap(tempObj.collider)){
 							//System.out.println("Collide");
 							/*velocityX = 0;
 							//System.out.println("Touching");

@@ -12,7 +12,7 @@ public class Obstacle extends GameObject{
 
 	private String imagePath = "";
 	
-	private boolean collider = false;
+	private boolean collisionEnabled = true;
 	
 	public boolean verticallyCenteredText = false;
 	
@@ -70,18 +70,20 @@ public class Obstacle extends GameObject{
 			Graphics.drawRect(x, y, width, height);
 			Graphics.setColor(1, 1, 1, 1);
 			
-			if(EventListener.renderBounds && showBounds)
+			if(EventListener.renderBounds)
 				drawBounds();
 			
-			if(EventListener.renderJoints && showJoints)
+			if(EventListener.renderJoints)
 				drawJoints();
 
 		}
 		else {
 			super.render();
 		}
+		
+		collider.renderAxes(0,0,1,1);
 	}
 	
-	public void collisionOn() { collider = true; }
-	public void collisionOff() { collider = false; }
+	public void collisionOn() { collisionEnabled = true; }
+	public void collisionOff() { collisionEnabled = false; }
 }

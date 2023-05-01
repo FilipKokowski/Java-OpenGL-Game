@@ -92,15 +92,18 @@ public class BodyPart extends Entities{
 		
 		if(partID.equals("1")) {
 			id = ID.BodyPart;
+			
 		}
 		
 		//rotation = parentAngle;
 	}
 	
-	/*public void render() {
-		Graphics.setColor(1, 1, 1, 1);
-		Graphics.fillRect(x, y, width, height);
-	}*/
+	public void render() {
+		super.render();
+		
+		if(partID.equals("1")) 
+			collider.renderAxes(0,1,0,1);
+	}
 	
 	public void setX(float x) {
 		this.x = x;

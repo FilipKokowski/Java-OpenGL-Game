@@ -5,6 +5,7 @@ import org.engine.GameLoop;
 import org.engine.Handler;
 import org.gameobjects.Entities;
 import org.gameobjects.ID;
+import org.graphics.EventListener;
 import org.graphics.Graphics;
 import org.input.KeyInput;
 
@@ -26,10 +27,10 @@ public class Player extends Entities{
 	
 	BodyPartsHandler bodyParts;
 	
-	private static String animationPath = "";
+	private static String imagePath = "";
 	
 	public Player(){
-		super(0, 0, initialWidth, initialHeight, animationPath);
+		super(0, 0, initialWidth, initialHeight, imagePath);
 		
 		HEIGHT = initialHeight;
 		WIDTH = initialWidth;
@@ -48,7 +49,7 @@ public class Player extends Entities{
 		reloadCrouchJumpForce();
 		reloadCrouchSpeedCap();
 		
-		bodyParts = new BodyPartsHandler("res/org/Entities/Skeleton.json");
+		//bodyParts = new BodyPartsHandler("res/org/Entities/Skeleton.json");
 		
 		fontSize = 16;
 		setCustomFont("res/org/fonts/pixelmix.ttf");
@@ -56,13 +57,26 @@ public class Player extends Entities{
 	}
 	
 	public void render() {
-		Graphics.setColor(0,0,0,0);
-		Graphics.drawRect(x, y, width, height);
-		Graphics.setTextColor(1, 0, 0, 1);
-		Graphics.setColor(1,1,1,1);
-		//Graphics.drawString(x, y, "Player");
+		if(imagePath.equals("")) {
+			Graphics.Rotate(-rotation);
+			Graphics.setColor(0, 0, 0, 1);
+			Graphics.drawRect(x, y, width, height);
+			Graphics.setColor(1, 1, 1, 1);
+			Graphics.Rotate(0);
+			
+			if(EventListener.renderBounds)
+				drawBounds();
+			
+			if(EventListener.renderJoints)
+				drawJoints();
+
+		}
+		else {
+			super.render();
+		}
 		
-		super.render();
+		collider.renderAxes(0, 1, 0, 1);
+		
 	}
 	
 	
@@ -76,16 +90,16 @@ public class Player extends Entities{
 		
 		text = "("+ x + "/" + y +")";
 		
-		bodyParts.passPosition(x, y, velocityX, velocityY, rotation);
+		//bodyParts.passPosition(x, y, velocityX, velocityY, rotation);
 		
 		if(KeyInput.getKey(KeyEvent.VK_G)) {
 			//System.out.println("collapse");
-			bodyParts.collapse();
+			//bodyParts.collapse();
 		}
 		
 		if(KeyInput.getKey(KeyEvent.VK_H)) {
 			//System.out.println("collapse");
-			bodyParts.assemble();
+			//bodyParts.assemble();
 		}
 		
 		float shiftX = 0;
@@ -105,7 +119,7 @@ public class Player extends Entities{
 			shiftY = .5f;
 		}
 		
-		bodyParts.moveJoint(shiftY, shiftX, "1");
+		//bodyParts.moveJoint(shiftY, shiftX, "1");
 		
 		//If player's not moving play idle animation
 		if(!KeyInput.getKey(KeyEvent.VK_A) && !KeyInput.getKey(KeyEvent.VK_D)) { 

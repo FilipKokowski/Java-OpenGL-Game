@@ -112,6 +112,8 @@ public class GameObject {
 		if(boundsOffsets.size() == 0)
 			boundsOffsets = getBounds();
 		
+		System.out.println(this.getClass().getSimpleName() + " bounds size: "+ boundsOffsets.size());
+		
 		bounds = new ArrayList<Point>();
 		
 		for(Point point : boundsOffsets) {

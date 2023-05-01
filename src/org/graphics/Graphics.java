@@ -95,7 +95,7 @@ public class Graphics {
 		
 		gl.glTranslatef(x, y, 0);
 		gl.glRotatef(-rotation, 0, 0, 1);
-		
+
 		gl.glColor4f(red, green, blue, alpha);
 		gl.glBegin(GL2.GL_QUADS);
 			gl.glVertex2f(-pos1, -pos2);
@@ -104,8 +104,8 @@ public class Graphics {
 			gl.glVertex2f(-pos1, pos2);
 		gl.glEnd();
 	
-		gl.glTranslatef(-x, -y, 0);
 		gl.glRotatef(rotation, 0, 0, 1);
+		gl.glTranslatef(-x, -y, 0);
 	}
 	
 	public static void fillTriangle(float x, float y, float width, float height) {

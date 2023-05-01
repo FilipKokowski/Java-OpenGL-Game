@@ -1,8 +1,10 @@
 package org.engine;
 
 import java.util.ArrayList;
+import java.util.concurrent.ConcurrentLinkedQueue;
 
 import org.gameobjects.GameObject;
+import org.gameobjects.ID;
 import org.gameobjects.Point;
 import org.gameobjects.Vertex;
 import org.graphics.Graphics;
@@ -11,7 +13,7 @@ public class Collider {
 
 	public ArrayList<Point> pointsOffsets = new ArrayList<Point>();
 	private ArrayList<Point> points = new ArrayList<Point>();
-	private ArrayList<Vertex> axes = new ArrayList<Vertex>();
+	private ConcurrentLinkedQueue<Vertex> axes = new ConcurrentLinkedQueue<Vertex>();
 	private GameObject parentObject;
 	
 	public Collider(ArrayList<Point> pointsOffsets, GameObject parentObject) {
@@ -33,16 +35,34 @@ public class Collider {
 		
 		axes.clear();
 		
-		for(int point = 0; point < points.size(); point += 2) {
+		for(int point = 0; point < points.size(); point += 1) {
 			try {
-				axes.add(new Vertex(-(points.get(point + 1).y - points.get(point).y), points.get(point + 1).x - points.get(point).x));
+				axes.offer(new Vertex(-(points.get(point + 1).y - points.get(point).y), points.get(point + 1).x - points.get(point).x));
 			} catch(IndexOutOfBoundsException e) {
-				axes.add(new Vertex(-(points.get(0).y - points.get(point).y), points.get(0).x - points.get(point).x));
+				axes.offer(new Vertex(-(points.get(0).y - points.get(point).y), points.get(0).x - points.get(point).x));
 			}
 		}
 		
 		for(Vertex axis : axes) {
-			float magnitude = (float) Math.sqrt(Math.pow(axis.x, 2) + Math.pow(axis.y, 2));
+			
+			boolean duplicate = false;
+			
+			for(Vertex checkedAxis : axes) {
+				if(axis.equals(checkedAxis))
+					continue;
+				
+				if(checkedAxis.x == axis.x && checkedAxis.y == axis.y) {
+					duplicate = true;
+					break;
+				}
+			}
+			
+			if(duplicate) {
+				axes.remove(axis);
+				continue;
+			}
+			
+			double magnitude = Math.sqrt(Math.pow(axis.x, 2) + Math.pow(axis.y, 2));
 			
 			if(magnitude != 0) {
 				axis.x *= 1 / magnitude;
@@ -50,8 +70,17 @@ public class Collider {
 			}
 			
 			//System.out.println(axis.x + " x " + axis.y);
-		}        
+		}       
 		
+	}
+	
+	public void renderAxes(float red,float green,float blue,float alpha) {
+		Graphics.setColor(red, green, blue, alpha);
+		
+		for(Vertex axis : axes) 
+			Graphics.drawLine(axis.x, axis.y, axis.x * 2, axis.y * 2, ID.HUD);
+		
+		Graphics.setColor(1,1,1,1);
 	}
 	
 	public boolean doOverlap(Collider collider) {
@@ -98,7 +127,7 @@ public class Collider {
 			
 			//System.out.println(polyOffset);
 			
-			System.out.println(firstPolygonmin + ">" + secondPolygonmax + " || " + secondPolygonmin +  ">" + firstPolygonmax + (firstPolygonmin > secondPolygonmax || secondPolygonmin > firstPolygonmax));
+			System.out.println(firstPolygonmin + ">" + secondPolygonmax + " || " + secondPolygonmin +  ">" + firstPolygonmax + (firstPolygonmin > secondPolygonmax || secondPolygonmin > firstPolygonmax) + " " + parentObject.getClass().getSimpleName());
 			
 			if (firstPolygonmin > secondPolygonmax || secondPolygonmin > firstPolygonmax){
 		      return true;
