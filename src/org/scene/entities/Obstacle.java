@@ -81,7 +81,7 @@ public class Obstacle extends GameObject{
 			super.render();
 		}
 		
-		collider.renderAxes(0,0,1,1);
+		collider.renderAxes(1,1,1,1);
 	}
 	
 	public void collisionOn() { collisionEnabled = true; }

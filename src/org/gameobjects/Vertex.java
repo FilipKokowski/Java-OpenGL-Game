@@ -1,5 +1,7 @@
 package org.gameobjects;
 
+import org.graphics.Graphics;
+
 public class Vertex {
 
 	public float x = 0;
@@ -24,5 +26,11 @@ public class Vertex {
 	
 	public void print() {
 		System.out.println("x: " + this.x + " y: " + this.y);
+	}
+	
+	public void render() {
+		Graphics.setColor(.5f, .5f, 0, 1);
+		Graphics.drawLine(x * (-2), y * (-2), x * 2, y * 2, ID.HUD);
+		Graphics.setColor(1, 1, 1, 1);
 	}
 }

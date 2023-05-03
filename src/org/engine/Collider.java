@@ -23,14 +23,13 @@ public class Collider {
 		for(Point pointOffset : pointsOffsets) {
 			this.points.add(pointOffset.clone());
 		}
-		
-		update();
 	}
 	
 	public void update() {
 		for(int point = 0; point < points.size(); point++) {
-			points.get(point).x = (float)((pointsOffsets.get(point).x + parentObject.getX()) * Math.cos(Math.toRadians(-parentObject.rotation)) - (pointsOffsets.get(point).y + parentObject.getY()) * Math.sin(Math.toRadians(-parentObject.rotation)) + parentObject.getX());
-			points.get(point).y = (float)((pointsOffsets.get(point).x + parentObject.getX()) * Math.sin(Math.toRadians(-parentObject.rotation)) + (pointsOffsets.get(point).y + parentObject.getY()) * Math.cos(Math.toRadians(-parentObject.rotation)) + parentObject.getY());
+			points.get(point).x = (float)((pointsOffsets.get(point).x) * Math.cos(Math.toRadians(-parentObject.rotation)) - (pointsOffsets.get(point).y) * Math.sin(Math.toRadians(-parentObject.rotation)) + parentObject.getX());
+			points.get(point).y = (float)((pointsOffsets.get(point).x) * Math.sin(Math.toRadians(-parentObject.rotation)) + (pointsOffsets.get(point).y) * Math.cos(Math.toRadians(-parentObject.rotation)) + parentObject.getY());
+			//System.out.println(parentObject.getClass().getSimpleName() + " - " + parentObject.getX() + " x " + parentObject.getY());
 		}
 		
 		axes.clear();
@@ -77,8 +76,12 @@ public class Collider {
 	public void renderAxes(float red,float green,float blue,float alpha) {
 		Graphics.setColor(red, green, blue, alpha);
 		
-		for(Vertex axis : axes) 
-			Graphics.drawLine(axis.x, axis.y, axis.x * 2, axis.y * 2, ID.HUD);
+		//Graphics.drawLine(axis.x * -2, axis.y * -2, axis.x * 2, axis.y * 2, ID.HUD);
+		
+		for(Point point : points) {
+			//System.out.println(parentObject.getClass().getSimpleName() + " - " + points.size() + " " + point.x + "x" + point.y);
+			Graphics.drawRect(point.x, point.y, .01f, .01f);
+		}
 		
 		Graphics.setColor(1,1,1,1);
 	}
@@ -90,7 +93,6 @@ public class Collider {
 		axes.addAll(collider.axes);
 		
 		for(Vertex axis : axes) {
-			
 			//axis.print();
 			
 			float firstPolygonmin = axis.dotProduct(points.get(0));
@@ -127,13 +129,12 @@ public class Collider {
 			
 			//System.out.println(polyOffset);
 			
-			System.out.println(firstPolygonmin + ">" + secondPolygonmax + " || " + secondPolygonmin +  ">" + firstPolygonmax + (firstPolygonmin > secondPolygonmax || secondPolygonmin > firstPolygonmax) + " " + parentObject.getClass().getSimpleName());
+			System.out.println("!(" + secondPolygonmax + " >= " + firstPolygonmin + " && " + firstPolygonmax + " >= " + secondPolygonmin + " " +(!(secondPolygonmax >= firstPolygonmin && firstPolygonmax >= secondPolygonmin)));
 			
-			if (firstPolygonmin > secondPolygonmax || secondPolygonmin > firstPolygonmax){
-		      return true;
-		    }
+			if(!(secondPolygonmax >= firstPolygonmin && firstPolygonmax >= secondPolygonmin))
+				return false;
 		}
 				
-		return false;
+		return true;
 	}
 }
