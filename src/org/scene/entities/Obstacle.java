@@ -33,6 +33,9 @@ public class Obstacle extends GameObject{
 		text = uuid;
 		
 		if(imagePath.equals("")) bounds = getBounds();
+		
+		if(collider.pointsOffsets.size() != 4)
+			collider.update();
 	}
 	
 	public void update() {
@@ -57,6 +60,7 @@ public class Obstacle extends GameObject{
 		}
 		
 		super.update();
+		
 	}
 	
 	public void offsetText(float xOffset, float yOffset) {

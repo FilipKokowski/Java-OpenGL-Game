@@ -300,7 +300,6 @@ public class GameObject {
 	}
 	
 	public void drawBounds() {
-		showBounds = true;
 		ArrayList<Point> bounds = getBounds();
 		float x1 = bounds.get(0).x;
 		float y1 = bounds.get(0).y;
@@ -325,7 +324,6 @@ public class GameObject {
 	public void hideBounds() { showBounds = false; }
 	
 	public void drawJoints() {
-		showJoints = true;
 		Graphics.setColor(.8f, .6f, .8f, 1);
 		Graphics.drawRect(jointPointX, jointPointY, .04f, .04f);
 		Graphics.setColor(1, 1, 1, 1);

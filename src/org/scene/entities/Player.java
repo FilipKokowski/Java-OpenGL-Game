@@ -64,10 +64,10 @@ public class Player extends Entities{
 			Graphics.setColor(1, 1, 1, 1);
 			Graphics.Rotate(0);
 			
-			if(EventListener.renderBounds)
+			if(EventListener.renderBounds || showBounds)
 				drawBounds();
 			
-			if(EventListener.renderJoints)
+			if(EventListener.renderJoints || showJoints)
 				drawJoints();
 
 		}

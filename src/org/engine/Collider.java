@@ -88,6 +88,9 @@ public class Collider {
 	
 	public boolean doOverlap(Collider collider) {
 		
+		parentObject.showBounds = true;
+		collider.parentObject.showBounds = true;
+		
 		ArrayList<Vertex> axes = new ArrayList<Vertex>();
 		axes.addAll(this.axes);
 		axes.addAll(collider.axes);
@@ -124,17 +127,17 @@ public class Collider {
 			
 			float polyOffset = axis.dotProduct(new Point(parentObject.getX() - collider.parentObject.getX(), parentObject.getY() - collider.parentObject.getY()));
 	
-			firstPolygonmin += polyOffset;
-			firstPolygonmax += polyOffset;
+			//firstPolygonmin += polyOffset;
+			//firstPolygonmax += polyOffset;
 			
 			//System.out.println(polyOffset);
 			
-			System.out.println("!(" + secondPolygonmax + " >= " + firstPolygonmin + " && " + firstPolygonmax + " >= " + secondPolygonmin + " " +(!(secondPolygonmax >= firstPolygonmin && firstPolygonmax >= secondPolygonmin)));
+			//System.out.println("!(" + secondPolygonmax + " >= " + firstPolygonmin + " && " + firstPolygonmax + " >= " + secondPolygonmin + " " +(!(secondPolygonmax >= firstPolygonmin && firstPolygonmax >= secondPolygonmin)));
 			
 			if(!(secondPolygonmax >= firstPolygonmin && firstPolygonmax >= secondPolygonmin))
-				return false;
+				return true;
 		}
 				
-		return true;
+		return false;
 	}
 }
