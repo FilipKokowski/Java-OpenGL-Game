@@ -87,8 +87,7 @@ public class Entities extends GameObject {
 						
 						//Check if objects ID is ID.Obstacle and is intersecting with entity
 						if(tempObj.id == ID.Obstacle && !collider.doOverlap(tempObj.collider)){
-							showBounds = true;
-							System.out.println("Collide");
+							System.out.println("Collide with " + tempObj.uuid);
 							//System.out.println("Collision with " + tempObj.getClass().getSimpleName() + " " + tempObj.uuid);
 							/*//If entity is more to the left side of obstacle, trigger left collisionW
 							if(x < tempObj.getX()) {
@@ -142,8 +141,7 @@ public class Entities extends GameObject {
 								x = tempObj.getX() + (tempObj.getWidth() + width) / 2;
 							}*/
 						
-						} else
-							showBounds = false;
+						}
 						
 						//When player is below object but not colliding with it, but his standing height is colliding with tempObj trigger forceCrouch
 						if(tempObj.id == ID.Obstacle && !collisionU && x - width / 2 < tempObj.getX() + tempObj.getWidth() / 2 && x + width / 2 > tempObj.getX() - tempObj.getWidth() / 2) {
@@ -172,8 +170,7 @@ public class Entities extends GameObject {
 							
 						//System.out.println("Player: " + collider.parentObject.getX() + "/nObstacle: " + tempObj.collider.parentObject.getX() + ": " + collider.doCollide(tempObj.collider));
 						if(tempObj.id == ID.Obstacle && !collider.doOverlap(tempObj.collider)){
-							showBounds = true;
-							//System.out.println("Collide");
+							System.out.println("Collide with " + tempObj.uuid);
 							/*velocityX = 0;
 							//System.out.println("Touching");
 							
@@ -204,8 +201,7 @@ public class Entities extends GameObject {
 								x = tempObj.getX() + (tempObj.getWidth() + width) / 2;
 							}
 							*/
-						} else
-							showBounds = false;
+						}
 						
 						if(tempObj.id == ID.Obstacle && !collisionU && x - width / 2 < tempObj.getX() + tempObj.getWidth() / 2 && x + width / 2 > tempObj.getX() - tempObj.getWidth() / 2) {
 							if(y - height / 2 + HEIGHT >= tempObj.getY() - tempObj.getHeight() / 2 && y - height / 2 + HEIGHT <= tempObj.getY() - tempObj.getHeight() / 2 + .5f) {

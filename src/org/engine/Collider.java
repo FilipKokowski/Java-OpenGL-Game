@@ -76,7 +76,8 @@ public class Collider {
 	public void renderAxes(float red,float green,float blue,float alpha) {
 		Graphics.setColor(red, green, blue, alpha);
 		
-		//Graphics.drawLine(axis.x * -2, axis.y * -2, axis.x * 2, axis.y * 2, ID.HUD);
+		for(Vertex axis : axes)
+		Graphics.drawLine(axis.x * -2, axis.y * -2, axis.x * 2, axis.y * 2, ID.HUD);
 		
 		for(Point point : points) {
 			//System.out.println(parentObject.getClass().getSimpleName() + " - " + points.size() + " " + point.x + "x" + point.y);
@@ -88,8 +89,7 @@ public class Collider {
 	
 	public boolean doOverlap(Collider collider) {
 		
-		parentObject.showBounds = true;
-		collider.parentObject.showBounds = true;
+		//System.out.println(collider.parentObject.uuid);
 		
 		ArrayList<Vertex> axes = new ArrayList<Vertex>();
 		axes.addAll(this.axes);
@@ -125,17 +125,14 @@ public class Collider {
 				secondPolygonmax = Math.max(secondPolygonmax, dot);
 			}
 			
-			float polyOffset = axis.dotProduct(new Point(parentObject.getX() - collider.parentObject.getX(), parentObject.getY() - collider.parentObject.getY()));
-	
-			//firstPolygonmin += polyOffset;
-			//firstPolygonmax += polyOffset;
-			
 			//System.out.println(polyOffset);
 			
-			//System.out.println("!(" + secondPolygonmax + " >= " + firstPolygonmin + " && " + firstPolygonmax + " >= " + secondPolygonmin + " " +(!(secondPolygonmax >= firstPolygonmin && firstPolygonmax >= secondPolygonmin)));
+			//if(collider.parentObject.uuid.equals("eb"))
+				//System.out.println("!(" + secondPolygonmax + " >= " + firstPolygonmin + " && " + firstPolygonmax + " >= " + secondPolygonmin + " " +(!(secondPolygonmax >= firstPolygonmin && firstPolygonmax >= secondPolygonmin)));
 			
-			if(!(secondPolygonmax >= firstPolygonmin && firstPolygonmax >= secondPolygonmin))
+			if(!(secondPolygonmax >= firstPolygonmin && firstPolygonmax >= secondPolygonmin)) {
 				return true;
+			}
 		}
 				
 		return false;
