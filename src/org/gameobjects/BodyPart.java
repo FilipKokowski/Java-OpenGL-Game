@@ -16,6 +16,7 @@ public class BodyPart extends Entities{
 	public String xOffset;
 	public String yOffset;
 	
+	public GameObject parentObject;
 	public float parentX;
 	public float parentY;
 	public float parentAngle;
@@ -27,6 +28,7 @@ public class BodyPart extends Entities{
 	public float jointOffsetY;
 	public boolean jointRelocating;
 	public boolean hasJoints = true;
+	
 	
 	private static boolean basePart;
 	private static String basePartID;
@@ -90,19 +92,13 @@ public class BodyPart extends Entities{
 		jointPointX = x + jointOffsetX;
 		jointPointY = y + jointOffsetY;
 		
-		if(partID.equals("1")) {
-			id = ID.BodyPart;
-			
-		}
-		
-		//rotation = parentAngle;
+		System.out.println(velocityY);
 	}
 	
 	public void render() {
 		super.render();
 		
-		if(partID.equals("1")) 
-			collider.renderAxes(0,1,0,1);
+		//collider.renderAxes(0,1,0,1);
 	}
 	
 	public void setX(float x) {
@@ -121,6 +117,10 @@ public class BodyPart extends Entities{
 			"\nJoint offset x =" + jointOffsetX +
 			"\nJoint offset y =" + jointOffsetY 
 		);
+	}
+	
+	public void passParentObject(GameObject parentObject) {
+		this.parentObject = parentObject;
 	}
 	
 	public String getBasePartID() {

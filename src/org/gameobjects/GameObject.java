@@ -26,8 +26,8 @@ public class GameObject {
 	protected float x = 0;
 	protected float y = 0;
 	
-	protected float velocityX = 0;
-	protected float velocityY = 0;
+	public float velocityX = 0;
+	public float velocityY = 0;
 	
 	protected float width = 1;
 	protected float height = 1;
@@ -74,6 +74,9 @@ public class GameObject {
 	public ArrayList<Point> boundsOffsets;
 	
 	public Collider collider;
+	public boolean collisionOn = true;
+	public boolean collides = false;
+	
 	private Point lastColliderPos = new Point();
 	private float lastColliderRotation = 0;
 	

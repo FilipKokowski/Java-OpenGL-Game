@@ -26,7 +26,7 @@ public class Main {
 		
 		Handler.addHUD(new HUD(0,Renderer.unitsTall / 2 - .25f, 1, .5f, true));
         
-		Obstacle obstacle2 = new Obstacle(-5, onGround(1) + 1, 2, 1, "");
+		/*Obstacle obstacle2 = new Obstacle(-5, onGround(1) + 1, 2, 1, "");
 		obstacle2.setColor(1f, .25f, .58f, .5f);
 		Handler.addGO(obstacle2);
 		
@@ -36,7 +36,7 @@ public class Main {
 		
 		Obstacle obstacle4 = new Obstacle(-7.5f, onGround(1) + 2.25f, 2, 1, "");
 		obstacle4.setColor(1f, .25f, .58f, .5f);
-		Handler.addGO(obstacle4);
+		Handler.addGO(obstacle4);*/
 		
 		Obstacle sign = new Obstacle(-1, onGround(.375f) + .25f, .5f, .375f, "res/org/scene/objects/Sign/sign.png");
 		sign.verticallyCenteredText = true;

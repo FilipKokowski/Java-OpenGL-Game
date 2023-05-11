@@ -15,7 +15,7 @@ public class Collider {
 	private ArrayList<Point> points = new ArrayList<Point>();
 	private ConcurrentLinkedQueue<Vertex> axes = new ConcurrentLinkedQueue<Vertex>();
 	private GameObject parentObject;
-	
+
 	public Collider(ArrayList<Point> pointsOffsets, GameObject parentObject) {
 		this.parentObject = parentObject;
 		this.pointsOffsets = pointsOffsets;
@@ -88,19 +88,20 @@ public class Collider {
 	}
 	
 	public boolean doOverlap(Collider collider) {
+
 		
 		//System.out.println(collider.parentObject.uuid);
 		
 		ArrayList<Vertex> axes = new ArrayList<Vertex>();
-		axes.addAll(this.axes);
 		axes.addAll(collider.axes);
+		axes.addAll(this.axes);
 		
 		for(Vertex axis : axes) {
 			//axis.print();
 			
 			float firstPolygonmin = axis.dotProduct(points.get(0));
 			float firstPolygonmax = firstPolygonmin;
-			
+
 			float secondPolygonmin = axis.dotProduct(collider.points.get(0));
 			float secondPolygonmax = secondPolygonmin;
 			
@@ -112,29 +113,29 @@ public class Collider {
 				
 				firstPolygonmin = Math.min(firstPolygonmin, dot);
 				firstPolygonmax = Math.max(firstPolygonmax, dot);
+
 			}
 			
 			for(Point point : collider.points) {
 				float dot = axis.dotProduct(point);
 				
 				//System.out.println(collider.parentObject.getClass().getSimpleName() + " - " + dot);
-				
 				//System.out.println(axis.x + " * " + point.x + " + " + axis.y + " * " + point.y + " = " + (axis.x * point.x + axis.y * point.y));
 				
 				secondPolygonmin = Math.min(secondPolygonmin, dot);
 				secondPolygonmax = Math.max(secondPolygonmax, dot);
+
 			}
 			
-			//System.out.println(polyOffset);
+			//System.out.println(firstPolMinID + " " + firstPolMaxID + " / " + secondPolMinID + " " + secondPolMaxID);
 			
-			//if(collider.parentObject.uuid.equals("eb"))
-				//System.out.println("!(" + secondPolygonmax + " >= " + firstPolygonmin + " && " + firstPolygonmax + " >= " + secondPolygonmin + " " +(!(secondPolygonmax >= firstPolygonmin && firstPolygonmax >= secondPolygonmin)));
+			//System.out.println("!(" + secondPolygonmax + " >= " + firstPolygonmin + " && " + firstPolygonmax + " >= " + secondPolygonmin + " " +(!(secondPolygonmax >= firstPolygonmin && firstPolygonmax >= secondPolygonmin)));
 			
 			if(!(secondPolygonmax >= firstPolygonmin && firstPolygonmax >= secondPolygonmin)) {
 				return true;
 			}
 		}
-				
+		
 		return false;
 	}
 }

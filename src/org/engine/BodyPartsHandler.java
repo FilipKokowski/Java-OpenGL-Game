@@ -6,6 +6,7 @@ import java.io.InputStreamReader;
 import java.util.ArrayList;
 
 import org.gameobjects.BodyPart;
+import org.gameobjects.GameObject;
 import org.json.simple.JSONObject;
 import org.json.simple.parser.JSONParser;
 import org.json.simple.parser.ParseException;
@@ -106,13 +107,13 @@ public class BodyPartsHandler {
 		}
 	}
 	
-	public void passPosition(float x, float y, float velocityX, float velocityY, float rotation) {
+	public void passPosition(GameObject parentObject) {
 		
-		parentX = x;
-		parentY = y;
-		parentAngle = rotation;
-		parentVelocityX = velocityX;
-		parentVelocityY = velocityY;
+		parentX = parentObject.getX();
+		parentY = parentObject.getY();
+		parentAngle = parentObject.rotation;
+		parentVelocityX = parentObject.velocityX;
+		parentVelocityY = parentObject.velocityY;
 		
 		BodyPart basePart = null;
 		
@@ -121,8 +122,9 @@ public class BodyPartsHandler {
 				basePart = bodyPart;
 				
 				bodyPart.hasJoints = false;
-				bodyPart.parentX = x;
-				bodyPart.parentY = y;
+				bodyPart.parentX = parentObject.getX();
+				bodyPart.parentY = parentObject.getY();
+				bodyPart.passParentObject(parentObject);
 				//bodyPart.parentAngle = rotation;
 			}
 		}
@@ -138,6 +140,7 @@ public class BodyPartsHandler {
 					if(bodyPart.jointWithID.equals(parentPart.partID)) {
 						bodyPart.parentX = parentPart.getX();
 						bodyPart.parentY = parentPart.getY();
+						bodyPart.passParentObject(parentObject);
 						//bodyPart.parentAngle = parentPart.rotation;
 					}
 				}
