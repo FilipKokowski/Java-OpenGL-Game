@@ -5,6 +5,7 @@ import java.awt.Font;
 import java.awt.geom.Rectangle2D;
 import java.util.ArrayList;
 
+import org.gameobjects.Color;
 import org.gameobjects.GameObject;
 import org.gameobjects.ID;
 import org.resource.ImageResource;
@@ -234,6 +235,13 @@ public class Graphics {
 	
 	public static void Rotate(float rotate) {
 		rotation = -rotate;
+	}
+	
+	public static void setColor(Color color) {
+		red = color.red;
+		green = color.green;
+		blue = color.blue;
+		alpha = color.alpha;
 	}
 	
 	public static void setColor(float r, float g, float b, float a) {

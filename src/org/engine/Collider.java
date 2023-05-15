@@ -3,6 +3,7 @@ package org.engine;
 import java.util.ArrayList;
 import java.util.concurrent.ConcurrentLinkedQueue;
 
+import org.gameobjects.Color;
 import org.gameobjects.GameObject;
 import org.gameobjects.ID;
 import org.gameobjects.Point;
@@ -76,8 +77,12 @@ public class Collider {
 	public void renderAxes(float red,float green,float blue,float alpha) {
 		Graphics.setColor(red, green, blue, alpha);
 		
-		for(Vertex axis : axes)
-		Graphics.drawLine(axis.x * -2, axis.y * -2, axis.x * 2, axis.y * 2, ID.HUD);
+		for(Vertex axis : axes) {
+			Graphics.setColor(axis.getColor());
+			Graphics.drawLine(axis.x * -2, axis.y * -2, axis.x * 2, axis.y * 2, ID.HUD);
+			Graphics.setColor(Color.clear());
+			
+		}
 		
 		for(Point point : points) {
 			//System.out.println(parentObject.getClass().getSimpleName() + " - " + points.size() + " " + point.x + "x" + point.y);
@@ -132,6 +137,7 @@ public class Collider {
 			//System.out.println("!(" + secondPolygonmax + " >= " + firstPolygonmin + " && " + firstPolygonmax + " >= " + secondPolygonmin + " " +(!(secondPolygonmax >= firstPolygonmin && firstPolygonmax >= secondPolygonmin)));
 			
 			if(!(secondPolygonmax >= firstPolygonmin && firstPolygonmax >= secondPolygonmin)) {
+				axis.setColor(1, 0, 0, 0);
 				return true;
 			}
 		}

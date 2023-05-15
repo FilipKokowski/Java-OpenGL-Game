@@ -33,6 +33,7 @@ public class Obstacle extends GameObject{
 		text = uuid;
 		
 		if(imagePath.equals("")) bounds = getBounds();
+		else scaleBounds(width, height);
 		
 		if(collider.pointsOffsets.size() != 4)
 			collider.update();
@@ -70,7 +71,7 @@ public class Obstacle extends GameObject{
 	
 	public void render() {
 		if(imagePath.equals("")) {
-			Graphics.setColor(red, green, blue, alpha);
+			Graphics.setColor(color.red, color.green, color.blue, color.alpha);
 			Graphics.drawRect(x, y, width, height);
 			Graphics.setColor(1, 1, 1, 1);
 			

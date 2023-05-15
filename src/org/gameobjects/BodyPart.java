@@ -92,7 +92,7 @@ public class BodyPart extends Entities{
 		jointPointX = x + jointOffsetX;
 		jointPointY = y + jointOffsetY;
 		
-		System.out.println(velocityY);
+		//System.out.println(velocityY);
 	}
 	
 	public void render() {

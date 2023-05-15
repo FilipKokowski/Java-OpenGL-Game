@@ -7,6 +7,8 @@ public class Vertex {
 	public float x = 0;
 	public float y = 0;
 	
+	private Color color = new Color(255, 255, 255, 255);
+	
 	public Vertex(float x, float y) {
 		this.x = x;
 		this.y = y;
@@ -28,8 +30,16 @@ public class Vertex {
 		System.out.println("x: " + this.x + " y: " + this.y);
 	}
 	
+	public void setColor(int r, int g, int b, int a) {
+		color.setColor(r, g, b, a);
+	}
+	
+	public Color getColor() {
+		return color;
+	}
+	
 	public void render() {
-		Graphics.setColor(.5f, .5f, 0, 1);
+		Graphics.setColor(color.red, color.green, color.blue, color.alpha);
 		Graphics.drawLine(x * (-2), y * (-2), x * 2, y * 2, ID.HUD);
 		Graphics.setColor(1, 1, 1, 1);
 	}

@@ -37,10 +37,7 @@ public class GameObject {
 	
 	protected float crouchHeight = (height / 3) * 2;
 	
-	public float red = 1;
-	public float green = 1;
-	public float blue = 1;
-	public float alpha = 1;
+	public Color color;
 	
 	public float textRed = 1;
 	public float textGreen = 0;
@@ -98,6 +95,8 @@ public class GameObject {
 		this.y = y;
 		this.width = width;
 		this.height = height;
+		
+		color = new Color(255, 255, 255, 255);
 		
 		lastColliderPos.x = this.x;
 		lastColliderPos.y = this.y;
@@ -228,11 +227,11 @@ public class GameObject {
 	
 	public void toggleMask() { txt.switchViewMode(); }
 	
-	public void setColor(float r, float g, float b, float a) {
-		red = Math.max(0, Math.min(1, r));
-		green = Math.max(0, Math.min(1, g));
-		blue = Math.max(0, Math.min(1, b));
-		alpha = Math.max(0, Math.min(1, a));
+	public void setColor(int r, int g, int b, int a) {
+		color.red = (float) Math.max(0, Math.min(255, r)) / 255;
+		color.green = (float) Math.max(0, Math.min(255, g)) / 255;
+		color.blue = (float) Math.max(0, Math.min(255, b)) / 255;
+		color.alpha = (float) Math.max(0, Math.min(255, a)) / 255;
 	}
 	
 	public void deactiveteWhenOutOfView() {
@@ -251,11 +250,20 @@ public class GameObject {
 		textAlpha = Math.max(0, Math.min(1, a));
 	}
 	
-	public void scaleToImageSize() {
-		width = txt.getWidth() / Renderer.pixelsPerUnit;
-		height = txt.getWidth() / Renderer.pixelsPerUnit;
+	//Scales points inside bounds array to fit rescaled object
+	public void scaleBounds(float width, float height) {	
+		try {
+			for(Point point : bounds) {
+				point.x *= width / (txt.getWidth() / Renderer.pixelsPerUnit);
+				point.y *= height / (txt.getHeight() / Renderer.pixelsPerUnit);
+			}
+			
+		} catch(NullPointerException e) {
+			System.out.println(this.getClass().getSimpleName());
+		}
 	}
 	
+	//Returns simple rectangular bounds
 	public ArrayList<Point> getBounds() {
 		ArrayList<Point> bounds = new ArrayList<Point>();
 		bounds.add(new Point((float)((-width / 2) * Math.cos(Math.toRadians(-rotation)) - (height / 2) * Math.sin(Math.toRadians(-rotation)) + x), (float)((-width / 2) * Math.sin(Math.toRadians(-rotation)) + (height / 2) * Math.cos(Math.toRadians(-rotation)) + y)));
@@ -266,42 +274,7 @@ public class GameObject {
 		return bounds;
 	}
 	
-	public boolean doOverlap(ArrayList<Point> rec1, ArrayList<Point> rec2) {
-	
-		/*System.out.println(
-			"Player {" +
-			" x1: " + rec1[0] + 
-			" y1: " + rec1[1] + 
-			" x2: " + rec1[2] + 
-			" y2: " + rec1[3] + 
-			" x3: " + rec1[4] + 
-			" y3: " + rec1[5] + 
-			" x4: " + rec1[6] + 
-			" y4: " + rec1[7] +
-		"}");
-		
-		System.out.println("\n\n");		
-		
-		System.out.println(
-			"Obstacle {" +
-			"x1: " + rec2[0] + 
-			" y1: " + rec2[1] + 
-			" x2: " + rec2[2] + 
-			" y2: " + rec2[3] + 
-			" x3: " + rec2[4] + 
-			" y3: " + rec2[5] + 
-			" x4: " + rec2[6] + 
-			" y4: " + rec2[7] +
-		"}");*/
-		
-		/*if(rec1[0] + rec1[2] / 2 >= rec2[0] - rec2[2] / 2 && rec1[0] - rec1[2] <= rec2[0] + rec2[2] / 2 - rec1[2] / 2 
-				&& rec1[1] - rec1[3] / 2 <= rec2[1] + rec2[3] / 2 && rec1[1] + rec1[3] / 2 >= rec2[1] - rec2[3] / 2) {
-			return true;
-		}*/
-		
-		return false;
-	}
-	
+	//Renders simple rectangular bounds
 	public void drawBounds() {
 		ArrayList<Point> bounds = getBounds();
 		float x1 = bounds.get(0).x;
@@ -324,14 +297,14 @@ public class GameObject {
 		Graphics.setColor(1, 1, 1, 1);
 	}
 	
-	public void hideBounds() { showBounds = false; }
-	
+	//Highlights places where object have joints connecting to other objects
 	public void drawJoints() {
 		Graphics.setColor(.8f, .6f, .8f, 1);
 		Graphics.drawRect(jointPointX, jointPointY, .04f, .04f);
 		Graphics.setColor(1, 1, 1, 1);
 	}
 	
+	//Checks if mouse is hovering over the object
 	public boolean hover() {
 		return (MouseInput.getMouseX() > x - width / 2 && MouseInput.getMouseX() < x + width / 2 && 
 				MouseInput.getMouseY() < y + height / 2 && MouseInput.getMouseY() > y - height / 2);
@@ -344,18 +317,16 @@ public class GameObject {
 		return false;
 	}
 	
+	//Sets new texture to the object
 	public void setImage(String path) {
 		this.txt = new ImageResource(path);
 	}
 	
+	//Allows object to be dragged
 	public void draggable() {
 		
 		if(isDraggable && (MouseInput.getMouseWorldX() > x - width / 2 && MouseInput.getMouseWorldX() < x + width / 2
 				&& MouseInput.getMouseWorldY() > y - height / 2 && MouseInput.getMouseWorldY() < y + height / 2 && MouseInput.pressed && !MouseInput.draggingSmth) || dragged) {
-			
-			//System.out.println("MouseInput.getMouseX() = " + MouseInput.getMouseX());
-			//System.out.println(this.getClass().getSimpleName());
-			//System.out.println("MouseInput.rotationSpeed = " + MouseInput.rotationSpeed + "\n\n");
 			
 			x = MouseInput.getMouseWorldX();
 			y = MouseInput.getMouseWorldY();
@@ -375,6 +346,7 @@ public class GameObject {
 			MouseInput.draggingSmth = true;
 			MouseInput.rotation = 0;
 		}
+		
 		if(!MouseInput.pressed) {
 			dragged = false;
 			MouseInput.draggingSmth = false;

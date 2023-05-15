@@ -28,11 +28,6 @@ public class HUD extends GameObject {
 		
 		this.interactable = interactable;
 		
-		red = 1;
-		green = 1;
-		blue = 1;
-		alpha = 1;
-		
 		id = ID.HUD;
 		
 		fontSize = 24;
@@ -71,7 +66,7 @@ public class HUD extends GameObject {
 			drawBounds();
 		}
 		else {
-			hideBounds();
+			showBounds = false;
 		}
 	}
 	
@@ -80,10 +75,10 @@ public class HUD extends GameObject {
 	}
 	
 	public void Color(float red, float green, float blue, float alpha) {
-		this.red = red;
-		this.blue = blue;
-		this.green = green;
-		this.alpha = alpha;
+		color.red = red;
+		color.blue = blue;
+		color.green = green;
+		color.alpha = alpha;
 	}
 
 }

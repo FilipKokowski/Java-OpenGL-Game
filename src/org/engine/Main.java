@@ -18,7 +18,7 @@ public class Main {
 		Handler.addGO(new Player());
 		
 		Obstacle obstacle = new Obstacle(-3, onGround(1) + 1, 2, 1, "");
-		obstacle.setColor(1f, .25f, .58f, .5f);
+		obstacle.setColor(255, 64, 130, 127);
 		Handler.addGO(obstacle);
 		
 		Handler.addHUD(new HUD(-Renderer.unitsWide / 2 + .5f,Renderer.unitsTall / 2 - .25f,1,.5f, false));
@@ -38,13 +38,13 @@ public class Main {
 		obstacle4.setColor(1f, .25f, .58f, .5f);
 		Handler.addGO(obstacle4);*/
 		
-		Obstacle sign = new Obstacle(-1, onGround(.375f) + .25f, .5f, .375f, "res/org/scene/objects/Sign/sign.png");
+		Obstacle sign = new Obstacle(-1, onGround(.375f), .5f, .375f, "res/org/scene/objects/Sign/sign.png");
 		sign.verticallyCenteredText = true;
 		sign.offsetText(0, .05f);
 		sign.setTextColor(0, 0, 0, 1);
 		sign.text = sign.uuid;
 		Handler.addGO(sign);
-	
+
 		GameLoop.start();
 		
 		Entities.physicsOn = true;
