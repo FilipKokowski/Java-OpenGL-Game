@@ -39,6 +39,6 @@ public class Color {
 	}
 	
 	public static Color clear() {
-		return new Color(1,1,1,1);
+		return new Color(255,255,255,255);
 	}
 }

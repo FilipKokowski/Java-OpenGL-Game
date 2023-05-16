@@ -45,96 +45,99 @@ public class ImageResource {
             	extension = path.substring(path.lastIndexOf(".") + 1);
             }
             
-			if(extension.equals("png")) {
-				mask = cloneBufferedImage(img);
+            if(loadedImages.containsKey(path)) {
+				boundsList = loadedImages.get(path);
+				System.out.println(path + " found in stash");
+			} else {
 				
-				for(int y = 0; y < img.getHeight(); y++) {
-					for(int x = 0; x < img.getWidth(); x++) {
-						if(((img.getRGB(x, y) & 0xff000000) >>> 24) == 0){
-							mask.setRGB(x, y, 0xFFFFFFFF);
-						} else {
-							mask.setRGB(x, y, 0xFF000000);
-						}
-					}
-				}
-
-				bounds = new BufferedImage(mask.getWidth(), mask.getHeight(), BufferedImage.TYPE_INT_ARGB);
-				
-				// Perform edge detection on the mask
-				for (int y = 0; y < mask.getHeight() - 1; y++) {
-		            for (int x = 0; x < mask.getWidth() - 1; x++) {
-
-		                if (Math.abs(mask.getRGB(x, y) - mask.getRGB(x + 1, y + 1)) > 0 || ((y == 0 || y == mask.getHeight() - 2) && mask.getRGB(x, y) == 0xFF000000) || ((x == 0 || x == mask.getWidth() - 2) && mask.getRGB(x, y) == 0xFF000000)) {
-		                    bounds.setRGB(x, y, 0xFFFF0000);
-		                    Point point = new Point((float)(x - mask.getWidth() / 2) / Renderer.pixelsPerUnit, -(float)(y - mask.getHeight() / 2) / Renderer.pixelsPerUnit);
-		                    boundsList.add(point);
-		                }
-
-		            }
-		        }
-				//System.out.println(boundsList);
-				//System.out.println("Width: " + img.getWidth() + " Height: " + img.getHeight());
-				
-				//Simplifying polygons
-				ArrayList<Point> pickedCoords = new ArrayList<Point>();
-		
-				for(int i=0; i < boundsList.size(); i += 2) {
-					pickedCoords.add(boundsList.get(i));
-				}
-				
-				boundsList = pickedCoords;
-				
-				//Math.sqrt(Math.pow(boundsList.get(closestID).get(1) - boundsList.get(point).get(1), 2) + Math.pow(boundsList.get(closestID).get(0) - boundsList.get(point).get(0), 2))
-				
-				if(loadedImages.containsKey(path)) {
-					boundsList = loadedImages.get(path);
-				} else {
-					ArrayList<Point> checkedPoints = new ArrayList<Point>();
+				if(extension.equals("png")) {
+					mask = cloneBufferedImage(img);
 					
-					//Organizing points
-					int currentPointID = 0;
-					
-					while(checkedPoints.size() <= boundsList.size()) {
-						int closestDistancePointID = 1;
-						double closestDistance = 100;
-						
-						
-						for(int pointID = 0; pointID < boundsList.size(); pointID++) {
-							if(currentPointID == pointID) continue;
-							
-							double distance = Math.sqrt(Math.pow(boundsList.get(pointID).y - boundsList.get(currentPointID).y, 2) + Math.pow(boundsList.get(pointID).x - boundsList.get(currentPointID).x, 2));
-							
-							Point point = new Point(boundsList.get(pointID).x, boundsList.get(pointID).y);
-
-							if(distance < closestDistance){
-								boolean pointReckognized = false;
-								
-								for(Point checkedPoint : checkedPoints) {
-									if(checkedPoint.x == point.x && checkedPoint.y == point.y)
-										pointReckognized = true;
-								}
-								
-								if(!pointReckognized) {
-									closestDistance = distance;
-									closestDistancePointID = pointID;
-								}
-								//System.out.println(pointID);
+					for(int y = 0; y < img.getHeight(); y++) {
+						for(int x = 0; x < img.getWidth(); x++) {
+							if(((img.getRGB(x, y) & 0xff000000) >>> 24) == 0){
+								mask.setRGB(x, y, 0xFFFFFFFF);
+							} else {
+								mask.setRGB(x, y, 0xFF000000);
 							}
 						}
-						
-						currentPointID = closestDistancePointID;
-						
-						Point point = new Point(boundsList.get(closestDistancePointID).x, boundsList.get(closestDistancePointID).y);
-						checkedPoints.add(point);
-						
-						//System.out.println(closestDistancePointID);
 					}
-					boundsList = checkedPoints;
+	
+					bounds = new BufferedImage(mask.getWidth(), mask.getHeight(), BufferedImage.TYPE_INT_ARGB);
 					
-					loadedImages.put(path, boundsList);
+					// Perform edge detection on the mask
+					for (int y = 0; y < mask.getHeight() - 1; y++) {
+			            for (int x = 0; x < mask.getWidth() - 1; x++) {
+	
+			                if (Math.abs(mask.getRGB(x, y) - mask.getRGB(x + 1, y + 1)) > 0 || ((y == 0 || y == mask.getHeight() - 2) && mask.getRGB(x, y) == 0xFF000000) || ((x == 0 || x == mask.getWidth() - 2) && mask.getRGB(x, y) == 0xFF000000)) {
+			                    bounds.setRGB(x, y, 0xFFFF0000);
+			                    Point point = new Point((float)(x - mask.getWidth() / 2) / Renderer.pixelsPerUnit, -(float)(y - mask.getHeight() / 2) / Renderer.pixelsPerUnit);
+			                    boundsList.add(point);
+			                }
+	
+			            }
+			        }
+					//System.out.println(boundsList);
+					//System.out.println("Width: " + img.getWidth() + " Height: " + img.getHeight());
+					
+					//Simplifying polygons
+					ArrayList<Point> pickedCoords = new ArrayList<Point>();
+			
+					for(int i=0; i < boundsList.size(); i += 2) {
+						pickedCoords.add(boundsList.get(i));
+					}
+					
+					boundsList = pickedCoords;
+					
+					//Math.sqrt(Math.pow(boundsList.get(closestID).get(1) - boundsList.get(point).get(1), 2) + Math.pow(boundsList.get(closestID).get(0) - boundsList.get(point).get(0), 2))
+					
+					
+						ArrayList<Point> checkedPoints = new ArrayList<Point>();
+						
+						//Organizing points
+						int currentPointID = 0;
+						
+						while(checkedPoints.size() <= boundsList.size()) {
+							int closestDistancePointID = 1;
+							double closestDistance = 100;
+							
+							
+							for(int pointID = 0; pointID < boundsList.size(); pointID++) {
+								if(currentPointID == pointID) continue;
+								
+								double distance = Math.sqrt(Math.pow(boundsList.get(pointID).y - boundsList.get(currentPointID).y, 2) + Math.pow(boundsList.get(pointID).x - boundsList.get(currentPointID).x, 2));
+								
+								Point point = new Point(boundsList.get(pointID).x, boundsList.get(pointID).y);
+	
+								if(distance < closestDistance){
+									boolean pointReckognized = false;
+									
+									for(Point checkedPoint : checkedPoints) {
+										if(checkedPoint.x == point.x && checkedPoint.y == point.y)
+											pointReckognized = true;
+									}
+									
+									if(!pointReckognized) {
+										closestDistance = distance;
+										closestDistancePointID = pointID;
+									}
+									//System.out.println(pointID);
+								}
+							}
+							
+							currentPointID = closestDistancePointID;
+							
+							Point point = new Point(boundsList.get(closestDistancePointID).x, boundsList.get(closestDistancePointID).y);
+							checkedPoints.add(point);
+							
+							//System.out.println(closestDistancePointID);
+						}
+						boundsList = checkedPoints;
+						
+						loadedImages.put(path, boundsList);
+					}
+					//System.out.println(boundsList);
 				}
-				//System.out.println(boundsList);
-			}
 			
 			} catch (IOException e) {
 				e.printStackTrace();

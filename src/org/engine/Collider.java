@@ -12,11 +12,13 @@ import org.graphics.Graphics;
 
 public class Collider {
 
+	public ArrayList<ArrayList<Point>> convexPolygons = new ArrayList<ArrayList<Point>>();
+	
 	public ArrayList<Point> pointsOffsets = new ArrayList<Point>();
 	private ArrayList<Point> points = new ArrayList<Point>();
 	private ConcurrentLinkedQueue<Vertex> axes = new ConcurrentLinkedQueue<Vertex>();
 	private GameObject parentObject;
-
+	
 	public Collider(ArrayList<Point> pointsOffsets, GameObject parentObject) {
 		this.parentObject = parentObject;
 		this.pointsOffsets = pointsOffsets;
@@ -24,9 +26,50 @@ public class Collider {
 		for(Point pointOffset : pointsOffsets) {
 			this.points.add(pointOffset.clone());
 		}
+		
+		convexPolygons.add(points);
+		
+		int lastPoint = 0;
+		
+		for(int point = 1; point < points.size() - 1; point++) {
+			Vertex v1 = new Vertex(points.get(point).x - points.get(point - 1).x, points.get(point).y - points.get(point - 1).y);
+			Vertex v2 = new Vertex(points.get(point + 1).x - points.get(point).x, points.get(point + 1).y - points.get(point).y);
+
+			double cos = Math.cos(v1.dotProduct(v2) / (Math.sqrt(Math.pow(v1.x, 2) + Math.pow(v1.y, 2)) * Math.sqrt(Math.pow(v2.x, 2) + Math.pow(v2.y, 2))));
+			double tg = Math.atan(v2.x - v1.x / v2.y - v1.y);
+			
+			if(Math.signum(cos) != Math.signum(tg)) {
+				//System.out.println(cos + " " + tg);
+				ArrayList<Point> newPolygon = new ArrayList<Point>();
+				
+				points.get(point).color = new Color(255,0,255,255);
+				
+				for(int p = lastPoint; p < points.size(); p++) {
+					if(points.get(p).equals(points.get(point))) {
+						lastPoint = p;
+						break;
+					}
+					newPolygon.add(points.get(p));
+				}
+				
+				convexPolygons.add(newPolygon);
+				
+			}
+				
+		}
+		
+		ArrayList<Point> convexPart = new ArrayList<Point>();
+		
+		for(int point = lastPoint; point < points.size(); point++) {
+			convexPart.add(points.get(point));
+		}
+		
 	}
 	
 	public void update() {
+		
+		//System.out.println(convexPolygons.size() + " " + parentObject.getClass().getSimpleName());
+		
 		for(int point = 0; point < points.size(); point++) {
 			points.get(point).x = (float)((pointsOffsets.get(point).x) * Math.cos(Math.toRadians(-parentObject.rotation)) - (pointsOffsets.get(point).y) * Math.sin(Math.toRadians(-parentObject.rotation)) + parentObject.getX());
 			points.get(point).y = (float)((pointsOffsets.get(point).x) * Math.sin(Math.toRadians(-parentObject.rotation)) + (pointsOffsets.get(point).y) * Math.cos(Math.toRadians(-parentObject.rotation)) + parentObject.getY());
@@ -86,14 +129,16 @@ public class Collider {
 		
 		for(Point point : points) {
 			//System.out.println(parentObject.getClass().getSimpleName() + " - " + points.size() + " " + point.x + "x" + point.y);
+			Graphics.setColor(point.color);
 			Graphics.drawRect(point.x, point.y, .01f, .01f);
+			Graphics.setColor(Color.clear());
 		}
-		
-		Graphics.setColor(1,1,1,1);
 	}
 	
 	public boolean doOverlap(Collider collider) {
-
+		//Prevents collider from checking collison with itself
+		if(this.equals(collider))
+			return false;
 		
 		//System.out.println(collider.parentObject.uuid);
 		
@@ -132,16 +177,17 @@ public class Collider {
 
 			}
 			
+			//System.out.println(firstPolygonmaxID + " " + firstPolygonminID + " / " + secondPolygonmaxID + " " + secondPolygonminID);
+	
 			//System.out.println(firstPolMinID + " " + firstPolMaxID + " / " + secondPolMinID + " " + secondPolMaxID);
 			
 			//System.out.println("!(" + secondPolygonmax + " >= " + firstPolygonmin + " && " + firstPolygonmax + " >= " + secondPolygonmin + " " +(!(secondPolygonmax >= firstPolygonmin && firstPolygonmax >= secondPolygonmin)));
 			
 			if(!(secondPolygonmax >= firstPolygonmin && firstPolygonmax >= secondPolygonmin)) {
-				axis.setColor(1, 0, 0, 0);
-				return true;
+				return false;
 			}
 		}
 		
-		return false;
+		return true;
 	}
 }

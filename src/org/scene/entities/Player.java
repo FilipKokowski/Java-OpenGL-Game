@@ -46,13 +46,13 @@ public class Player extends Entities{
 		speed = 3;
 		speedCap = 1.5f;
 		
-		collisionOn = true;
+		collisionOn = false;
 		
 		reloadCrouchHeight();
 		reloadCrouchJumpForce();
 		reloadCrouchSpeedCap();
 		
-		//bodyParts = new BodyPartsHandler("res/org/Entities/Skeleton.json");
+		bodyParts = new BodyPartsHandler("res/org/Entities/Skeleton.json");
 		
 		fontSize = 16;
 		setCustomFont("res/org/fonts/pixelmix.ttf");
@@ -62,7 +62,7 @@ public class Player extends Entities{
 	public void render() {
 		if(imagePath.equals("")) {
 			Graphics.Rotate(-rotation);
-			Graphics.setColor(0, 0, 0, 1);
+			Graphics.setColor(0, 0, 0, 0);
 			Graphics.drawRect(x, y, width, height);
 			Graphics.setColor(Color.clear());
 			Graphics.Rotate(0);
@@ -72,7 +72,7 @@ public class Player extends Entities{
 			super.render();
 		}
 		
-		//collider.renderAxes(0, 1, 0, 1);
+		//renderAxes(0, 1, 0, 1);
 		
 	}
 	
@@ -87,16 +87,16 @@ public class Player extends Entities{
 		
 		text = "("+ x + "/" + y +")";
 		
-		//bodyParts.passPosition(this);
+		bodyParts.passPosition(this);
 		
 		if(KeyInput.getKey(KeyEvent.VK_G)) {
 			//System.out.println("collapse");
-			//bodyParts.collapse();
+			bodyParts.collapse();
 		}
 		
 		if(KeyInput.getKey(KeyEvent.VK_H)) {
 			//System.out.println("collapse");
-			//bodyParts.assemble();
+			bodyParts.assemble();
 		}
 		
 		float shiftX = 0;
@@ -116,7 +116,7 @@ public class Player extends Entities{
 			shiftY = .5f;
 		}
 		
-		//bodyParts.moveJoint(shiftY, shiftX, "1");
+		bodyParts.moveJoint(shiftY, shiftX, "1");
 		
 		//If player's not moving play idle animation
 		if(!KeyInput.getKey(KeyEvent.VK_A) && !KeyInput.getKey(KeyEvent.VK_D)) { 

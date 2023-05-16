@@ -17,7 +17,7 @@ public class Main {
 		
 		Handler.addGO(new Player());
 		
-		Obstacle obstacle = new Obstacle(-3, onGround(1) + 1, 2, 1, "");
+		Obstacle obstacle = new Obstacle(-3, onGround(1) + 1, 2, 1, "res/org/scene/objects/Platform/platfrom.png");
 		obstacle.setColor(255, 64, 130, 127);
 		Handler.addGO(obstacle);
 		

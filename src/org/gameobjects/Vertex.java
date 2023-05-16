@@ -22,6 +22,14 @@ public class Vertex {
 		return (float)(x * point.x + y * point.y);
 	}
 	
+	public float dotProduct(Vertex vertex) {
+		return (float)(x * vertex.x + y * vertex.y);
+	}
+	
+	public float crossProduct(Point point) {
+		return (float)(x * point.x - y * point.y);
+	}
+	
 	public Vertex clone() {
 		return new Vertex(x,y);
     }

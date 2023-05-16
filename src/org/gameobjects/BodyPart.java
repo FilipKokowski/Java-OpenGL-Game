@@ -91,14 +91,14 @@ public class BodyPart extends Entities{
 
 		jointPointX = x + jointOffsetX;
 		jointPointY = y + jointOffsetY;
-		
-		//System.out.println(velocityY);
+
+		//System.out.println(collider.convexPolygons.size() + " " + partID);
 	}
 	
 	public void render() {
 		super.render();
 		
-		//collider.renderAxes(0,1,0,1);
+		collider.renderAxes(0,1,0,1);
 	}
 	
 	public void setX(float x) {

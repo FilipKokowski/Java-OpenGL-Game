@@ -7,6 +7,8 @@ public class Point {
 	public float x = 0;
 	public float y = 0;
 	
+	public Color color = new Color(255,0,0,255);
+	
 	public Point() {}
 	
 	public Point(float x, float y) {
