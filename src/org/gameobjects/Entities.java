@@ -88,7 +88,7 @@ public class Entities extends GameObject {
 						//Check if objects ID is ID.Obstacle and is intersecting with entity
 						if(tempObj.id == ID.Obstacle && collisionOn && collider.doOverlap(tempObj.collider)){
 							System.out.println("Collide with " + tempObj.uuid);
-							//velocityY = 5;
+							velocityY = .1f;
 							//System.out.println("Collision with " + tempObj.getClass().getSimpleName() + " " + tempObj.uuid);
 							/*//If entity is more to the left side of obstacle, trigger left collisionW
 							if(x < tempObj.getX()) {
@@ -160,6 +160,7 @@ public class Entities extends GameObject {
 				
 				//Set y to bottom of the screen
 				y = (-Renderer.unitsTall + height) / 2; 
+				velocityY = 0;
 				
 				
 				if(CollisionEnabled) {
@@ -172,7 +173,7 @@ public class Entities extends GameObject {
 						//System.out.println("Player: " + collider.parentObject.getX() + "/nObstacle: " + tempObj.collider.parentObject.getX() + ": " + collider.doCollide(tempObj.collider));
 						if(tempObj.id == ID.Obstacle && collisionOn && collider.doOverlap(tempObj.collider)){
 							System.out.println("Collide with " + tempObj.uuid);
-							//velocityY = 5;
+							velocityY = .1f;
 							/*velocityX = 0;
 							//System.out.println("Touching");
 							

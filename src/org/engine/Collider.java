@@ -38,7 +38,7 @@ public class Collider {
 			double cos = Math.cos(v1.dotProduct(v2) / (Math.sqrt(Math.pow(v1.x, 2) + Math.pow(v1.y, 2)) * Math.sqrt(Math.pow(v2.x, 2) + Math.pow(v2.y, 2))));
 			double tg = Math.atan(v2.x - v1.x / v2.y - v1.y);
 			
-			if(Math.signum(cos) != Math.signum(tg)) {
+			if(Math.signum(cos) == Math.signum(tg)) {
 				//System.out.println(cos + " " + tg);
 				ArrayList<Point> newPolygon = new ArrayList<Point>();
 				
@@ -54,7 +54,8 @@ public class Collider {
 				
 				convexPolygons.add(newPolygon);
 				
-			}
+			} else 
+				points.get(point).color = new Color(255,0,255,0);
 				
 		}
 		

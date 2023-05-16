@@ -2,6 +2,7 @@ package org.scene.entities;
 
 import java.awt.Font;
 
+import org.engine.GameLoop;
 import org.gameobjects.GameObject;
 import org.gameobjects.ID;
 import org.graphics.EventListener;
@@ -62,6 +63,8 @@ public class Obstacle extends GameObject{
 		
 		super.update();
 		
+		//rotation += (rotation + .0000001f) * GameLoop.updateDelta();
+		
 	}
 	
 	public void offsetText(float xOffset, float yOffset) {
@@ -86,7 +89,7 @@ public class Obstacle extends GameObject{
 			super.render();
 		}
 		
-		collider.renderAxes(255,255,255,255);
+		//collider.renderAxes(255,255,255,255);
 	}
 	
 	public void collisionOn() { collisionEnabled = true; }
