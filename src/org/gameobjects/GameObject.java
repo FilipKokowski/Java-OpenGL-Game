@@ -270,6 +270,11 @@ public class GameObject {
 		bounds.add(new Point((float)((width / 2) * Math.cos(Math.toRadians(-rotation)) - (height / 2) * Math.sin(Math.toRadians(-rotation)) + x), (float)((width / 2) * Math.sin(Math.toRadians(-rotation)) + (height / 2) * Math.cos(Math.toRadians(-rotation)) + y)));
 		bounds.add(new Point((float)((width / 2) * Math.cos(Math.toRadians(-rotation)) - (-height / 2) * Math.sin(Math.toRadians(-rotation)) + x), (float)((width / 2) * Math.sin(Math.toRadians(-rotation)) + (-height / 2) * Math.cos(Math.toRadians(-rotation)) + y)));
 		bounds.add(new Point((float)((-width / 2) * Math.cos(Math.toRadians(-rotation)) - (-height / 2) * Math.sin(Math.toRadians(-rotation)) + x), (float)((-width / 2) * Math.sin(Math.toRadians(-rotation)) + (-height / 2) * Math.cos(Math.toRadians(-rotation)) + y)));
+
+		/*
+		 * x′=(x−p)cos(θ)−(y−q)sin(θ)+p,
+		 * y'=(x−p)sin(θ)+(y−q)cos(θ)+q.
+		 */
 		
 		return bounds;
 	}
@@ -290,10 +295,14 @@ public class GameObject {
 		float y4 = bounds.get(3).y;
 		
 		Graphics.setColor(1, 0, 0, 1);
-		Graphics.drawLine(x1, y1, x2, y2, id);
+		/*Graphics.drawLine(x1, y1, x2, y2, id);
 		Graphics.drawLine(x2, y2, x3, y3, id);
 		Graphics.drawLine(x3, y3, x4, y4, id);
-		Graphics.drawLine(x4, y4, x1, y1, id);
+		Graphics.drawLine(x4, y4, x1, y1, id);*/
+		Graphics.drawRect(x1, y1, .01f, .01f);
+		Graphics.drawRect(x2, y2, .01f, .01f);
+		Graphics.drawRect(x3, y3, .01f, .01f);
+		Graphics.drawRect(x4, y4, .01f, .01f);
 		Graphics.setColor(1, 1, 1, 1);
 	}
 	

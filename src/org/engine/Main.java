@@ -1,6 +1,5 @@
 package org.engine;
 
-import org.scene.background.Background;
 import org.scene.entities.Obstacle;
 import org.scene.entities.Player;
 
@@ -17,7 +16,7 @@ public class Main {
 		
 		Handler.addGO(new Player());
 		
-		Obstacle obstacle = new Obstacle(-3, onGround(1) + 1, 6, 3, "res/org/scene/objects/Platform/platfrom.png");
+		Obstacle obstacle = new Obstacle(-3, onGround(1) + 1, 2, 1, "");
 		obstacle.setColor(255, 64, 130, 127);
 		Handler.addGO(obstacle);
 		

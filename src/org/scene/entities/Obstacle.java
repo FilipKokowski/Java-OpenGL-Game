@@ -63,8 +63,6 @@ public class Obstacle extends GameObject{
 		
 		super.update();
 		
-		//rotation += (rotation + .0000001f) * GameLoop.updateDelta();
-		
 	}
 	
 	public void offsetText(float xOffset, float yOffset) {
