@@ -138,57 +138,29 @@ public class Collider {
 	
 	public boolean doOverlap(Collider collider) {
 		//Prevents collider from checking collison with itself
-		if(this.equals(collider))
-			return false;
 		
-		//System.out.println(collider.parentObject.uuid);
-		
-		ArrayList<Vertex> axes = new ArrayList<Vertex>();
-		axes.addAll(collider.axes);
-		axes.addAll(this.axes);
-		
-		for(Vertex axis : axes) {
-			//axis.print();
+		for(Point point : points) {
 			
-			float firstPolygonmin = axis.dotProduct(points.get(0));
-			float firstPolygonmax = firstPolygonmin;
+			Point diagStart = new Point(parentObject.getX(), parentObject.getY());
+			Point diagEnd = point;
 
-			float secondPolygonmin = axis.dotProduct(collider.points.get(0));
-			float secondPolygonmax = secondPolygonmin;
-			
-			for(Point point : points) {
-				float dot = axis.dotProduct(point);
-				
-				//System.out.println(parentObject.getClass().getSimpleName() + " - " + dot);
-				//System.out.println(axis.x + " * " + point.x + " + " + axis.y + " * " + point.y + " = " + (axis.x * point.x + axis.y * point.y));
-				
-				firstPolygonmin = Math.min(firstPolygonmin, dot);
-				firstPolygonmax = Math.max(firstPolygonmax, dot);
+			for(Point otherColliderPoint : collider.points) {
+				Point edgeStart = new Point(otherColliderPoint.x, otherColliderPoint.y);
+				Point egdeEnd = new Point(collider.points.get((collider.points.indexOf(otherColliderPoint) + 1) % collider.points.size()).x, collider.points.get((collider.points.indexOf(otherColliderPoint) + 1) % collider.points.size()).y);
 
-			}
-			
-			for(Point point : collider.points) {
-				float dot = axis.dotProduct(point);
-				
-				//System.out.println(collider.parentObject.getClass().getSimpleName() + " - " + dot);
-				//System.out.println(axis.x + " * " + point.x + " + " + axis.y + " * " + point.y + " = " + (axis.x * point.x + axis.y * point.y));
-				
-				secondPolygonmin = Math.min(secondPolygonmin, dot);
-				secondPolygonmax = Math.max(secondPolygonmax, dot);
+				// Standard "off the shelf" line segment intersection
+				float h = (egdeEnd.x - edgeStart.x) * (diagStart.y - diagEnd.y) - (diagStart.x - diagEnd.x) * (egdeEnd.y - edgeStart.y);
+				float t1 = ((edgeStart.y - egdeEnd.y) * (diagStart.x - edgeStart.x) + (egdeEnd.x - edgeStart.x) * (diagStart.y - edgeStart.y)) / h;
+				float t2 = ((diagStart.y - diagEnd.y) * (diagStart.x - edgeStart.x) + (diagEnd.x - diagStart.x) * (diagStart.y - edgeStart.y)) / h;
 
-			}
 			
-			//System.out.println(firstPolygonmaxID + " " + firstPolygonminID + " / " + secondPolygonmaxID + " " + secondPolygonminID);
-	
-			//System.out.println(firstPolMinID + " " + firstPolMaxID + " / " + secondPolMinID + " " + secondPolMaxID);
-			
-			//System.out.println("!(" + secondPolygonmax + " >= " + firstPolygonmin + " && " + firstPolygonmax + " >= " + secondPolygonmin + " " +(!(secondPolygonmax >= firstPolygonmin && firstPolygonmax >= secondPolygonmin)));
-			
-			if(!(secondPolygonmax >= firstPolygonmin && firstPolygonmax >= secondPolygonmin)) {
-				return false;
+				if(t1 >= 0 && t1 < 1 && t2 >= 0 && t2 < 1) {
+					return true;
+				}
+				
 			}
 		}
 		
-		return true;
+		return false;
 	}
 }
