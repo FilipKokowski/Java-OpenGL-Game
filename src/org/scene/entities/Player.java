@@ -26,8 +26,6 @@ public class Player extends Entities{
 	private Boomerang boomer = new Boomerang(x, y, .1875f, .375f);
 	private boolean boomerDeployed;
 	
-	BodyPartsHandler bodyParts;
-	
 	private static String imagePath = "";
 	
 	public Player(){
@@ -52,7 +50,7 @@ public class Player extends Entities{
 		reloadCrouchJumpForce();
 		reloadCrouchSpeedCap();
 		
-		bodyParts = new BodyPartsHandler("res/org/Entities/Skeleton.json");
+		bodyPartsHandler = new BodyPartsHandler("res/org/Entities/Skeleton.json");
 		
 		fontSize = 16;
 		setCustomFont("res/org/fonts/pixelmix.ttf");
@@ -82,21 +80,23 @@ public class Player extends Entities{
 		
 		super.update();
 		
+		//getChildsVelocity();
+		
 		centerTextHorizontally();
 		placeTextAbove();
 		
 		text = "("+ x + "/" + y +")";
 		
-		bodyParts.passPosition(this);
+		bodyPartsHandler.passPosition(this);
 		
 		if(KeyInput.getKey(KeyEvent.VK_G)) {
 			//System.out.println("collapse");
-			bodyParts.collapse();
+			bodyPartsHandler.collapse();
 		}
 		
 		if(KeyInput.getKey(KeyEvent.VK_H)) {
 			//System.out.println("collapse");
-			bodyParts.assemble();
+			bodyPartsHandler.assemble();
 		}
 		
 		float shiftX = 0;
@@ -116,7 +116,7 @@ public class Player extends Entities{
 			shiftY = .5f;
 		}
 		
-		bodyParts.moveJoint(shiftY, shiftX, "1");
+		bodyPartsHandler.moveJoint(shiftY, shiftX, "1");
 		
 		//If player's not moving play idle animation
 		if(!KeyInput.getKey(KeyEvent.VK_A) && !KeyInput.getKey(KeyEvent.VK_D)) { 

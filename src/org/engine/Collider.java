@@ -12,7 +12,7 @@ import org.graphics.Graphics;
 
 public class Collider {
 
-	public static float minColliderPointSpacing = .25f;
+	public static float minColliderPointSpacing = .125f;
 	
 	public ArrayList<Point> pointsOffsets = new ArrayList<Point>();
 	private ArrayList<Point> points = new ArrayList<Point>();
@@ -119,11 +119,11 @@ public class Collider {
 			for(Point otherColliderPoint : collider.points) {
 				float distance = (float) (Math.pow(otherColliderPoint.x - point.x, 2) + Math.pow(otherColliderPoint.y - point.y, 2));
 				
-				if(distance < .005f) {
+				if(distance < .0025f) {
 					point.color = new Color(0,255,255,255);
 					otherColliderPoint.color = new Color(255,0,255,255);
 					
-					if(closestPoints.size() > 64) {}
+					if(closestPoints.size() > 32) {}
 					else if(points.size() > 16)
 						closestPoints.add(point);
 					else
@@ -156,6 +156,8 @@ public class Collider {
 				float t1 = ((edgeStart.y - egdeEnd.y) * (diagStart.x - edgeStart.x) + (egdeEnd.x - edgeStart.x) * (diagStart.y - edgeStart.y)) / h;
 				float t2 = ((diagStart.y - diagEnd.y) * (diagStart.x - edgeStart.x) + (diagEnd.x - diagStart.x) * (diagStart.y - edgeStart.y)) / h;
 
+				//System.out.println(t1 + " " + t2);
+				
 				if(t1 >= 0 && t1 < 1 && t2 >= 0 && t2 < 1) {
 					return true;
 				}
@@ -163,5 +165,9 @@ public class Collider {
 		}
 		
 		return false;
+	}
+	
+	public ArrayList<Point> getCollisonPoints(){
+		return points;
 	}
 }

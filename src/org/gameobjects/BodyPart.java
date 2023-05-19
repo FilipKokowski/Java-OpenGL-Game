@@ -29,7 +29,6 @@ public class BodyPart extends Entities{
 	public boolean jointRelocating;
 	public boolean hasJoints = true;
 	
-	
 	private static boolean basePart;
 	private static String basePartID;
 	
@@ -71,6 +70,8 @@ public class BodyPart extends Entities{
 	
 	public void update() {
 		
+		
+		
 		super.update();
 		
 		deactiveteWhenOutOfView();
@@ -98,6 +99,10 @@ public class BodyPart extends Entities{
 			text = "";
 		
 		//System.out.println(collider.convexPolygons.size() + " " + partID);
+		
+		//System.out.println(velocityX);
+		
+		
 	}
 	
 	public void render() {

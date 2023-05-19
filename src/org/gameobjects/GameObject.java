@@ -10,6 +10,7 @@ import java.util.Iterator;
 import java.util.UUID;
 
 import org.engine.AnimationHandler;
+import org.engine.BodyPartsHandler;
 import org.engine.Handler;
 import org.graphics.EventListener;
 import org.graphics.Graphics;
@@ -31,6 +32,8 @@ public class GameObject {
 	
 	protected float width = 1;
 	protected float height = 1;
+	
+	public boolean onGround = false;
 	
 	protected float offsetFromMiddleX = 0;
 	protected float offsetFromMiddleY = 0;
@@ -69,6 +72,8 @@ public class GameObject {
 	
 	public ArrayList<Point> bounds;
 	public ArrayList<Point> boundsOffsets;
+	
+	public BodyPartsHandler bodyPartsHandler;
 	
 	public Collider collider;
 	public boolean collisionOn = true;
@@ -289,28 +294,14 @@ public class GameObject {
 	
 	//Renders simple rectangular bounds
 	public void drawBounds() {
-		ArrayList<Point> bounds = getBounds();
-		float x1 = bounds.get(0).x;
-		float y1 = bounds.get(0).y;
-		
-		float x2 = bounds.get(1).x;
-		float y2 = bounds.get(1).y;
-		
-		float x3 = bounds.get(2).x;
-		float y3 = bounds.get(2).y;
-		
-		float x4 = bounds.get(3).x;
-		float y4 = bounds.get(3).y;
+		ArrayList<Point> collisionPoints = collider.getCollisonPoints();
 		
 		Graphics.setColor(1, 0, 0, 1);
-		/*Graphics.drawLine(x1, y1, x2, y2, id);
-		Graphics.drawLine(x2, y2, x3, y3, id);
-		Graphics.drawLine(x3, y3, x4, y4, id);
-		Graphics.drawLine(x4, y4, x1, y1, id);*/
-		Graphics.drawRect(x1, y1, .01f, .01f);
-		Graphics.drawRect(x2, y2, .01f, .01f);
-		Graphics.drawRect(x3, y3, .01f, .01f);
-		Graphics.drawRect(x4, y4, .01f, .01f);
+		
+		for(int point = 0; point < collisionPoints.size(); point++) {
+			Graphics.drawRect(collisionPoints.get(point).x, collisionPoints.get(point).y, .01f, .01f);
+		}
+		
 		Graphics.setColor(1, 1, 1, 1);
 	}
 	
@@ -367,6 +358,27 @@ public class GameObject {
 		if(!MouseInput.pressed) {
 			dragged = false;
 			MouseInput.draggingSmth = false;
+		}
+	}
+	
+	public void getChildsVelocity() {
+		if(bodyPartsHandler != null) {
+			ArrayList<Float> velocities = new ArrayList<Float>();
+			
+			for(BodyPart bodyPart : bodyPartsHandler.bodyParts) {
+				velocities.add(bodyPart.velocityX);
+			}
+			
+			velocities.add(velocityX);
+			
+			float biggestVelocity = 0;
+			
+			for(float velocity : velocities) {
+				biggestVelocity = Math.abs(biggestVelocity) < Math.abs(velocity) ? velocity : biggestVelocity;
+			}			
+			//System.out.println(biggestVelocity);
+			
+			velocityX = biggestVelocity;
 		}
 	}
 	
