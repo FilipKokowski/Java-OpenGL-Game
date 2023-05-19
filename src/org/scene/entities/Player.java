@@ -72,7 +72,7 @@ public class Player extends Entities{
 			super.render();
 		}
 		
-		//renderAxes(0, 1, 0, 1);
+		//collider.renderAxes(0, 1, 0, 1);
 		
 	}
 	

@@ -83,7 +83,7 @@ public class ImageResource {
 					//Simplifying polygons
 					ArrayList<Point> pickedCoords = new ArrayList<Point>();
 			
-					for(int i=0; i < boundsList.size(); i += 2) {
+					for(int i=0; i < boundsList.size(); i += 4) {
 						pickedCoords.add(boundsList.get(i));
 					}
 					

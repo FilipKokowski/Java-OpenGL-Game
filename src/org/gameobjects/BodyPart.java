@@ -103,7 +103,7 @@ public class BodyPart extends Entities{
 	public void render() {
 		super.render();
 		
-		//collider.renderAxes(0,1,0,1);
+		collider.renderAxes(0,1,0,1);
 	}
 	
 	public void setX(float x) {
