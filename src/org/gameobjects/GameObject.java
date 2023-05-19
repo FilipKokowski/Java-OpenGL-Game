@@ -271,13 +271,13 @@ public class GameObject {
 		
 		for(int point = 0; point <= wSpacing; point++) {
 			
-			bounds.add(new Point((float)((-width / 2 + Collider.minColliderPointSpacing * point) * Math.cos(Math.toRadians(-rotation)) - (height / 2) * Math.sin(Math.toRadians(-rotation)) + x), (float)((-width / 2 + Collider.minColliderPointSpacing * point) * Math.sin(Math.toRadians(-rotation)) + (height / 2) * Math.cos(Math.toRadians(-rotation)) + y)));
-			bounds.add(new Point((float)((-width / 2 + Collider.minColliderPointSpacing * point) * Math.cos(Math.toRadians(-rotation)) - (-height / 2) * Math.sin(Math.toRadians(-rotation)) + x), (float)((-width / 2 + Collider.minColliderPointSpacing * point) * Math.sin(Math.toRadians(-rotation)) + (-height / 2) * Math.cos(Math.toRadians(-rotation)) + y)));
+			bounds.add(new Point((float)((-width / 2 + Collider.minColliderPointSpacing * point) * Math.cos(Math.toRadians(-rotation)) - (height / 2) * Math.sin(Math.toRadians(-rotation))), (float)((-width / 2 + Collider.minColliderPointSpacing * point) * Math.sin(Math.toRadians(-rotation)) + (height / 2) * Math.cos(Math.toRadians(-rotation)))));
+			bounds.add(new Point((float)((-width / 2 + Collider.minColliderPointSpacing * point) * Math.cos(Math.toRadians(-rotation)) - (-height / 2) * Math.sin(Math.toRadians(-rotation))), (float)((-width / 2 + Collider.minColliderPointSpacing * point) * Math.sin(Math.toRadians(-rotation)) + (-height / 2) * Math.cos(Math.toRadians(-rotation)))));
 		}
 		for(int point = 0; point <= hSpacing; point++) {
-						
-			bounds.add(new Point((float)((width / 2) * Math.cos(Math.toRadians(-rotation)) - (-height / 2 + Collider.minColliderPointSpacing * point) * Math.sin(Math.toRadians(-rotation)) + x), (float)((width / 2) * Math.sin(Math.toRadians(-rotation)) + (-height / 2 + Collider.minColliderPointSpacing * point) * Math.cos(Math.toRadians(-rotation)) + y)));
-			bounds.add(new Point((float)((-width / 2) * Math.cos(Math.toRadians(-rotation)) - (-height / 2 + Collider.minColliderPointSpacing * point) * Math.sin(Math.toRadians(-rotation)) + x), (float)((-width / 2) * Math.sin(Math.toRadians(-rotation)) + (-height / 2 + Collider.minColliderPointSpacing * point) * Math.cos(Math.toRadians(-rotation)) + y)));
+			
+			bounds.add(new Point((float)((width / 2) * Math.cos(Math.toRadians(-rotation)) - (-height / 2 + Collider.minColliderPointSpacing * point) * Math.sin(Math.toRadians(-rotation))), (float)((width / 2) * Math.sin(Math.toRadians(-rotation)) + (-height / 2 + Collider.minColliderPointSpacing * point) * Math.cos(Math.toRadians(-rotation)))));
+			bounds.add(new Point((float)((-width / 2) * Math.cos(Math.toRadians(-rotation)) - (-height / 2 + Collider.minColliderPointSpacing * point) * Math.sin(Math.toRadians(-rotation))), (float)((-width / 2) * Math.sin(Math.toRadians(-rotation)) + (-height / 2 + Collider.minColliderPointSpacing * point) * Math.cos(Math.toRadians(-rotation)))));
 		}
 		/*
 		 * x′=(x−p)cos(θ)−(y−q)sin(θ)+p,

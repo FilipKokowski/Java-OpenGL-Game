@@ -119,16 +119,18 @@ public class Collider {
 			for(Point otherColliderPoint : collider.points) {
 				float distance = (float) (Math.pow(otherColliderPoint.x - point.x, 2) + Math.pow(otherColliderPoint.y - point.y, 2));
 				
-				if(distance < .01f) {
+				if(distance < .005f) {
 					point.color = new Color(0,255,255,255);
 					otherColliderPoint.color = new Color(255,0,255,255);
 					
-					if(points.size() > 16)
+					if(closestPoints.size() > 64) {}
+					else if(points.size() > 16)
 						closestPoints.add(point);
 					else
 						closestPoints.addAll(points);
 					
-					if(collider.points.size() > 16)
+					if(otherClosestPoints.size() > 64) {}
+					else if(collider.points.size() > 16)
 						otherClosestPoints.add(otherColliderPoint);
 					else
 						otherClosestPoints.addAll(collider.points);
