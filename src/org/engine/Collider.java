@@ -95,14 +95,14 @@ public class Collider {
 		for(Point point : closestPoints) {
 			//System.out.println(parentObject.getClass().getSimpleName() + " - " + points.size() + " " + point.x + "x" + point.y);
 			Graphics.setColor(point.color);
-			Graphics.drawRect(point.x, point.y, .01f, .01f);
+			Graphics.drawRect(point.x, point.y, .02f, .02f);
 			Graphics.setColor(Color.clear());
 		}
 		
 		for(Point point : otherClosestPoints) {
 			//System.out.println(parentObject.getClass().getSimpleName() + " - " + points.size() + " " + point.x + "x" + point.y);
 			Graphics.setColor(point.color);
-			Graphics.drawRect(point.x, point.y, .01f, .01f);
+			Graphics.drawRect(point.x, point.y, .02f, .02f);
 			Graphics.setColor(Color.clear());
 		}
 		

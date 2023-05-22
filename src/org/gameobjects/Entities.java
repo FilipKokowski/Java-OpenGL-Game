@@ -157,7 +157,7 @@ public class Entities extends GameObject {
 			}
 			else {
 				onGround = true;
-				System.out.println(onGround + " " + this.getClass().getSimpleName());
+				//System.out.println(onGround + " " + this.getClass().getSimpleName());
 				
 				//Set y to bottom of the screen
 				y = (-Renderer.unitsTall + height) / 2; 

@@ -24,8 +24,8 @@ import org.engine.Collider;
 import com.jogamp.opengl.util.awt.TextRenderer;
 
 public class GameObject {
-	protected float x = 0;
-	protected float y = 0;
+	public float x = 0;
+	public float y = 0;
 	
 	public float velocityX = 0;
 	public float velocityY = 0;

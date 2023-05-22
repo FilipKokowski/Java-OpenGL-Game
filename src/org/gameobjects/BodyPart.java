@@ -34,6 +34,8 @@ public class BodyPart extends Entities{
 	
 	public boolean collapse;
 	
+	public boolean collides = false;
+	
 	public BodyPart(String src, String sideID, String partID, String xOffset, String yOffset, String jointWithID, String jointOffsetX, String jointOffsetY) throws IOException {
 		super(0, 0, 0, 0, src);
 		
@@ -69,7 +71,7 @@ public class BodyPart extends Entities{
 	}
 	
 	public void update() {
-		
+		collides = false;
 		
 		
 		super.update();
@@ -100,7 +102,7 @@ public class BodyPart extends Entities{
 		
 		//System.out.println(collider.convexPolygons.size() + " " + partID);
 		
-		//System.out.println(velocityX);
+		//System.out.println(collides);
 		
 		
 	}

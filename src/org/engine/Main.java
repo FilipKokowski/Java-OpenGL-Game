@@ -1,5 +1,6 @@
 package org.engine;
 
+import org.scene.background.Background;
 import org.scene.entities.Obstacle;
 import org.scene.entities.Player;
 
@@ -12,7 +13,7 @@ public class Main {
 	public static void main(String[] args) {
 		Renderer.init();
 		
-		//Handler.addGO(new Background("res/org/scene/background/bg.jpg"));
+		Handler.addGO(new Background("res/org/scene/background/bg.jpg"));
 		
 		Handler.addGO(new Player());
 		
@@ -25,17 +26,17 @@ public class Main {
 		
 		Handler.addHUD(new HUD(0,Renderer.unitsTall / 2 - .25f, 1, .5f, true));
         
-		/*Obstacle obstacle2 = new Obstacle(-5, onGround(1) + 1, 2, 1, "");
-		obstacle2.setColor(1f, .25f, .58f, .5f);
+		Obstacle obstacle2 = new Obstacle(-5, onGround(1) + 1, 2, 1, "");
+		obstacle2.setColor(255, 64, 135, 127);
 		Handler.addGO(obstacle2);
 		
 		Obstacle obstacle3 = new Obstacle(4.8f, onGround(.8f) + .2f, 8, .8f, "");
-		obstacle3.setColor(.89f, .5f, .32f, .5f);
+		obstacle3.setColor(220, 127, 80, 127);
 		Handler.addGO(obstacle3);
 		
 		Obstacle obstacle4 = new Obstacle(-7.5f, onGround(1) + 2.25f, 2, 1, "");
-		obstacle4.setColor(1f, .25f, .58f, .5f);
-		Handler.addGO(obstacle4);*/
+		obstacle4.setColor(255, 64, 135, 127);
+		Handler.addGO(obstacle4);
 		
 		Obstacle sign = new Obstacle(-1, onGround(.375f), .5f, .375f, "res/org/scene/objects/Sign/sign.png");
 		sign.verticallyCenteredText = true;
