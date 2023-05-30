@@ -6,6 +6,7 @@ import java.io.InputStreamReader;
 import java.util.ArrayList;
 
 import org.gameobjects.BodyPart;
+import org.gameobjects.Entities;
 import org.gameobjects.GameObject;
 import org.json.simple.JSONObject;
 import org.json.simple.parser.JSONParser;
@@ -19,6 +20,8 @@ public class BodyPartsHandler {
 	private float parentAngle;
 	private float parentVelocityX;
 	private float parentVelocityY;
+	
+	public BodyPart basePart;
 	
 	public ArrayList<BodyPart> bodyParts = new ArrayList<BodyPart>();
 	
@@ -107,7 +110,7 @@ public class BodyPartsHandler {
 		}
 	}
 	
-	public void passPosition(GameObject parentObject) {
+	public void passPosition(Entities parentObject) {
 		
 		parentX = parentObject.getX();
 		parentY = parentObject.getY();
@@ -115,11 +118,11 @@ public class BodyPartsHandler {
 		parentVelocityX = parentObject.velocityX;
 		parentVelocityY = parentObject.velocityY;
 		
-		BodyPart basePart = null;
-		
 		for(BodyPart bodyPart : bodyParts) {
 			if(bodyPart.getBasePartID().equals(bodyPart.partID)) {
 				basePart = bodyPart;
+				
+				parentObject.linkBodyPart(basePart);
 				
 				bodyPart.hasJoints = false;
 				bodyPart.parentX = parentObject.getX();

@@ -4,6 +4,7 @@ import java.io.IOException;
 
 import org.engine.GameLoop;
 import org.engine.Handler;
+import org.graphics.Graphics;
 import org.resource.ImageResource;
 
 public class BodyPart extends Entities{
@@ -66,13 +67,11 @@ public class BodyPart extends Entities{
 		if(!hasJoints) showJoints = false;
 		else showJoints = true;
 		
-		showBounds = true;
-		
+		showBounds = true;		
 	}
 	
 	public void update() {
 		collides = false;
-		
 		
 		super.update();
 		
@@ -85,20 +84,22 @@ public class BodyPart extends Entities{
 		
 		if(!collapse) {
 			//rotation += 2.5f;
-			x = parentX - Float.valueOf(xOffset);
-			y = parentY - Float.valueOf(yOffset);
+			position.x = parentX - Float.valueOf(xOffset);
+			position.y = parentY - Float.valueOf(yOffset);
 		}
 		else {
-			x -= velocityX * GameLoop.updateDelta();
+			position.x -= velocityX * GameLoop.updateDelta();
 		}
 
-		jointPointX = x + jointOffsetX;
-		jointPointY = y + jointOffsetY;
+		jointPointX = position.x + jointOffsetX;
+		jointPointY = position.y + jointOffsetY;
 
 		if(collapse)
 			text = String.valueOf(velocityY);
 		else
 			text = "";
+		
+		//velocityX = -.5f;
 		
 		//System.out.println(collider.convexPolygons.size() + " " + partID);
 		
@@ -110,11 +111,15 @@ public class BodyPart extends Entities{
 	public void render() {
 		super.render();
 		
+		Graphics.setColor(new Color(255,0,255,255));
+		Graphics.drawRect(centerOfMass.x + position.x, centerOfMass.y + position.y, .05f, .05f);
+		Graphics.setColor(Color.clear());
+				
 		collider.renderAxes(0,1,0,1);
 	}
 	
 	public void setX(float x) {
-		this.x = x;
+		this.position.x = x;
 	}
 	
 	public void printValues() {

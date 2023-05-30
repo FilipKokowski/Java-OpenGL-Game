@@ -6,7 +6,6 @@ import org.engine.Handler;
 import org.gameobjects.Color;
 import org.gameobjects.Entities;
 import org.gameobjects.ID;
-import org.graphics.EventListener;
 import org.graphics.Graphics;
 import org.input.KeyInput;
 
@@ -23,7 +22,7 @@ public class Player extends Entities{
 	//False == left, True == right
 	private static boolean lastFacing = false;
 	
-	private Boomerang boomer = new Boomerang(x, y, .1875f, .375f);
+	private Boomerang boomer = new Boomerang(position.x, position.y, .1875f, .375f);
 	private boolean boomerDeployed;
 	
 	private static String imagePath = "";
@@ -61,7 +60,7 @@ public class Player extends Entities{
 		if(imagePath.equals("")) {
 			Graphics.Rotate(-rotation);
 			Graphics.setColor(0, 0, 0, 0);
-			Graphics.drawRect(x, y, width, height);
+			Graphics.drawRect(position.x, position.y, width, height);
 			Graphics.setColor(Color.clear());
 			Graphics.Rotate(0);
 
@@ -70,14 +69,13 @@ public class Player extends Entities{
 			super.render();
 		}
 		
-		//collider.renderAxes(0, 1, 0, 1);
+		collider.renderAxes(0, 1, 0, 1);
 		
 	}
 	
 	
 	@Override
 	public void update() {
-		
 		super.update();
 		
 		//getChildsVelocity();
@@ -85,10 +83,10 @@ public class Player extends Entities{
 		centerTextHorizontally();
 		placeTextAbove();
 		
-		text = "("+ x + "/" + y +")";
+		text = "("+ position.x + "/" + position.y +")";
 		
 		bodyPartsHandler.passPosition(this);
-		
+				
 		if(KeyInput.getKey(KeyEvent.VK_G)) {
 			//System.out.println("collapse");
 			bodyPartsHandler.collapse();
@@ -136,7 +134,7 @@ public class Player extends Entities{
 		//Jump if player's standing on obstacle
 		if((KeyInput.getKey(KeyEvent.VK_W) || KeyInput.getKey(KeyEvent.VK_SPACE)) && onGround){
 			velocityY = jumpForce;
-			y += velocityY * GameLoop.updateDelta();
+			position.y += velocityY * GameLoop.updateDelta();
 			currentAnimation = 10;
 		}
 		
@@ -179,7 +177,7 @@ public class Player extends Entities{
 			jumpForce = crouchJumpForce;
 			
 			height = crouchHeight;
-			y -= height / 4;
+			position.y -= height / 4;
 			
 			crouched = true;
 			
@@ -197,7 +195,7 @@ public class Player extends Entities{
 			jumpForce = crouchJumpForce * 2;
 			
 			if(crouched) { 
-				y += height / 6;
+				position.y += height / 6;
 				reloadSpeedCap();
 			}
 			
@@ -205,8 +203,8 @@ public class Player extends Entities{
 		}
 		
 		if(KeyInput.getKey(KeyEvent.VK_T) && !boomerDeployed) {
-			boomer.setX(x);
-			boomer.setY(y);
+			boomer.setX(position.x);
+			boomer.setY(position.y);
 			boomer.resetAngle();
 			boomer.setFacing(lastFacing);
 			boomer.setCooldown(5);
@@ -221,8 +219,8 @@ public class Player extends Entities{
 		boolean reset = false;
 		
 		if(KeyInput.getKey(KeyEvent.VK_X) && !reset) {
-			y = 0;
-			x = 0;
+			position.y = 0;
+			position.x = 0;
 			velocityX = 0;
 			velocityY = 0;
 			
@@ -237,13 +235,12 @@ public class Player extends Entities{
 		}
 		
 		//Change x based on velocity
-		x += velocityX * GameLoop.updateDelta();
+		position.x += velocityX * GameLoop.updateDelta();
 		
 		boomer.cooldown -= GameLoop.updateDelta();
 		
-		
 		//Camera follow player
-		Camera.x += (x - Camera.x) * speed * GameLoop.updateDelta();
+		Camera.x += (position.x - Camera.x) * speed * GameLoop.updateDelta();
 		
 		draggable();
 	

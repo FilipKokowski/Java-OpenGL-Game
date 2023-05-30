@@ -29,10 +29,12 @@ public class Main {
 		Obstacle obstacle2 = new Obstacle(-5, onGround(1) + 1, 2, 1, "");
 		obstacle2.setColor(255, 64, 135, 127);
 		Handler.addGO(obstacle2);
-		
-		Obstacle obstacle3 = new Obstacle(4.8f, onGround(.8f) + .2f, 8, .8f, "");
-		obstacle3.setColor(220, 127, 80, 127);
-		Handler.addGO(obstacle3);
+	
+		for(float i = 0; i < 4; i += .6f) {
+			Obstacle obstacle3 = new Obstacle(1.5f + i, onGround(.8f) + .2f, .4f, 8f, "");
+			obstacle3.setColor(220, 127, 80, 127);
+			Handler.addGO(obstacle3);
+		}
 		
 		Obstacle obstacle4 = new Obstacle(-7.5f, onGround(1) + 2.25f, 2, 1, "");
 		obstacle4.setColor(255, 64, 135, 127);

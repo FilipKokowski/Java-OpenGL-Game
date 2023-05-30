@@ -12,6 +12,8 @@ public class Entities extends GameObject {
 	public float HEIGHT;
 	public float WIDTH;
 	
+	public BodyPart mainBodyPart;
+	
 	public boolean crouched = false;
 	public boolean forceCrouch = false;
 
@@ -58,6 +60,14 @@ public class Entities extends GameObject {
 		speedCap = crouchSpeedCap * 1.5f;
 	}
 	
+	public void linkBodyPart(BodyPart bodyPart) {
+		mainBodyPart = bodyPart;
+	}
+	
+	public void unlinkBodyPart() {
+		mainBodyPart = null;
+	}
+	
 	public void applyPhysics(boolean GravityEnabled, boolean CollisionEnabled){
 		if(physicsOn) {
 
@@ -65,13 +75,13 @@ public class Entities extends GameObject {
 			else if(velocityX != 0 && onGround)	
 				velocityX += (velocityX >= 0) ? (-friction) : (friction);
 
-			if(y > (-Renderer.unitsTall + height) / 2) { 
+			if(position.y > (-Renderer.unitsTall + height) / 2) { 
 				if(GravityEnabled)
 					gravity();
 				
 				onGround = false;
 				
-				y += velocityY * GameLoop.updateDelta();
+				position.y += velocityY * GameLoop.updateDelta();
 				
 				if(CollisionEnabled) {
 					//Collision detection
@@ -87,8 +97,8 @@ public class Entities extends GameObject {
 						//Check if objects ID is ID.Obstacle and is intersecting with entity
 						if(tempObj.id == ID.Obstacle && collisionOn && collider.doOverlap(tempObj.collider)){
 							//System.out.println("Collide with " + tempObj.uuid);
-							velocityY = 5;
-							velocityX = -3;
+							//velocityY = 5;
+							velocityX = (velocityX > 0) ? (-velocityX * 2) : velocityX;
 							//System.out.println("Collision with " + tempObj.getClass().getSimpleName() + " " + tempObj.uuid);
 							/*//If entity is more to the left side of obstacle, trigger left collisionW
 							if(x < tempObj.getX()) {
@@ -145,8 +155,8 @@ public class Entities extends GameObject {
 						}
 						
 						//When player is below object but not colliding with it, but his standing height is colliding with tempObj trigger forceCrouch
-						if(tempObj.id == ID.Obstacle && !collisionU && x - width / 2 < tempObj.getX() + tempObj.getWidth() / 2 && x + width / 2 > tempObj.getX() - tempObj.getWidth() / 2) {
-							if(y - height / 2 + HEIGHT >= tempObj.getY() - tempObj.getHeight() / 2 && y - height / 2 + HEIGHT <= tempObj.getY() - tempObj.getHeight() / 2 + .5f) {
+						if(tempObj.id == ID.Obstacle && !collisionU && position.x - width / 2 < tempObj.getX() + tempObj.getWidth() / 2 && position.x + width / 2 > tempObj.getX() - tempObj.getWidth() / 2) {
+							if(position.y - height / 2 + HEIGHT >= tempObj.getY() - tempObj.getHeight() / 2 && position.y - height / 2 + HEIGHT <= tempObj.getY() - tempObj.getHeight() / 2 + .5f) {
 								forceCrouch = true;
 							}
 						}
@@ -160,7 +170,7 @@ public class Entities extends GameObject {
 				//System.out.println(onGround + " " + this.getClass().getSimpleName());
 				
 				//Set y to bottom of the screen
-				y = (-Renderer.unitsTall + height) / 2; 
+				position.y = (-Renderer.unitsTall + height) / 2; 
 				velocityY = 0;
 				
 				
@@ -174,8 +184,8 @@ public class Entities extends GameObject {
 						//System.out.println("Player: " + collider.parentObject.getX() + "/nObstacle: " + tempObj.collider.parentObject.getX() + ": " + collider.doCollide(tempObj.collider));
 						if(tempObj.id == ID.Obstacle && collisionOn && collider.doOverlap(tempObj.collider)){
 							//System.out.println("Collide with " + tempObj.uuid);
-							velocityY = 5;
-							velocityX = -3;
+							//velocityY = 5;
+							velocityX = (velocityX > 0) ? (-velocityX * 2) : velocityX;
 							/*velocityX = 0;
 							//System.out.println("Touching");
 							
@@ -208,8 +218,8 @@ public class Entities extends GameObject {
 							*/
 						}
 						
-						if(tempObj.id == ID.Obstacle && !collisionU && x - width / 2 < tempObj.getX() + tempObj.getWidth() / 2 && x + width / 2 > tempObj.getX() - tempObj.getWidth() / 2) {
-							if(y - height / 2 + HEIGHT >= tempObj.getY() - tempObj.getHeight() / 2 && y - height / 2 + HEIGHT <= tempObj.getY() - tempObj.getHeight() / 2 + .5f) {
+						if(tempObj.id == ID.Obstacle && !collisionU && position.x - width / 2 < tempObj.getX() + tempObj.getWidth() / 2 && position.x + width / 2 > tempObj.getX() - tempObj.getWidth() / 2) {
+							if(position.y - height / 2 + HEIGHT >= tempObj.getY() - tempObj.getHeight() / 2 && position.y - height / 2 + HEIGHT <= tempObj.getY() - tempObj.getHeight() / 2 + .5f) {
 								forceCrouch = true;
 							}
 							else {

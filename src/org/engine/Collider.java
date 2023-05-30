@@ -22,6 +22,9 @@ public class Collider {
 	private ArrayList<Point> closestPoints = new ArrayList<Point>();
 	private ArrayList<Point> otherClosestPoints = new ArrayList<Point>();
 	
+	private ArrayList<Point> closestPointsRender = new ArrayList<Point>();
+	private ArrayList<Point> otherClosestPointsRender = new ArrayList<Point>();
+	
 	public Collider(ArrayList<Point> pointsOffsets, GameObject parentObject) {
 		this.parentObject = parentObject;
 		this.pointsOffsets = pointsOffsets;
@@ -92,28 +95,32 @@ public class Collider {
 			
 		}*/
 		
-		for(Point point : closestPoints) {
+		for(Point point : closestPointsRender) {
 			//System.out.println(parentObject.getClass().getSimpleName() + " - " + points.size() + " " + point.x + "x" + point.y);
 			Graphics.setColor(point.color);
 			Graphics.drawRect(point.x, point.y, .02f, .02f);
 			Graphics.setColor(Color.clear());
 		}
 		
-		for(Point point : otherClosestPoints) {
+		for(Point point : otherClosestPointsRender) {
 			//System.out.println(parentObject.getClass().getSimpleName() + " - " + points.size() + " " + point.x + "x" + point.y);
 			Graphics.setColor(point.color);
 			Graphics.drawRect(point.x, point.y, .02f, .02f);
 			Graphics.setColor(Color.clear());
 		}
 		
-		closestPoints.clear();
-		otherClosestPoints.clear();
+		closestPointsRender.clear();
+		otherClosestPointsRender.clear();
 	}
 	
 	public boolean doOverlap(Collider collider) {
+		
 		//Prevents collider from checking collison with itself
 		if(this.equals(collider))
 			return false;
+		
+		closestPoints.clear();
+		otherClosestPoints.clear();
 		
 		for(Point point : points) {
 			for(Point otherColliderPoint : collider.points) {
@@ -123,13 +130,13 @@ public class Collider {
 					point.color = new Color(0,255,255,255);
 					otherColliderPoint.color = new Color(255,0,255,255);
 					
-					if(closestPoints.size() > 32) {}
+					if(closestPoints.size() > 16) {}
 					else if(points.size() > 16)
 						closestPoints.add(point);
 					else
 						closestPoints.addAll(points);
 					
-					if(otherClosestPoints.size() > 64) {}
+					if(otherClosestPoints.size() > 16) {}
 					else if(collider.points.size() > 16)
 						otherClosestPoints.add(otherColliderPoint);
 					else
@@ -137,6 +144,10 @@ public class Collider {
 				}
 			}
 		}
+		
+		closestPointsRender.addAll(closestPoints);
+		otherClosestPointsRender.addAll(otherClosestPoints);
+		
 		
 		//System.out.println(closestDistance + " x " + closestPoints.size());
 		//System.out.println(points.get(closestPointFirstPolygonID).x + " x " + points.get(closestPointFirstPolygonID).y);
@@ -159,6 +170,10 @@ public class Collider {
 				//System.out.println(t1 + " " + t2);
 				
 				if(t1 >= 0 && t1 < 1 && t2 >= 0 && t2 < 1) {
+					//System.out.println("xOffset = " + (otherColliderPoint.x - point.x));
+					parentObject.position.x += (otherColliderPoint.x - point.x);
+					parentObject.velocityX = (parentObject.velocityX > 0 || parentObject.velocityX < 0) ? 0 : parentObject.velocityX;
+
 					return true;
 				}
 			}

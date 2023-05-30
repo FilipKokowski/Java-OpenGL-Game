@@ -24,8 +24,7 @@ import org.engine.Collider;
 import com.jogamp.opengl.util.awt.TextRenderer;
 
 public class GameObject {
-	public float x = 0;
-	public float y = 0;
+	public Point position = new Point(0,0);
 	
 	public float velocityX = 0;
 	public float velocityY = 0;
@@ -73,6 +72,8 @@ public class GameObject {
 	public ArrayList<Point> bounds;
 	public ArrayList<Point> boundsOffsets;
 	
+	public Point centerOfMass = new Point(0,0);
+	
 	public BodyPartsHandler bodyPartsHandler;
 	
 	public Collider collider;
@@ -96,15 +97,15 @@ public class GameObject {
 	public static int updated = 0;
 	
 	public GameObject(float x, float y, float width, float height, String src) {
-		this.x = x;
-		this.y = y;
+		this.position.x = x;
+		this.position.y = y;
 		this.width = width;
 		this.height = height;
 		
 		color = new Color(255, 255, 255, 255);
 		
-		lastColliderPos.x = this.x;
-		lastColliderPos.y = this.y;
+		lastColliderPos.x = this.position.x;
+		lastColliderPos.y = this.position.y;
 		
 		offsetFromMiddleX = width / 2;
 		offsetFromMiddleY = height / 2;
@@ -129,15 +130,19 @@ public class GameObject {
 		
 		collider = new Collider(bounds, this);
 		
+		centerOfMass = txt.centerOfMass;
+		
+		System.out.println(centerOfMass.x + " x " + centerOfMass.y);
+		
 		//System.out.println(bounds.size() + ": " + this.getClass().getSimpleName());
 		
 		//System.out.println(this.getClass().getSimpleName() + ": " + bounds);
 	}
 	
 	public void update() {
-		if(lastColliderPos.x != x || lastColliderPos.y != y || lastColliderRotation != rotation) {
-			lastColliderPos.x = x;
-			lastColliderPos.y = y;
+		if(lastColliderPos.x != position.x || lastColliderPos.y != position.y || lastColliderRotation != rotation) {
+			lastColliderPos.x = position.x;
+			lastColliderPos.y = position.y;
 			lastColliderRotation = rotation;
 			
 			collider.update();
@@ -147,7 +152,7 @@ public class GameObject {
 	public void render() {
 		if(!outOfView) {
 			Graphics.Rotate(-rotation);
-			Graphics.drawImage(txt, x, y, width, height, id);
+			Graphics.drawImage(txt, position.x, position.y, width, height, id);
 			Graphics.Rotate(0);
 			
 			if(EventListener.renderBounds && showBounds) {
@@ -157,8 +162,8 @@ public class GameObject {
 				
 				for(int point = 0; point < bounds.size() - 1; point++) {
 					//Calculating position of x and y after rotating
-					float x = (float)((bounds.get(point).x) * Math.cos(Math.toRadians(-rotation)) - (bounds.get(point).y) * Math.sin(Math.toRadians(-rotation)) + this.x);
-					float y = (float)((bounds.get(point).x) * Math.sin(Math.toRadians(-rotation)) + (bounds.get(point).y) * Math.cos(Math.toRadians(-rotation)) + this.y);
+					float x = (float)((bounds.get(point).x) * Math.cos(Math.toRadians(-rotation)) - (bounds.get(point).y) * Math.sin(Math.toRadians(-rotation)) + this.position.x);
+					float y = (float)((bounds.get(point).x) * Math.sin(Math.toRadians(-rotation)) + (bounds.get(point).y) * Math.cos(Math.toRadians(-rotation)) + this.position.y);
 					Graphics.drawRect(x, y, .01f, .01f);
 					//Graphics.drawLine(x + bounds.get(point).x, y + bounds.get(point).y, x + bounds.get(point + 1).x , y + bounds.get(point + 1).y, id);
 				}
@@ -176,7 +181,7 @@ public class GameObject {
 	public void renderText() {
 		Graphics.Rotate(-rotation);
 		Graphics.setTextColor(textRed, textGreen, textBlue, textAlpha);
-		Graphics.drawString(x + textOffsetX, y + textOffsetY, text, this, id);
+		Graphics.drawString(position.x + textOffsetX, position.y + textOffsetY, text, this, id);
 		Graphics.Rotate(0);
 	}
 	
@@ -217,15 +222,15 @@ public class GameObject {
 		}
 	}
 	
-	public float getWorldX() {return ((Renderer.unitsWide / Renderer.getWindowWidth()) * x - Renderer.unitsWide/2) + Camera.x;}
+	public float getWorldX() {return ((Renderer.unitsWide / Renderer.getWindowWidth()) * position.x - Renderer.unitsWide/2) + Camera.x;}
 	
 	public float getWorldY() {
 		float unitsTall = Renderer.unitsWide * (float) ((float)Renderer.getWindowHeight() / (float)Renderer.getWindowWidth());
-		return -(unitsTall / Renderer.getWindowHeight() * y - unitsTall/2) + Camera.y;
+		return -(unitsTall / Renderer.getWindowHeight() * position.y - unitsTall/2) + Camera.y;
 	}
 	
-	public float getX() { return x; };
-	public float getY() { return y; };
+	public float getX() { return position.x; };
+	public float getY() { return position.y; };
 	
 	public float getWidth() { return width; };
 	public float getHeight() { return height; };
@@ -240,8 +245,8 @@ public class GameObject {
 	}
 	
 	public void deactiveteWhenOutOfView() {
-		if((x - width / 2 - Camera.x > Renderer.unitsWide / 2 || x + width / 2 - Camera.x < -Renderer.unitsWide / 2)
-				|| (y - height / 2 - Camera.y > Renderer.unitsTall / 2 || y + height / 2 - Camera.y < -Renderer.unitsTall / 2)) {
+		if((position.x - width / 2 - Camera.x > Renderer.unitsWide / 2 || position.x + width / 2 - Camera.x < -Renderer.unitsWide / 2)
+				|| (position.y - height / 2 - Camera.y > Renderer.unitsTall / 2 || position.y + height / 2 - Camera.y < -Renderer.unitsTall / 2)) {
 			outOfView = true;
 		}
 		else 
@@ -314,8 +319,8 @@ public class GameObject {
 	
 	//Checks if mouse is hovering over the object
 	public boolean hover() {
-		return (MouseInput.getMouseX() > x - width / 2 && MouseInput.getMouseX() < x + width / 2 && 
-				MouseInput.getMouseY() < y + height / 2 && MouseInput.getMouseY() > y - height / 2);
+		return (MouseInput.getMouseX() > position.x - width / 2 && MouseInput.getMouseX() < position.x + width / 2 && 
+				MouseInput.getMouseY() < position.y + height / 2 && MouseInput.getMouseY() > position.y - height / 2);
 	}
 	
 	public boolean onClick() {
@@ -333,11 +338,11 @@ public class GameObject {
 	//Allows object to be dragged
 	public void draggable() {
 		
-		if(isDraggable && (MouseInput.getMouseWorldX() > x - width / 2 && MouseInput.getMouseWorldX() < x + width / 2
-				&& MouseInput.getMouseWorldY() > y - height / 2 && MouseInput.getMouseWorldY() < y + height / 2 && MouseInput.pressed && !MouseInput.draggingSmth) || dragged) {
+		if(isDraggable && (MouseInput.getMouseWorldX() > position.x - width / 2 && MouseInput.getMouseWorldX() < position.x + width / 2
+				&& MouseInput.getMouseWorldY() > position.y - height / 2 && MouseInput.getMouseWorldY() < position.y + height / 2 && MouseInput.pressed && !MouseInput.draggingSmth) || dragged) {
 			
-			x = MouseInput.getMouseWorldX();
-			y = MouseInput.getMouseWorldY();
+			position.x = MouseInput.getMouseWorldX();
+			position.y = MouseInput.getMouseWorldY();
 			
 			rotation += MouseInput.rotation;
 			

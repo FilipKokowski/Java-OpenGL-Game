@@ -27,12 +27,14 @@ public class ImageResource {
 	
 	private ArrayList<Point> boundsList = new ArrayList<Point>();
 	
+	public Point centerOfMass = new Point(0,0);
+	
 	private static HashMap<String, ArrayList<Point>> loadedImages = new HashMap<String, ArrayList<Point>>();
 	
 	public ImageResource(String path) {
 		
 		if(path == null) return;
-		
+	 
 		InputStream url = getClass().getClassLoader().getResourceAsStream(path);
 		
 		try {
@@ -79,6 +81,18 @@ public class ImageResource {
 			        }
 					//System.out.println(boundsList);
 					//System.out.println("Width: " + img.getWidth() + " Height: " + img.getHeight());
+					
+					float centerOfMassX = 0;
+					float centerOfMassY = 0;
+					
+					for(Point point : boundsList) {
+						centerOfMassX += (1f / boundsList.size()) * point.x;
+						centerOfMassY += (1f / boundsList.size()) * point.y;						
+					}
+	
+					centerOfMass = new Point(centerOfMassX / 1, centerOfMassY / 1);
+					
+					System.out.println(centerOfMass.x + " x " + centerOfMass.y);
 					
 					//Simplifying polygons
 					ArrayList<Point> pickedCoords = new ArrayList<Point>();

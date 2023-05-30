@@ -63,8 +63,8 @@ public class Boomerang extends Entities{
 		else
 			angle -= speed;
 		
-		x = (float) (x0 + Math.cos(angle) * verticalRotationRadius);
-		y = (float) (y0 + Math.sin(angle) * verticalRotationRadius);
+		position.x = (float) (x0 + Math.cos(angle) * verticalRotationRadius);
+		position.y = (float) (y0 + Math.sin(angle) * verticalRotationRadius);
 		
 		for(int i = 0; i < Handler.gameObjects.size(); i++) {
 			//GameObject tempObj = getAt(i);

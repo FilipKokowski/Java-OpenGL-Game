@@ -73,7 +73,7 @@ public class Obstacle extends GameObject{
 	public void render() {
 		if(imagePath.equals("")) {
 			Graphics.setColor(color.red, color.green, color.blue, color.alpha);
-			Graphics.drawRect(x, y, width, height);
+			Graphics.drawRect(position.x, position.y, width, height);
 			Graphics.setColor(1, 1, 1, 1);
 			
 			if(EventListener.renderBounds)
