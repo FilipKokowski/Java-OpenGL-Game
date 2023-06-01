@@ -3,6 +3,7 @@ package org.scene.entities;
 import java.awt.Font;
 
 import org.engine.GameLoop;
+import org.gameobjects.Color;
 import org.gameobjects.GameObject;
 import org.gameobjects.ID;
 import org.graphics.EventListener;
@@ -71,6 +72,10 @@ public class Obstacle extends GameObject{
 	}
 	
 	public void render() {
+		Graphics.setColor(new Color(255,128,128,255));
+		Graphics.drawCircle(position.x, position.y, collisionFieldRadius, ID.HUD);
+		Graphics.setColor(Color.clear());
+		
 		if(imagePath.equals("")) {
 			Graphics.setColor(color.red, color.green, color.blue, color.alpha);
 			Graphics.drawRect(position.x, position.y, width, height);

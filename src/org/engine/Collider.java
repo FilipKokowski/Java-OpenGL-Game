@@ -5,7 +5,6 @@ import java.util.concurrent.ConcurrentLinkedQueue;
 
 import org.gameobjects.Color;
 import org.gameobjects.GameObject;
-import org.gameobjects.ID;
 import org.gameobjects.Point;
 import org.gameobjects.Vertex;
 import org.graphics.Graphics;
@@ -13,6 +12,8 @@ import org.graphics.Graphics;
 public class Collider {
 
 	public static float minColliderPointSpacing = .125f;
+	
+	public ArrayList<GameObject> objectsToIgnore = new ArrayList<GameObject>();
 	
 	public ArrayList<Point> pointsOffsets = new ArrayList<Point>();
 	private ArrayList<Point> points = new ArrayList<Point>();
@@ -114,13 +115,25 @@ public class Collider {
 	}
 	
 	public boolean doOverlap(Collider collider) {
+				
+		closestPoints.clear();
+		otherClosestPoints.clear();
 		
 		//Prevents collider from checking collison with itself
 		if(this.equals(collider))
 			return false;
 		
-		closestPoints.clear();
-		otherClosestPoints.clear();
+		for(GameObject object : objectsToIgnore)
+			if(object.uuid.equals(collider.parentObject.uuid))
+				return false;
+		
+		
+		//System.out.println(collider.parentObject.getClass().getSimpleName());
+		
+		if((float) (Math.pow(collider.parentObject.position.x - parentObject.position.x, 2) + Math.pow(collider.parentObject.position.y - parentObject.position.y, 2)) > parentObject.collisionFieldRadius + collider.parentObject.collisionFieldRadius)
+			return false;
+		
+		
 		
 		for(Point point : points) {
 			for(Point otherColliderPoint : collider.points) {
@@ -166,8 +179,6 @@ public class Collider {
 				float h = (egdeEnd.x - edgeStart.x) * (diagStart.y - diagEnd.y) - (diagStart.x - diagEnd.x) * (egdeEnd.y - edgeStart.y);
 				float t1 = ((edgeStart.y - egdeEnd.y) * (diagStart.x - edgeStart.x) + (egdeEnd.x - edgeStart.x) * (diagStart.y - edgeStart.y)) / h;
 				float t2 = ((diagStart.y - diagEnd.y) * (diagStart.x - edgeStart.x) + (diagEnd.x - diagStart.x) * (diagStart.y - edgeStart.y)) / h;
-
-				//System.out.println(t1 + " " + t2);
 				
 				if(t1 >= 0 && t1 < 1 && t2 >= 0 && t2 < 1) {
 					//System.out.println("xOffset = " + (otherColliderPoint.x - point.x));

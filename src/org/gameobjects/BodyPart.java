@@ -59,6 +59,8 @@ public class BodyPart extends Entities{
 		width = pixelWidth / 250;
 		height = width / WHRatio;
 		
+		collisionFieldRadius = Math.max(width / 2, height / 2);
+		
 		//Default width and height
 		WIDTH = width;
 		HEIGHT = height;	
@@ -72,6 +74,12 @@ public class BodyPart extends Entities{
 	
 	public void update() {
 		collides = false;
+		
+		if(parentObject != null && collider.objectsToIgnore.isEmpty()) {
+			for(BodyPart bodyPart : parentObject.bodyPartsHandler.bodyParts) {
+				collider.objectsToIgnore.add(bodyPart);	
+			}
+		}
 		
 		super.update();
 		
@@ -110,6 +118,9 @@ public class BodyPart extends Entities{
 	
 	public void render() {
 		super.render();
+		
+		Graphics.setColor(new Color(255,128,128,255));
+		Graphics.drawCircle(position.x, position.y, collisionFieldRadius, ID.HUD);
 		
 		Graphics.setColor(new Color(255,0,255,255));
 		Graphics.drawRect(centerOfMass.x + position.x, centerOfMass.y + position.y, .05f, .05f);
