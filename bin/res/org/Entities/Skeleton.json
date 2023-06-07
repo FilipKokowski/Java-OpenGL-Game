@@ -135,5 +135,89 @@
                 "jointY":"" 
             }
         }
+    },
+
+    "Side":{
+        "id":"1",
+
+        "Body":{
+            "id":"0",
+            "src":"res/org/scene/entities/Skeleton/Parts/Side/Body.png",
+            "x":"x",
+            "y":"x",
+            "jointWith":"",
+            "jointX":"",
+            "jointY":""
+        },
+
+        "Head":{
+            "id":"1",
+            "src":"res/org/scene/entities/Skeleton/Parts/Side/Head.png",
+            "x":"x",
+            "y":"x",
+            "jointWith":"",
+            "jointX":"",
+            "jointY":"" 
+        },
+
+        "Arm":{
+            "Upper":{
+                "id":"2A",
+                "src":"res/org/scene/entities/Skeleton/Parts/Side/UpperArm.png",
+                "x":"x",
+                "y":"x",
+                "jointWith":"",
+                "jointX":"",
+                "jointY":"" 
+            },
+            "Lower":{
+                "id":"2B",
+                "src":"res/org/scene/entities/Skeleton/Parts/Side/LowerArm.png",
+                "x":"x",
+                "y":"x",
+                "jointWith":"",
+                "jointX":"",
+                "jointY":"" 
+            },
+            "Hand":{
+                "id":"2C",
+                "src":"res/org/scene/entities/Skeleton/Parts/Side/Hand.png",
+                "x":"x",
+                "y":"x",
+                "jointWith":"",
+                "jointX":"",
+                "jointY":"" 
+            }
+        },
+
+        "Leg":{
+            "Upper":{
+                "id":"3A",
+                "src":"res/org/scene/entities/Skeleton/Parts/Side/UpperLeg.png",
+                "x":"x",
+                "y":"x",
+                "jointWith":"",
+                "jointX":"",
+                "jointY":"" 
+            },
+            "Lower":{
+                "id":"3B",
+                "src":"res/org/scene/entities/Skeleton/Parts/Side/LowerLeg.png",
+                "x":"x",
+                "y":"x",
+                "jointWith":"",
+                "jointX":"",
+                "jointY":"" 
+            },
+            "Foot":{
+                "id":"3C",
+                "src":"res/org/scene/entities/Skeleton/Parts/Side/Foot.png",
+                "x":"-0.28125",
+                "y":"-1.015625",
+                "jointWith":"",
+                "jointX":"",
+                "jointY":"" 
+            }
+        }
     }
 }

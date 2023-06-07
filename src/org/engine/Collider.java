@@ -11,13 +11,13 @@ import org.graphics.Graphics;
 
 public class Collider {
 
-	public static float minColliderPointSpacing = .125f;
+	public static float minColliderPointSpacing = .03275f;
 	
 	public ArrayList<GameObject> objectsToIgnore = new ArrayList<GameObject>();
 	
 	public ArrayList<Point> pointsOffsets = new ArrayList<Point>();
 	private ArrayList<Point> points = new ArrayList<Point>();
-	private ConcurrentLinkedQueue<Vertex> axes = new ConcurrentLinkedQueue<Vertex>();
+
 	private GameObject parentObject;
 	
 	private ArrayList<Point> closestPoints = new ArrayList<Point>();
@@ -25,6 +25,17 @@ public class Collider {
 	
 	private ArrayList<Point> closestPointsRender = new ArrayList<Point>();
 	private ArrayList<Point> otherClosestPointsRender = new ArrayList<Point>();
+	
+	public Point collisionFieldPosition = new Point(0,0);
+	public float collisionFieldWidth = 0;
+	public float collisionFieldHeight = 0;
+	public ArrayList<Point> extremes = new ArrayList<Point>();
+	
+	private float minX = 0;
+	private float maxX = 0;
+	
+	private float minY = 0;
+	private float maxY = 0;
 	
 	public Collider(ArrayList<Point> pointsOffsets, GameObject parentObject) {
 		this.parentObject = parentObject;
@@ -38,52 +49,37 @@ public class Collider {
 	public void update() {
 		
 		//System.out.println(convexPolygons.size() + " " + parentObject.getClass().getSimpleName());
-		
 		for(int point = 0; point < points.size(); point++) {
 			points.get(point).x = (float)((pointsOffsets.get(point).x) * Math.cos(Math.toRadians(-parentObject.rotation)) - (pointsOffsets.get(point).y) * Math.sin(Math.toRadians(-parentObject.rotation)) + parentObject.getX());
 			points.get(point).y = (float)((pointsOffsets.get(point).x) * Math.sin(Math.toRadians(-parentObject.rotation)) + (pointsOffsets.get(point).y) * Math.cos(Math.toRadians(-parentObject.rotation)) + parentObject.getY());
-			//System.out.println(parentObject.getClass().getSimpleName() + " - " + parentObject.getX() + " x " + parentObject.getY());
-		}
-		
-		axes.clear();
-		
-		for(int point = 0; point < points.size(); point += 1) {
-			try {
-				axes.offer(new Vertex(-(points.get(point + 1).y - points.get(point).y), points.get(point + 1).x - points.get(point).x));
-			} catch(IndexOutOfBoundsException e) {
-				axes.offer(new Vertex(-(points.get(0).y - points.get(point).y), points.get(0).x - points.get(point).x));
-			}
-		}
-		
-		for(Vertex axis : axes) {
-			
-			boolean duplicate = false;
-			
-			for(Vertex checkedAxis : axes) {
-				if(axis.equals(checkedAxis))
-					continue;
-				
-				if(checkedAxis.x == axis.x && checkedAxis.y == axis.y) {
-					duplicate = true;
-					break;
-				}
-			}
-			
-			if(duplicate) {
-				axes.remove(axis);
-				continue;
-			}
-			
-			double magnitude = Math.sqrt(Math.pow(axis.x, 2) + Math.pow(axis.y, 2));
-			
-			if(magnitude != 0) {
-				axis.x *= 1 / magnitude;
-				axis.y *= 1 / magnitude;
-			}
-			
-			//System.out.println(axis.x + " x " + axis.y);
 		}       
 		
+		maxX = points.get(0).x;
+		minX = points.get(0).x;
+		minY = points.get(0).y;
+		maxY = points.get(0).y;
+		
+		for(Point point : points) {
+			
+			extremes.clear();
+			
+			minX = (point.x < minX) ? point.x : minX;
+			maxX = (point.x > maxX) ? point.x : maxX;
+			
+			minY = (point.y < minY) ? point.y : minY;
+			maxY = (point.y > maxY) ? point.y : maxY;
+		}
+		
+		collisionFieldPosition.x = (maxX + minX) / 2;
+		collisionFieldPosition.y = (maxY + minY) / 2;
+		
+		collisionFieldWidth = (collisionFieldPosition.x - minX) * 2;
+		collisionFieldHeight = (collisionFieldPosition.y - minY) * 2;
+		
+		extremes.add(new Point(maxX, maxY)); //Top left
+		extremes.add(new Point(minX, maxY)); //Top right
+		extremes.add(new Point(minX, minY)); //Bottom right
+		extremes.add(new Point(maxX, minY)); //Bottom left
 	}
 	
 	public void renderAxes(float red,float green,float blue,float alpha) {
@@ -110,6 +106,18 @@ public class Collider {
 			Graphics.setColor(Color.clear());
 		}
 		
+		
+		/*Graphics.Rotate(0);
+		Graphics.setColor(new Color(255,255,255,255));
+		Graphics.drawRect(collisionFieldPosition.x, collisionFieldPosition.y, collisionFieldWidth, collisionFieldHeight);
+		Graphics.setColor(Color.clear());*/
+		
+		for(Point point : extremes) {
+			Graphics.setColor(point.color);
+			Graphics.drawRect(point.x, point.y, .02f, .02f);
+			Graphics.setColor(Color.clear());
+		}
+		
 		closestPointsRender.clear();
 		otherClosestPointsRender.clear();
 	}
@@ -127,29 +135,26 @@ public class Collider {
 			if(object.uuid.equals(collider.parentObject.uuid))
 				return false;
 		
-		
 		//System.out.println(collider.parentObject.getClass().getSimpleName());
 		
-		if((float) (Math.pow(collider.parentObject.position.x - parentObject.position.x, 2) + Math.pow(collider.parentObject.position.y - parentObject.position.y, 2)) > parentObject.collisionFieldRadius + collider.parentObject.collisionFieldRadius)
-			return false;
-		
-		
+		if(!doCollisionFieldsCollide(collider))
+			return false;	
 		
 		for(Point point : points) {
 			for(Point otherColliderPoint : collider.points) {
 				float distance = (float) (Math.pow(otherColliderPoint.x - point.x, 2) + Math.pow(otherColliderPoint.y - point.y, 2));
 				
-				if(distance < .0025f) {
+				if(distance < .00625f) {
 					point.color = new Color(0,255,255,255);
 					otherColliderPoint.color = new Color(255,0,255,255);
 					
-					if(closestPoints.size() > 16) {}
+					if(closestPoints.size() > 32) {}
 					else if(points.size() > 16)
 						closestPoints.add(point);
 					else
 						closestPoints.addAll(points);
 					
-					if(otherClosestPoints.size() > 16) {}
+					if(otherClosestPoints.size() > 32) {}
 					else if(collider.points.size() > 16)
 						otherClosestPoints.add(otherColliderPoint);
 					else
@@ -160,7 +165,6 @@ public class Collider {
 		
 		closestPointsRender.addAll(closestPoints);
 		otherClosestPointsRender.addAll(otherClosestPoints);
-		
 		
 		//System.out.println(closestDistance + " x " + closestPoints.size());
 		//System.out.println(points.get(closestPointFirstPolygonID).x + " x " + points.get(closestPointFirstPolygonID).y);
@@ -182,15 +186,21 @@ public class Collider {
 				
 				if(t1 >= 0 && t1 < 1 && t2 >= 0 && t2 < 1) {
 					//System.out.println("xOffset = " + (otherColliderPoint.x - point.x));
-					parentObject.position.x += (otherColliderPoint.x - point.x);
-					parentObject.velocityX = (parentObject.velocityX > 0 || parentObject.velocityX < 0) ? 0 : parentObject.velocityX;
+					//parentObject.position.x += (otherColliderPoint.x - point.x);
+					//parentObject.velocityX = (parentObject.velocityX > 0 || parentObject.velocityX < 0) ? 0 : parentObject.velocityX;
 
 					return true;
 				}
 			}
 		}
 		
+		
 		return false;
+	}
+	
+	private boolean doCollisionFieldsCollide(Collider collider) {
+		return !(collisionFieldPosition.x + collisionFieldWidth / 2 <= collider.collisionFieldPosition.x - collider.collisionFieldWidth / 2 || collisionFieldPosition.x - collisionFieldWidth / 2 >= collider.collisionFieldPosition.x + collider.collisionFieldWidth / 2 ||
+				collisionFieldPosition.y + collisionFieldHeight / 2 <= collider.collisionFieldPosition.y - collider.collisionFieldHeight / 2 || collisionFieldPosition.y - collisionFieldHeight / 2 >= collider.collisionFieldPosition.y + collider.collisionFieldHeight / 2);
 	}
 	
 	public ArrayList<Point> getCollisonPoints(){

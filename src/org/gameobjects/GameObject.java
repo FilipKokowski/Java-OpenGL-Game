@@ -81,7 +81,6 @@ public class GameObject {
 	public boolean collides = false;
 	
 	//Field in which collision will be checked
-	public ArrayList<Float> collisionFields = new ArrayList<Float>();
 	public float collisionFieldRadius = 0;
 	
 	private Point lastColliderPos = new Point();
@@ -138,13 +137,7 @@ public class GameObject {
 		
 		System.out.println(centerOfMass.x + " x " + centerOfMass.y);
 		
-		collisionFieldRadius = Math.min(width / 2 + width / 6, height / 2 + .1f + height / 6);
-		
-		if(collisionFieldRadius == width / 2) {
-			
-		}
-		
-		System.out.println(collisionFieldRadius);
+		collisionFieldRadius = Math.max(width / 2 + width / 6, height / 2 + height / 6);
 		
 		//System.out.println(bounds.size() + ": " + this.getClass().getSimpleName());
 		

@@ -72,9 +72,9 @@ public class Obstacle extends GameObject{
 	}
 	
 	public void render() {
-		Graphics.setColor(new Color(255,128,128,255));
+		/*Graphics.setColor(new Color(255,128,128,255));
 		Graphics.drawCircle(position.x, position.y, collisionFieldRadius, ID.HUD);
-		Graphics.setColor(Color.clear());
+		Graphics.setColor(Color.clear());*/
 		
 		if(imagePath.equals("")) {
 			Graphics.setColor(color.red, color.green, color.blue, color.alpha);
@@ -92,7 +92,7 @@ public class Obstacle extends GameObject{
 			super.render();
 		}
 		
-		//collider.renderAxes(255,255,255,255);
+		collider.renderAxes(255,255,255,255);
 	}
 	
 	public void collisionOn() { collisionEnabled = true; }

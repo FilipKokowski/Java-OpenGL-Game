@@ -31,7 +31,7 @@ public class Main {
 		Handler.addGO(obstacle2);
 	
 		for(float i = 0; i < 4; i += .6f) {
-			Obstacle obstacle3 = new Obstacle(1.5f + i, onGround(.8f) + .2f, .4f, 8f, "");
+			Obstacle obstacle3 = new Obstacle(1.5f + i, onGround(.8f) + .2f, .4f, .8f, "");
 			obstacle3.setColor(220, 127, 80, 127);
 			Handler.addGO(obstacle3);
 		}
