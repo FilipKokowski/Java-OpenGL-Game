@@ -23,12 +23,9 @@ public class HUD extends GameObject {
 	private boolean clicked;
 
 	public HUD(float x, float y, float width, float height, boolean interactable) {
-		super(x, y, width, height, "");
-		// TODO Auto-generated constructor stub
-		
+		super(x, y, width, height, "", ID.HUD);
+
 		this.interactable = interactable;
-		
-		id = ID.HUD;
 		
 		fontSize = 24;
 		setCustomFont("res/org/fonts/pixelmix.ttf");

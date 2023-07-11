@@ -69,9 +69,8 @@ public class GameObject {
 	public float textOffsetX = 0;
 	public float textOffsetY = 0;
 	
-	public ArrayList<Point> bounds;
-	public ArrayList<Point> boundsOffsets;
-	
+	public Polygon bounds;
+
 	public Point centerOfMass = new Point(0,0);
 	
 	public BodyPartsHandler bodyPartsHandler;
@@ -99,11 +98,12 @@ public class GameObject {
 	
 	public static int updated = 0;
 	
-	public GameObject(float x, float y, float width, float height, String src) {
+	public GameObject(float x, float y, float width, float height, String src, ID id) {
 		this.position.x = x;
 		this.position.y = y;
 		this.width = width;
 		this.height = height;
+		this.id = id;
 		
 		color = new Color(255, 255, 255, 255);
 		
@@ -118,24 +118,45 @@ public class GameObject {
 		this.animationPath = src;
 		this.txt = new ImageResource(src);
 		
-		boundsOffsets = txt.getImageBounds();
+		bounds = new Polygon(txt.getImageBounds());
 		
-		if(boundsOffsets.size() == 0)
-			boundsOffsets = getBounds();
+		if(bounds.vertices.size() == 0) 
+			bounds.vertices = getBounds();
 		
-		System.out.println(this.getClass().getSimpleName() + " bounds size: "+ boundsOffsets.size());
+		if(id != ID.HUD)
+			bounds.vertices = ImageResource.organizePoints(bounds.vertices, this);
 		
-		bounds = new ArrayList<Point>();
+		this.txt.addToStash();
 		
-		for(Point point : boundsOffsets) {
-			bounds.add(point.clone());
+		if(id == ID.Player || id == ID.Obstacle) {
+			
+			Point firstPoint = null;
+			Point secondPoint = null;
+			
+			for(int point = 1; point < bounds.vertices.size() - 1; point++) {
+				Vertex v1 = new Vertex(bounds.vertices.get(point).x - bounds.vertices.get(point - 1).x, bounds.vertices.get(point).y - bounds.vertices.get(point - 1).y);
+				Vertex v2 = new Vertex(bounds.vertices.get(point + 1).x - bounds.vertices.get(point).x, bounds.vertices.get(point + 1).y - bounds.vertices.get(point).y);
+				
+				double angle = Math.toDegrees(Math.atan2(v2.y, v2.x) - Math.atan2(v1.y, v1.x));
+				
+				angle = angle < 0 ? 360 + angle : angle;
+				
+				if(angle > 180) {
+					bounds.vertices.get(point).color = new Color(0, 255, 0, 255);
+					System.out.println(angle + " " + this.getClass().getSimpleName());	
+				}
+				
+				//System.out.println(Math.toDegrees(Math.atan2(v2.y, v2.x) - Math.atan2(v1.y, v1.x)));
+				
+			}
 		}
-		
-		collider = new Collider(bounds, this);
+		//System.out.println(this.getClass().getSimpleName() + " bounds size: "+ bounds.vertices.size());
+
+		collider = new Collider(bounds.vertices, this);
 		
 		centerOfMass = txt.centerOfMass;
 		
-		System.out.println(centerOfMass.x + " x " + centerOfMass.y);
+		//System.out.println(centerOfMass.x + " x " + centerOfMass.y);
 		
 		collisionFieldRadius = Math.max(width / 2 + width / 6, height / 2 + height / 6);
 		
@@ -163,12 +184,14 @@ public class GameObject {
 			if(EventListener.renderBounds && showBounds) {
 				//System.out.println(this.getClass().getSimpleName() + " complex bounds rendering (UUID: " + uuid + ")");
 				
-				Graphics.setColor(1, 0, 0, 1);
 				
-				for(int point = 0; point < bounds.size() - 1; point++) {
+				
+				for(int point = 0; point < bounds.vertices.size() - 1; point++) {
+					Graphics.setColor(bounds.vertices.get(point).color);
 					//Calculating position of x and y after rotating
-					float x = (float)((bounds.get(point).x) * Math.cos(Math.toRadians(-rotation)) - (bounds.get(point).y) * Math.sin(Math.toRadians(-rotation)) + this.position.x);
-					float y = (float)((bounds.get(point).x) * Math.sin(Math.toRadians(-rotation)) + (bounds.get(point).y) * Math.cos(Math.toRadians(-rotation)) + this.position.y);
+					float x = (float)((bounds.vertices.get(point).x) * Math.cos(Math.toRadians(-rotation)) - (bounds.vertices.get(point).y) * Math.sin(Math.toRadians(-rotation)) + this.position.x);
+					float y = (float)((bounds.vertices.get(point).x) * Math.sin(Math.toRadians(-rotation)) + (bounds.vertices.get(point).y) * Math.cos(Math.toRadians(-rotation)) + this.position.y);
+					
 					Graphics.drawRect(x, y, .01f, .01f);
 					//Graphics.drawLine(x + bounds.get(point).x, y + bounds.get(point).y, x + bounds.get(point + 1).x , y + bounds.get(point + 1).y, id);
 				}
@@ -268,7 +291,7 @@ public class GameObject {
 	//Scales points inside bounds array to fit rescaled object
 	public void scaleBounds(float width, float height) {	
 		try {
-			for(Point point : bounds) {
+			for(Point point : bounds.vertices) {
 				point.x *= width / (txt.getWidth() / Renderer.pixelsPerUnit);
 				point.y *= height / (txt.getHeight() / Renderer.pixelsPerUnit);
 			}

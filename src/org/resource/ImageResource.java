@@ -10,6 +10,7 @@ import java.util.HashMap;
 
 import javax.imageio.ImageIO;
 
+import org.gameobjects.GameObject;
 import org.gameobjects.Point;
 import org.graphics.Renderer;
 
@@ -20,6 +21,7 @@ public class ImageResource {
 	
 	private Texture texture = null;
 	private BufferedImage img = null;
+	private String path = "";
 	
 	private BufferedImage currentImg = null;
 	private BufferedImage mask = null;
@@ -34,6 +36,8 @@ public class ImageResource {
 	public ImageResource(String path) {
 		
 		if(path == null) return;
+		
+		this.path = path;
 	 
 		InputStream url = getClass().getClassLoader().getResourceAsStream(path);
 		
@@ -49,7 +53,7 @@ public class ImageResource {
             
             if(loadedImages.containsKey(path)) {
 				boundsList = loadedImages.get(path);
-				System.out.println(path + " found in stash");
+				//System.out.println(path + " found in stash");
 			} else {
 				
 				if(extension.equals("png")) {
@@ -92,7 +96,7 @@ public class ImageResource {
 	
 					centerOfMass = new Point(centerOfMassX / 1, centerOfMassY / 1);
 					
-					System.out.println(centerOfMass.x + " x " + centerOfMass.y);
+					//System.out.println(centerOfMass.x + " x " + centerOfMass.y);
 					
 					//Simplifying polygons
 					ArrayList<Point> pickedCoords = new ArrayList<Point>();
@@ -104,59 +108,15 @@ public class ImageResource {
 					boundsList = pickedCoords;
 					
 					//Math.sqrt(Math.pow(boundsList.get(closestID).get(1) - boundsList.get(point).get(1), 2) + Math.pow(boundsList.get(closestID).get(0) - boundsList.get(point).get(0), 2))
-					
-					
-						ArrayList<Point> checkedPoints = new ArrayList<Point>();
-						
-						//Organizing points
-						int currentPointID = 0;
-						
-						while(checkedPoints.size() <= boundsList.size()) {
-							int closestDistancePointID = 1;
-							double closestDistance = 100;
-							
-							
-							for(int pointID = 0; pointID < boundsList.size(); pointID++) {
-								if(currentPointID == pointID) continue;
-								
-								double distance = Math.sqrt(Math.pow(boundsList.get(pointID).y - boundsList.get(currentPointID).y, 2) + Math.pow(boundsList.get(pointID).x - boundsList.get(currentPointID).x, 2));
-								
-								Point point = new Point(boundsList.get(pointID).x, boundsList.get(pointID).y);
-	
-								if(distance < closestDistance){
-									boolean pointReckognized = false;
-									
-									for(Point checkedPoint : checkedPoints) {
-										if(checkedPoint.x == point.x && checkedPoint.y == point.y)
-											pointReckognized = true;
-									}
-									
-									if(!pointReckognized) {
-										closestDistance = distance;
-										closestDistancePointID = pointID;
-									}
-									//System.out.println(pointID);
-								}
-							}
-							
-							currentPointID = closestDistancePointID;
-							
-							Point point = new Point(boundsList.get(closestDistancePointID).x, boundsList.get(closestDistancePointID).y);
-							checkedPoints.add(point);
-							
-							//System.out.println(closestDistancePointID);
-						}
-						boundsList = checkedPoints;
-						
-						loadedImages.put(path, boundsList);
-					}
-					//System.out.println(boundsList);
+
 				}
+				//System.out.println(boundsList);
+			}
 			
 			} catch (IOException e) {
 				e.printStackTrace();
 			} catch (NullPointerException e) {
-				System.out.println("abdwunawd");
+				//System.out.println("abdwunawd");
 			}	
 		
 		if(img != null) {
@@ -201,6 +161,53 @@ public class ImageResource {
 	
 	public float getHeight() {
 		return img.getHeight();
+	}
+	
+	public static ArrayList<Point> organizePoints(ArrayList<Point> boundsList, GameObject parent) {
+		
+		ArrayList<Point> checkedPoints = new ArrayList<Point>();
+		
+		//Organizing points
+		int currentPointID = 0;
+		
+		while(checkedPoints.size() <= boundsList.size()) {
+			int closestDistancePointID = 1;
+			double closestDistance = 100;
+			
+			
+			for(int pointID = 0; pointID < boundsList.size(); pointID++) {
+				if(currentPointID == pointID) continue;
+				
+				double distance = Math.sqrt(Math.pow(boundsList.get(pointID).y - boundsList.get(currentPointID).y, 2) + Math.pow(boundsList.get(pointID).x - boundsList.get(currentPointID).x, 2));
+				
+				Point point = new Point(boundsList.get(pointID).x, boundsList.get(pointID).y);
+
+				if(distance < closestDistance){
+					boolean pointReckognized = false;
+					
+					for(Point checkedPoint : checkedPoints) {
+						if(checkedPoint.x == point.x && checkedPoint.y == point.y)
+							pointReckognized = true;
+					}
+					
+					if(!pointReckognized) {
+						closestDistance = distance;
+						closestDistancePointID = pointID;
+					}
+				}
+			}
+			
+			currentPointID = closestDistancePointID;
+			
+			Point point = new Point(boundsList.get(closestDistancePointID).x, boundsList.get(closestDistancePointID).y);
+			checkedPoints.add(point);
+		}
+		
+		return checkedPoints;
+	}
+	
+	public void addToStash() {
+		loadedImages.put(path, boundsList);
 	}
 	
 }

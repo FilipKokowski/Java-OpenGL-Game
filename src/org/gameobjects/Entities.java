@@ -38,8 +38,8 @@ public class Entities extends GameObject {
 	
 	public Vertex dir = new Vertex(0,0);
 	
-	public Entities(float x, float y, float width, float height, String textureSrc) {
-		super(x, y, width, height, textureSrc);
+	public Entities(float x, float y, float width, float height, String textureSrc, ID id) {
+		super(x, y, width, height, textureSrc, id);
 	}
 	
 	public void gravity() { velocityY -= mass/G; };

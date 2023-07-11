@@ -38,7 +38,7 @@ public class BodyPart extends Entities{
 	public boolean collides = false;
 	
 	public BodyPart(String src, String sideID, String partID, String xOffset, String yOffset, String jointWithID, String jointOffsetX, String jointOffsetY) throws IOException {
-		super(0, 0, 0, 0, src);
+		super(0, 0, 0, 0, src, ID.BodyPart);
 		
 		this.texture = new ImageResource(src);
 		this.textureSrc = src;

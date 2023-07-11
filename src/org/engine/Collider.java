@@ -148,14 +148,14 @@ public class Collider {
 					point.color = new Color(0,255,255,255);
 					otherColliderPoint.color = new Color(255,0,255,255);
 					
-					if(closestPoints.size() > 32) {}
-					else if(points.size() > 16)
+					if(closestPoints.size() > 128) {}
+					else if(points.size() > 32)
 						closestPoints.add(point);
 					else
 						closestPoints.addAll(points);
 					
-					if(otherClosestPoints.size() > 32) {}
-					else if(collider.points.size() > 16)
+					if(otherClosestPoints.size() > 128) {}
+					else if(collider.points.size() > 32)
 						otherClosestPoints.add(otherColliderPoint);
 					else
 						otherClosestPoints.addAll(collider.points);

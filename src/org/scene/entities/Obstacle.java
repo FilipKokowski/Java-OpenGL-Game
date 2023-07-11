@@ -22,9 +22,7 @@ public class Obstacle extends GameObject{
 	private float textOffsetY = 0;
 	
 	public Obstacle(float x, float y, float width, float height, String path) {
-		super(x, y, width, height, path);
-		
-		id = ID.Obstacle;
+		super(x, y, width, height, path, ID.Obstacle);
 		
 		imagePath = path;
 		
@@ -34,7 +32,7 @@ public class Obstacle extends GameObject{
 		
 		text = uuid;
 		
-		if(imagePath.equals("")) bounds = getBounds();
+		if(imagePath.equals("")) bounds.vertices = getBounds();
 		else scaleBounds(width, height);
 		
 		if(collider.pointsOffsets.size() != 4)
@@ -92,7 +90,20 @@ public class Obstacle extends GameObject{
 			super.render();
 		}
 		
-		collider.renderAxes(255,255,255,255);
+		//collider.renderAxes(255,255,255,255);
+		
+		for(int point = 0; point < bounds.vertices.size() - 1; point++) {
+			Graphics.setColor(bounds.vertices.get(point).color);
+			//Calculating position of x and y after rotating
+			float x = (float)((bounds.vertices.get(point).x) * Math.cos(Math.toRadians(-rotation)) - (bounds.vertices.get(point).y) * Math.sin(Math.toRadians(-rotation)) + this.position.x);
+			float y = (float)((bounds.vertices.get(point).x) * Math.sin(Math.toRadians(-rotation)) + (bounds.vertices.get(point).y) * Math.cos(Math.toRadians(-rotation)) + this.position.y);
+			
+			Graphics.drawRect(x, y, .01f, .01f);
+			//Graphics.drawLine(x + bounds.get(point).x, y + bounds.get(point).y, x + bounds.get(point + 1).x , y + bounds.get(point + 1).y, id);
+		}
+		
+		
+		Graphics.setColor(1, 1, 1, 1);
 	}
 	
 	public void collisionOn() { collisionEnabled = true; }

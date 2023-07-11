@@ -28,7 +28,7 @@ public class Player extends Entities{
 	private static String imagePath = "";
 	
 	public Player(){
-		super(0, 0, initialWidth, initialHeight, imagePath);
+		super(0, 0, initialWidth, initialHeight, imagePath, ID.Player);
 		
 		HEIGHT = initialHeight;
 		WIDTH = initialWidth;
@@ -43,13 +43,13 @@ public class Player extends Entities{
 		speed = 3;
 		speedCap = 1.5f;
 		
-		collisionOn = false;
+		collisionOn = true;
 		
 		reloadCrouchHeight();
 		reloadCrouchJumpForce();
 		reloadCrouchSpeedCap();
 		
-		bodyPartsHandler = new BodyPartsHandler("res/org/Entities/Skeleton.json");
+		//bodyPartsHandler = new BodyPartsHandler("res/org/Entities/Skeleton.json");
 		
 		fontSize = 16;
 		setCustomFont("res/org/fonts/pixelmix.ttf");
@@ -59,18 +59,28 @@ public class Player extends Entities{
 	public void render() {
 		if(imagePath.equals("")) {
 			Graphics.Rotate(-rotation);
-			Graphics.setColor(0, 0, 0, 0);
+			Graphics.setColor(0, 0, 0, 1);
 			Graphics.drawRect(position.x, position.y, width, height);
 			Graphics.setColor(Color.clear());
 			Graphics.Rotate(0);
 
 		}
-		else {
-			super.render();
+		else super.render();
+		
+		for(int point = 0; point < bounds.vertices.size() - 1; point++) {
+			Graphics.setColor(bounds.vertices.get(point).color);
+			//Calculating position of x and y after rotating
+			float x = (float)((bounds.vertices.get(point).x) * Math.cos(Math.toRadians(-rotation)) - (bounds.vertices.get(point).y) * Math.sin(Math.toRadians(-rotation)) + this.position.x);
+			float y = (float)((bounds.vertices.get(point).x) * Math.sin(Math.toRadians(-rotation)) + (bounds.vertices.get(point).y) * Math.cos(Math.toRadians(-rotation)) + this.position.y);
+			
+			Graphics.drawRect(x, y, .01f, .01f);
+			//Graphics.drawLine(x + bounds.get(point).x, y + bounds.get(point).y, x + bounds.get(point + 1).x , y + bounds.get(point + 1).y, id);
 		}
 		
+		
+		Graphics.setColor(1, 1, 1, 1);
+		
 	}
-	
 	
 	@Override
 	public void update() {
@@ -83,16 +93,16 @@ public class Player extends Entities{
 		
 		text = "("+ position.x + "/" + position.y +")";
 		
-		bodyPartsHandler.passPosition(this);
+		//bodyPartsHandler.passPosition(this);
 				
 		if(KeyInput.getKey(KeyEvent.VK_G)) {
 			//System.out.println("collapse");
-			bodyPartsHandler.collapse();
+			//bodyPartsHandler.collapse();
 		}
 		
 		if(KeyInput.getKey(KeyEvent.VK_H)) {
 			//System.out.println("collapse");
-			bodyPartsHandler.assemble();
+			//bodyPartsHandler.assemble();
 		}
 		
 		float shiftX = 0;
@@ -112,7 +122,7 @@ public class Player extends Entities{
 			shiftY = .5f;
 		}
 		
-		bodyPartsHandler.moveJoint(shiftY, shiftX, "1");
+		//bodyPartsHandler.moveJoint(shiftY, shiftX, "1");
 		
 		//If player's not moving play idle animation
 		if(!KeyInput.getKey(KeyEvent.VK_A) && !KeyInput.getKey(KeyEvent.VK_D)) { 

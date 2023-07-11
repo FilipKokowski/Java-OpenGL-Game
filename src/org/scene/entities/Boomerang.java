@@ -32,9 +32,7 @@ public class Boomerang extends Entities{
 	//public HUD cooldownBarTop = new HUD(-(Renderer.unitsWide / 2) + 1.125f, Main.onGround(.25f) + .125f, 1, .25f);
 
 	public Boomerang(float x, float y, float width, float height) {
-		super(x, y, width, height, animationPath);
-		
-		id = ID.Projectile;
+		super(x, y, width, height, animationPath, ID.Projectile);
 		
 		x0 = x;
 		y0 = y + verticalRotationRadius;
