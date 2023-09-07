@@ -5,8 +5,9 @@ import java.util.concurrent.ConcurrentLinkedQueue;
 
 import org.gameobjects.Color;
 import org.gameobjects.GameObject;
+import org.gameobjects.ID;
 import org.gameobjects.Point;
-import org.gameobjects.Vertex;
+import org.gameobjects.Vector;
 import org.graphics.Graphics;
 
 public class Collider {
@@ -36,6 +37,8 @@ public class Collider {
 	
 	private float minY = 0;
 	private float maxY = 0;
+	
+	public Point lastNonCollisionPos = new Point(0,0);
 	
 	public Collider(ArrayList<Point> pointsOffsets, GameObject parentObject) {
 		this.parentObject = parentObject;
@@ -122,7 +125,9 @@ public class Collider {
 		otherClosestPointsRender.clear();
 	}
 	
-	public boolean doOverlap(Collider collider) {
+	public boolean doOverlap(Collider collider, boolean resolveCollision) {
+		
+		Point checkedPosition;
 				
 		closestPoints.clear();
 		otherClosestPoints.clear();
@@ -135,10 +140,10 @@ public class Collider {
 			if(object.uuid.equals(collider.parentObject.uuid))
 				return false;
 		
-		//System.out.println(collider.parentObject.getClass().getSimpleName());
-		
-		if(!doCollisionFieldsCollide(collider))
+		//Only checks collisions if objects collsionFields are overlaping each other
+		if(!doCollisionFieldsCollide(collider)) 
 			return false;	
+		
 		
 		for(Point point : points) {
 			for(Point otherColliderPoint : collider.points) {
@@ -185,18 +190,15 @@ public class Collider {
 				float t2 = ((diagStart.y - diagEnd.y) * (diagStart.x - edgeStart.x) + (diagEnd.x - diagStart.x) * (diagStart.y - edgeStart.y)) / h;
 				
 				if(t1 >= 0 && t1 < 1 && t2 >= 0 && t2 < 1) {
-					//System.out.println("xOffset = " + (otherColliderPoint.x - point.x));
-					//parentObject.position.x += (otherColliderPoint.x - point.x);
-					//parentObject.velocityX = (parentObject.velocityX > 0 || parentObject.velocityX < 0) ? 0 : parentObject.velocityX;
-
 					return true;
 				}
 			}
+			
 		}
-		
 		
 		return false;
 	}
+	
 	
 	private boolean doCollisionFieldsCollide(Collider collider) {
 		return !(collisionFieldPosition.x + collisionFieldWidth / 2 <= collider.collisionFieldPosition.x - collider.collisionFieldWidth / 2 || collisionFieldPosition.x - collisionFieldWidth / 2 >= collider.collisionFieldPosition.x + collider.collisionFieldWidth / 2 ||

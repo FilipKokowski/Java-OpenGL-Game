@@ -36,7 +36,7 @@ public class Entities extends GameObject {
 	public boolean collisionU = false;
 	public boolean collisionD = false;
 	
-	public Vertex dir = new Vertex(0,0);
+	public Vector dir = new Vector(0,0);
 	
 	public Entities(float x, float y, float width, float height, String textureSrc, ID id) {
 		super(x, y, width, height, textureSrc, id);
@@ -95,11 +95,11 @@ public class Entities extends GameObject {
 						//System.out.println(collider.doCollide(tempObj.collider) + " " + tempObj.id);
 						
 						//Check if objects ID is ID.Obstacle and is intersecting with entity
-						if(collisionOn && tempObj.collisionOn && collider.doOverlap(tempObj.collider)){
+						if(collisionOn && tempObj.collisionOn && collider.doOverlap(tempObj.collider, true)){
 							
-							System.out.println("Collide with " + tempObj.uuid);
+							//System.out.println("Collide with " + tempObj.uuid);
 							
-							velocityY = 5;
+							//velocityY = 5;
 							//velocityX = (velocityX > 0) ? (-velocityX * 2) : velocityX;
 							//System.out.println("Collision with " + tempObj.getClass().getSimpleName() + " " + tempObj.uuid);
 							/*//If entity is more to the left side of obstacle, trigger left collisionW
@@ -184,9 +184,9 @@ public class Entities extends GameObject {
 						//System.out.println(this.getClass().getSimpleName() + " " + collider.minkowskiDiff(tempObj.collider, dir).x  +  " x " + collider.minkowskiDiff(tempObj.collider, dir).y);
 							
 						//System.out.println("Player: " + collider.parentObject.getX() + "/nObstacle: " + tempObj.collider.parentObject.getX() + ": " + collider.doCollide(tempObj.collider));
-						if(collisionOn && tempObj.collisionOn && collider.doOverlap(tempObj.collider)){
-							System.out.println("Collide with " + tempObj.uuid);
-							velocityY = 5;
+						if(collisionOn && tempObj.collisionOn && collider.doOverlap(tempObj.collider, true)){
+							//System.out.println("Collide with " + tempObj.uuid);
+							//velocityY = 5;
 							//velocityX = (velocityX > 0) ? (-velocityX * 2) : velocityX;
 							/*velocityX = 0;
 							//System.out.println("Touching");

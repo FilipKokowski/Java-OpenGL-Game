@@ -59,8 +59,6 @@ public class BodyPart extends Entities{
 		width = pixelWidth / 250;
 		height = width / WHRatio;
 		
-		collisionFieldRadius = Math.max(width / 2 + width / 6, height / 2 + height / 6);
-		
 		//Default width and height
 		WIDTH = width;
 		HEIGHT = height;	
@@ -106,13 +104,6 @@ public class BodyPart extends Entities{
 			text = String.valueOf(velocityY);
 		else
 			text = "";
-		
-		//velocityX = -.5f;
-		
-		//System.out.println(collider.convexPolygons.size() + " " + partID);
-		
-		//System.out.println(collides);
-		
 		
 	}
 	

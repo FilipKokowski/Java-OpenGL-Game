@@ -7,6 +7,7 @@ import java.awt.geom.Rectangle2D;
 import java.io.IOException;
 import java.util.ArrayList;
 import java.util.Iterator;
+import java.util.Random;
 import java.util.UUID;
 
 import org.engine.AnimationHandler;
@@ -79,9 +80,6 @@ public class GameObject {
 	public boolean collisionOn = true;
 	public boolean collides = false;
 	
-	//Field in which collision will be checked
-	public float collisionFieldRadius = 0;
-	
 	private Point lastColliderPos = new Point();
 	private float lastColliderRotation = 0;
 	
@@ -105,6 +103,8 @@ public class GameObject {
 		this.height = height;
 		this.id = id;
 		
+		Random random = new Random();
+		
 		color = new Color(255, 255, 255, 255);
 		
 		lastColliderPos.x = this.position.x;
@@ -127,42 +127,12 @@ public class GameObject {
 			bounds.vertices = ImageResource.organizePoints(bounds.vertices, this);
 		
 		this.txt.addToStash();
-		
-		if(id == ID.Player || id == ID.Obstacle) {
-			
-			Point firstPoint = null;
-			Point secondPoint = null;
-			
-			for(int point = 1; point < bounds.vertices.size() - 1; point++) {
-				Vertex v1 = new Vertex(bounds.vertices.get(point).x - bounds.vertices.get(point - 1).x, bounds.vertices.get(point).y - bounds.vertices.get(point - 1).y);
-				Vertex v2 = new Vertex(bounds.vertices.get(point + 1).x - bounds.vertices.get(point).x, bounds.vertices.get(point + 1).y - bounds.vertices.get(point).y);
-				
-				double angle = Math.toDegrees(Math.atan2(v2.y, v2.x) - Math.atan2(v1.y, v1.x));
-				
-				angle = angle < 0 ? 360 + angle : angle;
-				
-				if(angle > 180) {
-					bounds.vertices.get(point).color = new Color(0, 255, 0, 255);
-					System.out.println(angle + " " + this.getClass().getSimpleName());	
-				}
-				
-				//System.out.println(Math.toDegrees(Math.atan2(v2.y, v2.x) - Math.atan2(v1.y, v1.x)));
-				
-			}
-		}
-		//System.out.println(this.getClass().getSimpleName() + " bounds size: "+ bounds.vertices.size());
 
 		collider = new Collider(bounds.vertices, this);
 		
 		centerOfMass = txt.centerOfMass;
 		
-		//System.out.println(centerOfMass.x + " x " + centerOfMass.y);
 		
-		collisionFieldRadius = Math.max(width / 2 + width / 6, height / 2 + height / 6);
-		
-		//System.out.println(bounds.size() + ": " + this.getClass().getSimpleName());
-		
-		//System.out.println(this.getClass().getSimpleName() + ": " + bounds);
 	}
 	
 	public void update() {
@@ -183,8 +153,6 @@ public class GameObject {
 			
 			if(EventListener.renderBounds && showBounds) {
 				//System.out.println(this.getClass().getSimpleName() + " complex bounds rendering (UUID: " + uuid + ")");
-				
-				
 				
 				for(int point = 0; point < bounds.vertices.size() - 1; point++) {
 					Graphics.setColor(bounds.vertices.get(point).color);

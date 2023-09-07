@@ -91,19 +91,7 @@ public class Obstacle extends GameObject{
 		}
 		
 		//collider.renderAxes(255,255,255,255);
-		
-		for(int point = 0; point < bounds.vertices.size() - 1; point++) {
-			Graphics.setColor(bounds.vertices.get(point).color);
-			//Calculating position of x and y after rotating
-			float x = (float)((bounds.vertices.get(point).x) * Math.cos(Math.toRadians(-rotation)) - (bounds.vertices.get(point).y) * Math.sin(Math.toRadians(-rotation)) + this.position.x);
-			float y = (float)((bounds.vertices.get(point).x) * Math.sin(Math.toRadians(-rotation)) + (bounds.vertices.get(point).y) * Math.cos(Math.toRadians(-rotation)) + this.position.y);
-			
-			Graphics.drawRect(x, y, .01f, .01f);
-			//Graphics.drawLine(x + bounds.get(point).x, y + bounds.get(point).y, x + bounds.get(point + 1).x , y + bounds.get(point + 1).y, id);
-		}
-		
-		
-		Graphics.setColor(1, 1, 1, 1);
+	
 	}
 	
 	public void collisionOn() { collisionEnabled = true; }

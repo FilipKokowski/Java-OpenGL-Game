@@ -2,14 +2,14 @@ package org.gameobjects;
 
 import org.graphics.Graphics;
 
-public class Vertex {
+public class Vector {
 
 	public float x = 0;
 	public float y = 0;
 	
 	private Color color = new Color(255, 255, 255, 255);
 	
-	public Vertex(float x, float y) {
+	public Vector(float x, float y) {
 		this.x = x;
 		this.y = y;
 	}
@@ -22,7 +22,7 @@ public class Vertex {
 		return (float)(x * point.x + y * point.y);
 	}
 	
-	public float dotProduct(Vertex vertex) {
+	public float dotProduct(Vector vertex) {
 		return (float)(x * vertex.x + y * vertex.y);
 	}
 	
@@ -30,8 +30,8 @@ public class Vertex {
 		return (float)(x * point.x - y * point.y);
 	}
 	
-	public Vertex clone() {
-		return new Vertex(x,y);
+	public Vector clone() {
+		return new Vector(x,y);
     }
 	
 	public void print() {
