@@ -126,8 +126,6 @@ public class Collider {
 	}
 	
 	public boolean doOverlap(Collider collider, boolean resolveCollision) {
-		
-		Point checkedPosition;
 				
 		closestPoints.clear();
 		otherClosestPoints.clear();
@@ -190,11 +188,32 @@ public class Collider {
 				float t2 = ((diagStart.y - diagEnd.y) * (diagStart.x - edgeStart.x) + (diagEnd.x - diagStart.x) * (diagStart.y - edgeStart.y)) / h;
 				
 				if(t1 >= 0 && t1 < 1 && t2 >= 0 && t2 < 1) {
+					
+					if(resolveCollision && collider.parentObject.moveable) {
+					
+						collider.parentObject.position.x += parentObject.movementVector.x;
+						//collider.parentObject.position.y += parentObject.movementVector.y;
+						
+						//doOverlap(collider, true);
+						return false;
+					}
+					else if(resolveCollision) {
+						parentObject.position.y -= parentObject.movementVector.y / 10;
+						parentObject.velocityY = 0;
+						
+						doOverlap(collider, true);
+						
+						System.out.println(parentObject.movementVector.x + " x " + parentObject.movementVector.y);
+						
+					}
+					
 					return true;
 				}
 			}
 			
 		}
+		
+		
 		
 		return false;
 	}

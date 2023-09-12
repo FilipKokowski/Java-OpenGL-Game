@@ -3,8 +3,6 @@ package org.gameobjects;
 import java.io.IOException;
 
 import org.engine.GameLoop;
-import org.engine.Handler;
-import org.graphics.Graphics;
 import org.resource.ImageResource;
 
 public class BodyPart extends Entities{
@@ -104,6 +102,7 @@ public class BodyPart extends Entities{
 			text = String.valueOf(velocityY);
 		else
 			text = "";
+		
 		
 	}
 	

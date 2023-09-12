@@ -2,15 +2,13 @@ package org.scene.entities;
 
 import java.awt.Font;
 
-import org.engine.GameLoop;
-import org.gameobjects.Color;
-import org.gameobjects.GameObject;
+import org.gameobjects.Entities;
 import org.gameobjects.ID;
 import org.graphics.EventListener;
 import org.graphics.Graphics;
 
 
-public class Obstacle extends GameObject{
+public class Obstacle extends Entities{
 
 	private String imagePath = "";
 	
@@ -21,8 +19,10 @@ public class Obstacle extends GameObject{
 	private float textOffsetX = 0;
 	private float textOffsetY = 0;
 	
-	public Obstacle(float x, float y, float width, float height, String path) {
+	public Obstacle(float x, float y, float width, float height, boolean moveable, String path) {
 		super(x, y, width, height, path, ID.Obstacle);
+		
+		this.moveable = moveable;
 		
 		imagePath = path;
 		
@@ -40,6 +40,8 @@ public class Obstacle extends GameObject{
 	}
 	
 	public void update() {
+		
+		applyPhysics(moveable, moveable);
 		
 		deactiveteWhenOutOfView();
 		if(!outOfView) {

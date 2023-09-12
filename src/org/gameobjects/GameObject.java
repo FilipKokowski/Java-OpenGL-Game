@@ -33,6 +33,9 @@ public class GameObject {
 	protected float width = 1;
 	protected float height = 1;
 	
+	public Vector movementVector = new Vector(0,0);
+	public Point lastObjPosition = new Point(0,0);
+	
 	public boolean onGround = false;
 	
 	protected float offsetFromMiddleX = 0;
@@ -82,6 +85,8 @@ public class GameObject {
 	
 	private Point lastColliderPos = new Point();
 	private float lastColliderRotation = 0;
+	
+	public boolean moveable = false;
 	
 	public boolean outOfView = false;
 
@@ -136,6 +141,12 @@ public class GameObject {
 	}
 	
 	public void update() {
+		movementVector.x = position.x - lastObjPosition.x;
+		movementVector.y = position.y - lastObjPosition.y;
+		
+		lastObjPosition.x = position.x;
+		lastObjPosition.y = position.y;
+		
 		if(lastColliderPos.x != position.x || lastColliderPos.y != position.y || lastColliderRotation != rotation) {
 			lastColliderPos.x = position.x;
 			lastColliderPos.y = position.y;
