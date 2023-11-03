@@ -6,6 +6,7 @@ import java.awt.event.KeyEvent;
 import java.awt.geom.Rectangle2D;
 import java.io.IOException;
 import java.util.ArrayList;
+import java.util.Arrays;
 import java.util.Iterator;
 import java.util.Random;
 import java.util.UUID;
@@ -74,6 +75,7 @@ public class GameObject {
 	public float textOffsetY = 0;
 	
 	public Polygon bounds;
+	public ArrayList<Polygon> triangulatedBounds = new ArrayList<Polygon>();
 
 	public Point centerOfMass = new Point(0,0);
 	
@@ -100,6 +102,8 @@ public class GameObject {
 	public String uuid = UUID.randomUUID().toString().replaceAll("_", "");
 	
 	public static int updated = 0;
+	
+	public ArrayList<Point> splitPoints = new ArrayList<Point>();
 	
 	public GameObject(float x, float y, float width, float height, String src, ID id) {
 		this.position.x = x;
@@ -131,6 +135,85 @@ public class GameObject {
 		if(id != ID.HUD)
 			bounds.vertices = ImageResource.organizePoints(bounds.vertices, this);
 		
+		/*for(int vertex = 0; vertex < bounds.vertices.size() - 2; vertex++) {
+			Point p1 = bounds.vertices.get(vertex);
+			Point p2 = bounds.vertices.get(vertex + 1);
+			Point p3 = bounds.vertices.get(vertex + 2);
+			
+			double a = Math.sqrt(Math.pow(p3.x - p1.x, 2) + Math.pow(p3.y - p1.y, 2));
+			double b = Math.sqrt(Math.pow(p2.x - p1.x, 2) + Math.pow(p2.y - p1.y, 2));
+			double c = Math.sqrt(Math.pow(p3.x - p2.x, 2) + Math.pow(p3.y - p2.y, 2));
+			
+			double cosine = (Math.pow(a, 2) - Math.pow(b, 2) - Math.pow(c, 2)) / (-2 * b * c);
+			
+			double angle = 360 - Math.toDegrees(Math.acos(cosine));
+			
+			//System.out.println("a: " + a + " b: " + b +" c: " + c + "    " +  angle);
+			System.out.println(angle);
+			
+			if(angle > 180 && angle != 360) {
+				p2.color = new Color(0,255,0,255);
+				splitPoints.add(p2);
+			}
+			
+		}*/
+		
+		ArrayList<Point> boundsToTriangulate = new ArrayList<>();
+		boundsToTriangulate.addAll(bounds.vertices);
+		
+		for(int vertex = 0; vertex < boundsToTriangulate.size(); vertex++) {
+			
+			Point p1 = boundsToTriangulate.get((vertex == 0) ? boundsToTriangulate.size() - 1 : vertex - 1);
+			Point p2 = boundsToTriangulate.get(vertex);
+			Point p3 = boundsToTriangulate.get((vertex == boundsToTriangulate.size() - 1) ? 0 : vertex + 1);
+			
+			double a = Math.sqrt(Math.pow(p3.x - p1.x, 2) + Math.pow(p3.y - p1.y, 2));
+			double b = Math.sqrt(Math.pow(p2.x - p1.x, 2) + Math.pow(p2.y - p1.y, 2));
+			double c = Math.sqrt(Math.pow(p3.x - p2.x, 2) + Math.pow(p3.y - p2.y, 2));
+			
+			double angle = Math.toDegrees(Math.acos((Math.pow(a, 2) - Math.pow(b, 2) - Math.pow(c, 2)) / (-2 * b * c)));
+			
+			if(angle < 180 && angle != 0) {
+				double p = (a + b + c) / 2;
+				double ABCarea = Math.sqrt(p * (p - a) * (p - b) * (p - c));
+				
+				for(int pointIndex = 0; pointIndex < boundsToTriangulate.size(); pointIndex++) {
+					Point point = boundsToTriangulate.get(pointIndex);
+					
+					if(point.equals(p1) || point.equals(p2) || point.equals(p3))
+						continue;
+					
+					double p1Q = Math.sqrt(Math.pow(point.x - p1.x, 2) + Math.pow(point.y - p1.y, 2));
+					double p2Q = Math.sqrt(Math.pow(point.x - p2.x, 2) + Math.pow(point.y - p2.y, 2));
+					double p3Q = Math.sqrt(Math.pow(point.x - p3.x, 2) + Math.pow(point.y - p3.y, 2));
+					
+					double ABQp = (b + p1Q + p2Q) / 2;
+					double ABQarea = Math.sqrt(ABQp * (ABQp - b) * (ABQp - p1Q) * (ABQp - p2Q));
+					
+					double ACQp = (a + p1Q + p3Q) / 2;
+					double ACQarea = Math.sqrt(ACQp * (ACQp - a) * (ACQp - p1Q) * (ACQp - p3Q));
+					
+					double BCQp = (c + p2Q + p3Q) / 2;
+					double BCQarea = Math.sqrt(BCQp * (BCQp - c) * (BCQp - p2Q) * (BCQp - p3Q));
+					
+					if(ABCarea != ABQarea + ACQarea + BCQarea) {
+						//System.out.println("Found an ear, I guess");
+						triangulatedBounds.add(new Polygon(new Point[]{p1,p2,p3}));
+						
+						boundsToTriangulate.remove(p2);
+						
+						vertex = 0;
+					}
+				}
+				//System.out.println("a: " + a + "b: " + b + "c: " + c + " area: " + abcArea);
+			}
+			
+		}
+		
+		
+		System.out.println(this.getClass().getSimpleName() + " has " + triangulatedBounds.size() + " triangles");
+		
+
 		this.txt.addToStash();
 
 		collider = new Collider(bounds.vertices, this);
@@ -175,12 +258,21 @@ public class GameObject {
 					//Graphics.drawLine(x + bounds.get(point).x, y + bounds.get(point).y, x + bounds.get(point + 1).x , y + bounds.get(point + 1).y, id);
 				}
 				
-				
 				Graphics.setColor(1, 1, 1, 1);
 			}
 			
 			if(EventListener.renderJoints && showJoints)
 				drawJoints();
+			
+			/*if(id == ID.Obstacle) {
+				Graphics.setColor(new Color(255,0,0,255));
+				for(Polygon triangle : triangulatedBounds) {
+					for(int vertex = 0; vertex < 3; vertex++) {
+						Graphics.drawLine(position.x + triangle.vertices.get(vertex).x, position.y + triangle.vertices.get(vertex).y, position.x + triangle.vertices.get((vertex == 2) ? 0 : vertex + 1).x, position.y + triangle.vertices.get((vertex == 2) ? 0 : vertex + 1).y, id);
+					}
+				}
+				Graphics.setColor(Color.clear());
+			}*/
 			
 		}
 	}

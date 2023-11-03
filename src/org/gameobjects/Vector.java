@@ -26,8 +26,20 @@ public class Vector {
 		return (float)(x * vertex.x + y * vertex.y);
 	}
 	
-	public float crossProduct(Point point) {
+	public static double dotProduct(Vector v1, Vector v2) {
+		return (v1.x * v2.x + v1.y * v2.y);
+	}
+	
+	public float determinant(Point point) {
 		return (float)(x * point.x - y * point.y);
+	}
+	
+	public static float determinant(Vector v1, Vector v2) {
+		return (v1.x * v2.x - v1.y * v2.y);
+	}
+	
+	public static double magnitude(Vector v) {
+		return Math.sqrt(Math.pow(v.x, 2) + Math.pow(v.y, 2)); 
 	}
 	
 	public Vector clone() {
