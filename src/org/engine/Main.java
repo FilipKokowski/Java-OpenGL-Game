@@ -40,7 +40,7 @@ public class Main {
 		obstacle4.setColor(255, 64, 135, 127);
 		Handler.addGO(obstacle4);
 		
-		Obstacle sign = new Obstacle(-1, onGround(3.75f), 5f, 3.75f, false, "res/org/scene/objects/Sign/sign.png");
+		Obstacle sign = new Obstacle(-1, onGround(.375f), .5f, .375f, false, "res/org/scene/objects/Sign/sign.png");
 		sign.verticallyCenteredText = true;
 		sign.offsetText(0, .05f);
 		sign.setTextColor(0, 0, 0, 1);

@@ -104,6 +104,7 @@ public class ImageResource {
 					for(int i=0; i < boundsList.size(); i += 3) {
 						pickedCoords.add(boundsList.get(i));
 					}
+
 					
 					boundsList = pickedCoords;
 					

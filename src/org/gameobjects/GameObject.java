@@ -132,87 +132,80 @@ public class GameObject {
 		if(bounds.vertices.size() == 0) 
 			bounds.vertices = getBounds();
 		
-		if(id != ID.HUD)
+		if(this.id != ID.HUD) {
 			bounds.vertices = ImageResource.organizePoints(bounds.vertices, this);
+
 		
-		/*for(int vertex = 0; vertex < bounds.vertices.size() - 2; vertex++) {
-			Point p1 = bounds.vertices.get(vertex);
-			Point p2 = bounds.vertices.get(vertex + 1);
-			Point p3 = bounds.vertices.get(vertex + 2);
+			ArrayList<Point> boundsToTriangulate = new ArrayList<>();
+			boundsToTriangulate.addAll(bounds.vertices);
 			
-			double a = Math.sqrt(Math.pow(p3.x - p1.x, 2) + Math.pow(p3.y - p1.y, 2));
-			double b = Math.sqrt(Math.pow(p2.x - p1.x, 2) + Math.pow(p2.y - p1.y, 2));
-			double c = Math.sqrt(Math.pow(p3.x - p2.x, 2) + Math.pow(p3.y - p2.y, 2));
-			
-			double cosine = (Math.pow(a, 2) - Math.pow(b, 2) - Math.pow(c, 2)) / (-2 * b * c);
-			
-			double angle = 360 - Math.toDegrees(Math.acos(cosine));
-			
-			//System.out.println("a: " + a + " b: " + b +" c: " + c + "    " +  angle);
-			System.out.println(angle);
-			
-			if(angle > 180 && angle != 360) {
-				p2.color = new Color(0,255,0,255);
-				splitPoints.add(p2);
-			}
-			
-		}*/
-		
-		ArrayList<Point> boundsToTriangulate = new ArrayList<>();
-		boundsToTriangulate.addAll(bounds.vertices);
-		
-		for(int vertex = 0; vertex < boundsToTriangulate.size(); vertex++) {
-			
-			Point p1 = boundsToTriangulate.get((vertex == 0) ? boundsToTriangulate.size() - 1 : vertex - 1);
-			Point p2 = boundsToTriangulate.get(vertex);
-			Point p3 = boundsToTriangulate.get((vertex == boundsToTriangulate.size() - 1) ? 0 : vertex + 1);
-			
-			double a = Math.sqrt(Math.pow(p3.x - p1.x, 2) + Math.pow(p3.y - p1.y, 2));
-			double b = Math.sqrt(Math.pow(p2.x - p1.x, 2) + Math.pow(p2.y - p1.y, 2));
-			double c = Math.sqrt(Math.pow(p3.x - p2.x, 2) + Math.pow(p3.y - p2.y, 2));
-			
-			double angle = Math.toDegrees(Math.acos((Math.pow(a, 2) - Math.pow(b, 2) - Math.pow(c, 2)) / (-2 * b * c)));
-			
-			if(angle < 180 && angle != 0) {
-				double p = (a + b + c) / 2;
-				double ABCarea = Math.sqrt(p * (p - a) * (p - b) * (p - c));
+			for(int vertex = 0; vertex < boundsToTriangulate.size(); vertex++) {
+				Point p1 = boundsToTriangulate.get((vertex == 0) ? boundsToTriangulate.size() - 1 : vertex - 1);
+				Point p2 = boundsToTriangulate.get(vertex);
 				
-				for(int pointIndex = 0; pointIndex < boundsToTriangulate.size(); pointIndex++) {
-					Point point = boundsToTriangulate.get(pointIndex);
-					
-					if(point.equals(p1) || point.equals(p2) || point.equals(p3))
+				for(int point = 0; point < boundsToTriangulate.size(); point++) {
+					Point p3 = boundsToTriangulate.get(point);
+					if(p1.x == p3.x && p1.y == p3.y || p2.x == p3.x && p2.y == p3.y)
 						continue;
 					
-					double p1Q = Math.sqrt(Math.pow(point.x - p1.x, 2) + Math.pow(point.y - p1.y, 2));
-					double p2Q = Math.sqrt(Math.pow(point.x - p2.x, 2) + Math.pow(point.y - p2.y, 2));
-					double p3Q = Math.sqrt(Math.pow(point.x - p3.x, 2) + Math.pow(point.y - p3.y, 2));
+					if(Math.sqrt(Math.pow(p3.x - p1.x, 2) + Math.pow(p3.y - p1.y, 2)) + Math.sqrt(Math.pow(p3.x - p2.x, 2) + Math.pow(p3.y - p2.y, 2)) == Math.sqrt(Math.pow(p1.x - p2.x, 2) + Math.pow(p1.y - p2.y, 2))) {
+						boundsToTriangulate.remove(p3); point--;
+					}
+				}
+				
+			}
+			
+			for(int vertex = 0; vertex < boundsToTriangulate.size(); vertex++) {
+				
+				Point p1 = boundsToTriangulate.get((vertex == 0) ? boundsToTriangulate.size() - 1 : vertex - 1);
+				Point p2 = boundsToTriangulate.get(vertex);
+				Point p3 = boundsToTriangulate.get((vertex == boundsToTriangulate.size() - 1) ? 0 : vertex + 1);
+				
+				if(boundsToTriangulate.size() <= 3) {
+					triangulatedBounds.add(new Polygon(new Point[]{p1,p2,p3}));
+					break;
+				}
+				
+				Vector p1_p2 = new Vector(p2.x - p1.x, p2.y - p1.y);
+				Vector p1_p3 = new Vector(p3.x - p1.x, p3.y - p1.y);
+				
+				
+				if(p1_p2.x * p1_p3.y - p1_p3.x * p1_p2.y < 0) {
 					
-					double ABQp = (b + p1Q + p2Q) / 2;
-					double ABQarea = Math.sqrt(ABQp * (ABQp - b) * (ABQp - p1Q) * (ABQp - p2Q));
+					boolean ear = true;
+		
+					for(int pointIndex = 0; pointIndex < bounds.vertices.size(); pointIndex++) {
+						Point point = bounds.vertices.get(pointIndex);
+						
+						if((p1.x == point.x && p1.y == point.y) || (p2.x == point.x && p2.y == point.y) || (p3.x == point.x && p3.y == point.y))
+							continue;
+						
+	
+						float detT = (p2.y - p3.y) * (p1.x - p3.x) + (p3.x - p2.x) * (p1.y - p3.y);
+						    
+					    float u = ((p2.y - p3.y) * (point.x - p3.x) + (p3.x - p2.x) * (point.y - p3.y)) / detT;
+					    float v = ((p3.y - p1.y) * (point.x - p3.x) + (p1.x - p3.x) * (point.y - p3.y)) / detT;
+					    float w = 1 - u - v;
+						    
+						if((u >= 0 && u <= 1) && (v >= 0 && v <= 1) && (w >= 0 && w <= 1)) {
+							ear = false;	
+							break;
+						}
+					}
 					
-					double ACQp = (a + p1Q + p3Q) / 2;
-					double ACQarea = Math.sqrt(ACQp * (ACQp - a) * (ACQp - p1Q) * (ACQp - p3Q));
-					
-					double BCQp = (c + p2Q + p3Q) / 2;
-					double BCQarea = Math.sqrt(BCQp * (BCQp - c) * (BCQp - p2Q) * (BCQp - p3Q));
-					
-					if(ABCarea != ABQarea + ACQarea + BCQarea) {
-						//System.out.println("Found an ear, I guess");
+					if(ear) {
 						triangulatedBounds.add(new Polygon(new Point[]{p1,p2,p3}));
 						
 						boundsToTriangulate.remove(p2);
 						
-						vertex = 0;
+						vertex = 0;	
 					}
-				}
-				//System.out.println("a: " + a + "b: " + b + "c: " + c + " area: " + abcArea);
+				}	
 			}
-			
 		}
-		
-		
-		System.out.println(this.getClass().getSimpleName() + " has " + triangulatedBounds.size() + " triangles");
-		
+	
+		System.out.println("Numbner of vertices: " + bounds.vertices.size());
+		System.out.println("Numbner of triangles: " + triangulatedBounds.size() + "\n");
 
 		this.txt.addToStash();
 
@@ -244,12 +237,14 @@ public class GameObject {
 			Graphics.Rotate(-rotation);
 			Graphics.drawImage(txt, position.x, position.y, width, height, id);
 			Graphics.Rotate(0);
-			
+
+		
+
 			if(EventListener.renderBounds && showBounds) {
 				//System.out.println(this.getClass().getSimpleName() + " complex bounds rendering (UUID: " + uuid + ")");
 				
 				for(int point = 0; point < bounds.vertices.size() - 1; point++) {
-					Graphics.setColor(bounds.vertices.get(point).color);
+					Graphics.setColor(new Color(0,0,255,255));
 					//Calculating position of x and y after rotating
 					float x = (float)((bounds.vertices.get(point).x) * Math.cos(Math.toRadians(-rotation)) - (bounds.vertices.get(point).y) * Math.sin(Math.toRadians(-rotation)) + this.position.x);
 					float y = (float)((bounds.vertices.get(point).x) * Math.sin(Math.toRadians(-rotation)) + (bounds.vertices.get(point).y) * Math.cos(Math.toRadians(-rotation)) + this.position.y);
@@ -264,15 +259,6 @@ public class GameObject {
 			if(EventListener.renderJoints && showJoints)
 				drawJoints();
 			
-			/*if(id == ID.Obstacle) {
-				Graphics.setColor(new Color(255,0,0,255));
-				for(Polygon triangle : triangulatedBounds) {
-					for(int vertex = 0; vertex < 3; vertex++) {
-						Graphics.drawLine(position.x + triangle.vertices.get(vertex).x, position.y + triangle.vertices.get(vertex).y, position.x + triangle.vertices.get((vertex == 2) ? 0 : vertex + 1).x, position.y + triangle.vertices.get((vertex == 2) ? 0 : vertex + 1).y, id);
-					}
-				}
-				Graphics.setColor(Color.clear());
-			}*/
 			
 		}
 	}
