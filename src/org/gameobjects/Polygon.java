@@ -5,6 +5,8 @@ import java.util.Arrays;
 
 public class Polygon {
 
+	public Color color = new Color(255,0,0,255);
+	
 	public ArrayList<Point> vertices = new ArrayList<Point>();
 	
 	public Polygon(ArrayList<Point> vertices) {

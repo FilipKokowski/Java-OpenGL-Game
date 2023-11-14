@@ -1,9 +1,13 @@
 package org.scene.entities;
 
 import java.awt.Font;
+import java.util.ArrayList;
 
+import org.engine.Collider;
 import org.gameobjects.Entities;
 import org.gameobjects.ID;
+import org.gameobjects.Point;
+import org.gameobjects.Polygon;
 import org.graphics.EventListener;
 import org.graphics.Graphics;
 
@@ -35,8 +39,9 @@ public class Obstacle extends Entities{
 		if(imagePath.equals("")) bounds.vertices = getBounds();
 		else scaleBounds(width, height);
 		
-		if(collider.pointsOffsets.size() != 4)
+		if(collider.trianglesOffsets.size() != 2)
 			collider.update();
+		
 	}
 	
 	public void update() {
@@ -63,7 +68,6 @@ public class Obstacle extends Entities{
 		}
 		
 		super.update();
-		
 	}
 	
 	public void offsetText(float xOffset, float yOffset) {
@@ -92,7 +96,7 @@ public class Obstacle extends Entities{
 			super.render();
 		}
 		
-		//collider.renderAxes(255,255,255,255);
+		collider.renderAxes(255,255,255,255);
 	
 	}
 	

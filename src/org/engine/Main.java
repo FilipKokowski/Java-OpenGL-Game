@@ -17,16 +17,16 @@ public class Main {
 		
 		Handler.addGO(new Player());
 		
-		Obstacle obstacle = new Obstacle(-3, onGround(1) + 1, 2, 1, false, "");
+		/*Obstacle obstacle = new Obstacle(-3, onGround(1) + 1, 2, 1, false, "");
 		obstacle.setColor(255, 64, 130, 127);
-		Handler.addGO(obstacle);
+		Handler.addGO(obstacle);*/
 		
 		Handler.addHUD(new HUD(-Renderer.unitsWide / 2 + .5f,Renderer.unitsTall / 2 - .25f,1,.5f, false));
 		Handler.addHUD(new HUD(Renderer.unitsWide / 2 - .5f,Renderer.unitsTall / 2 - .25f,1,.5f, true));
 		
 		Handler.addHUD(new HUD(0,Renderer.unitsTall / 2 - .25f, 1, .5f, true));
         
-		Obstacle obstacle2 = new Obstacle(-5, onGround(1) + 1, 2, 1, false, "");
+		/*Obstacle obstacle2 = new Obstacle(-5, onGround(1) + 1, 2, 1, false, "");
 		obstacle2.setColor(255, 64, 135, 127);
 		Handler.addGO(obstacle2);
 	
@@ -38,9 +38,9 @@ public class Main {
 		
 		Obstacle obstacle4 = new Obstacle(-7.5f, onGround(1) + 2.25f, 2, 1, false, "");
 		obstacle4.setColor(255, 64, 135, 127);
-		Handler.addGO(obstacle4);
+		Handler.addGO(obstacle4);*/
 		
-		Obstacle sign = new Obstacle(-1, onGround(.375f), .5f, .375f, false, "res/org/scene/objects/Sign/sign.png");
+		Obstacle sign = new Obstacle(-3, onGround(3.75f), 5f, 3.75f, false, "res/org/scene/objects/Sign/sign.png");
 		sign.verticallyCenteredText = true;
 		sign.offsetText(0, .05f);
 		sign.setTextColor(0, 0, 0, 1);

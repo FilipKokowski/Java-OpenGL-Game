@@ -134,7 +134,6 @@ public class GameObject {
 		
 		if(this.id != ID.HUD) {
 			bounds.vertices = ImageResource.organizePoints(bounds.vertices, this);
-
 		
 			ArrayList<Point> boundsToTriangulate = new ArrayList<>();
 			boundsToTriangulate.addAll(bounds.vertices);
@@ -209,7 +208,10 @@ public class GameObject {
 
 		this.txt.addToStash();
 
-		collider = new Collider(bounds.vertices, this);
+		collider = new Collider(triangulatedBounds, this);
+		collider.nonTriangulatedBounds = bounds;
+		
+	
 		
 		centerOfMass = txt.centerOfMass;
 		
@@ -238,13 +240,11 @@ public class GameObject {
 			Graphics.drawImage(txt, position.x, position.y, width, height, id);
 			Graphics.Rotate(0);
 
-		
-
 			if(EventListener.renderBounds && showBounds) {
 				//System.out.println(this.getClass().getSimpleName() + " complex bounds rendering (UUID: " + uuid + ")");
-				
+
+				Graphics.setColor(new Color(0,0,255,255));
 				for(int point = 0; point < bounds.vertices.size() - 1; point++) {
-					Graphics.setColor(new Color(0,0,255,255));
 					//Calculating position of x and y after rotating
 					float x = (float)((bounds.vertices.get(point).x) * Math.cos(Math.toRadians(-rotation)) - (bounds.vertices.get(point).y) * Math.sin(Math.toRadians(-rotation)) + this.position.x);
 					float y = (float)((bounds.vertices.get(point).x) * Math.sin(Math.toRadians(-rotation)) + (bounds.vertices.get(point).y) * Math.cos(Math.toRadians(-rotation)) + this.position.y);
@@ -384,12 +384,12 @@ public class GameObject {
 	
 	//Renders simple rectangular bounds
 	public void drawBounds() {
-		ArrayList<Point> collisionPoints = collider.getCollisonPoints();
+		Polygon collisionPoints = collider.getCollisonPoints();
 		
 		Graphics.setColor(1, 0, 0, 1);
 		
-		for(int point = 0; point < collisionPoints.size(); point++) {
-			Graphics.drawRect(collisionPoints.get(point).x, collisionPoints.get(point).y, .01f, .01f);
+		for(int point = 0; point < collisionPoints.vertices.size(); point++) {
+			Graphics.drawRect(collisionPoints.vertices.get(point).x, collisionPoints.vertices.get(point).y, .01f, .01f);
 		}
 		
 		Graphics.setColor(1, 1, 1, 1);

@@ -7,8 +7,11 @@ import org.gameobjects.Color;
 import org.gameobjects.GameObject;
 import org.gameobjects.ID;
 import org.gameobjects.Point;
+import org.gameobjects.Polygon;
 import org.gameobjects.Vector;
 import org.graphics.Graphics;
+
+import com.jogamp.graph.geom.Triangle;
 
 public class Collider {
 
@@ -16,16 +19,18 @@ public class Collider {
 	
 	public ArrayList<GameObject> objectsToIgnore = new ArrayList<GameObject>();
 	
-	public ArrayList<Point> pointsOffsets = new ArrayList<Point>();
-	private ArrayList<Point> points = new ArrayList<Point>();
+	public Polygon nonTriangulatedBounds = new Polygon();
+	
+	public ArrayList<Polygon> trianglesOffsets = new ArrayList<Polygon>();
+	private ArrayList<Polygon> triangles = new ArrayList<Polygon>();
 
 	private GameObject parentObject;
 	
-	private ArrayList<Point> closestPoints = new ArrayList<Point>();
-	private ArrayList<Point> otherClosestPoints = new ArrayList<Point>();
+	private ArrayList<Polygon> closestTriangles = new ArrayList<Polygon>();
+	private ArrayList<Polygon> otherClosestTriangles = new ArrayList<Polygon>();
 	
-	private ArrayList<Point> closestPointsRender = new ArrayList<Point>();
-	private ArrayList<Point> otherClosestPointsRender = new ArrayList<Point>();
+	private ArrayList<Polygon> closestTrianglesRender = new ArrayList<Polygon>();
+	private ArrayList<Polygon> otherClosestTrianglesRender = new ArrayList<Polygon>();
 	
 	public Point collisionFieldPosition = new Point(0,0);
 	public float collisionFieldWidth = 0;
@@ -40,38 +45,49 @@ public class Collider {
 	
 	public Point lastNonCollisionPos = new Point(0,0);
 	
-	public Collider(ArrayList<Point> pointsOffsets, GameObject parentObject) {
+	public Polygon lineR = new Polygon();
+	
+	public Collider(ArrayList<Polygon> trianglesOffsets, GameObject parentObject) {
 		this.parentObject = parentObject;
-		this.pointsOffsets = pointsOffsets;
+		this.trianglesOffsets = trianglesOffsets;
 		
-		for(Point pointOffset : pointsOffsets) {
-			this.points.add(pointOffset.clone());
+		for(Polygon triangle : trianglesOffsets) {
+			Polygon t = new Polygon();
+			for(Point pointOffset : triangle.vertices) {
+				t.vertices.add(pointOffset.clone());
+			}
+			triangles.add(t);
 		}
 	}
 	
 	public void update() {
 		
 		//System.out.println(convexPolygons.size() + " " + parentObject.getClass().getSimpleName());
-		for(int point = 0; point < points.size(); point++) {
-			points.get(point).x = (float)((pointsOffsets.get(point).x) * Math.cos(Math.toRadians(-parentObject.rotation)) - (pointsOffsets.get(point).y) * Math.sin(Math.toRadians(-parentObject.rotation)) + parentObject.getX());
-			points.get(point).y = (float)((pointsOffsets.get(point).x) * Math.sin(Math.toRadians(-parentObject.rotation)) + (pointsOffsets.get(point).y) * Math.cos(Math.toRadians(-parentObject.rotation)) + parentObject.getY());
-		}       
-		
-		maxX = points.get(0).x;
-		minX = points.get(0).x;
-		minY = points.get(0).y;
-		maxY = points.get(0).y;
-		
-		for(Point point : points) {
-			
-			extremes.clear();
-			
-			minX = (point.x < minX) ? point.x : minX;
-			maxX = (point.x > maxX) ? point.x : maxX;
-			
-			minY = (point.y < minY) ? point.y : minY;
-			maxY = (point.y > maxY) ? point.y : maxY;
+		for(Polygon triangle : triangles) {
+			for(int point = 0; point < triangle.vertices.size(); point++) {
+				triangle.vertices.get(point).x = (float)((trianglesOffsets.get(triangles.indexOf(triangle)).vertices.get(point).x) * Math.cos(Math.toRadians(-parentObject.rotation)) - (trianglesOffsets.get(triangles.indexOf(triangle)).vertices.get(point).y) * Math.sin(Math.toRadians(-parentObject.rotation)) + parentObject.getX());
+				triangle.vertices.get(point).y = (float)((trianglesOffsets.get(triangles.indexOf(triangle)).vertices.get(point).x) * Math.sin(Math.toRadians(-parentObject.rotation)) + (trianglesOffsets.get(triangles.indexOf(triangle)).vertices.get(point).y) * Math.cos(Math.toRadians(-parentObject.rotation)) + parentObject.getY());
+			}       
 		}
+		
+		
+		maxX = triangles.get(0).vertices.get(0).x;
+		minX = triangles.get(0).vertices.get(0).x;
+		minY = triangles.get(0).vertices.get(0).y;
+		maxY = triangles.get(0).vertices.get(0).y;
+		
+		for(Polygon triangle : triangles)
+			for(Point point : triangle.vertices) {
+				
+				extremes.clear();
+				
+				minX = (point.x < minX) ? point.x : minX;
+				maxX = (point.x > maxX) ? point.x : maxX;
+				
+				minY = (point.y < minY) ? point.y : minY;
+				maxY = (point.y > maxY) ? point.y : maxY;
+			}
+		
 		
 		collisionFieldPosition.x = (maxX + minX) / 2;
 		collisionFieldPosition.y = (maxY + minY) / 2;
@@ -94,22 +110,7 @@ public class Collider {
 			Graphics.setColor(Color.clear());
 			
 		}*/
-		
-		for(Point point : closestPointsRender) {
-			//System.out.println(parentObject.getClass().getSimpleName() + " - " + points.size() + " " + point.x + "x" + point.y);
-			Graphics.setColor(point.color);
-			Graphics.drawRect(point.x, point.y, .02f, .02f);
-			Graphics.setColor(Color.clear());
-		}
-		
-		for(Point point : otherClosestPointsRender) {
-			//System.out.println(parentObject.getClass().getSimpleName() + " - " + points.size() + " " + point.x + "x" + point.y);
-			Graphics.setColor(point.color);
-			Graphics.drawRect(point.x, point.y, .02f, .02f);
-			Graphics.setColor(Color.clear());
-		}
-		
-		
+
 		/*Graphics.Rotate(0);
 		Graphics.setColor(new Color(255,255,255,255));
 		Graphics.drawRect(collisionFieldPosition.x, collisionFieldPosition.y, collisionFieldWidth, collisionFieldHeight);
@@ -121,14 +122,42 @@ public class Collider {
 			Graphics.setColor(Color.clear());
 		}
 		
-		closestPointsRender.clear();
-		otherClosestPointsRender.clear();
+		if(parentObject.id == ID.Obstacle)
+			for(Polygon triangle : triangles) {
+				Graphics.setColor(triangle.color);
+				for(int point = 0; point < triangle.vertices.size(); point++) 
+					Graphics.drawLine(triangle.vertices.get(point).x,triangle.vertices.get(point).y, triangle.vertices.get((point == 2) ? 0 : point + 1).x, triangle.vertices.get((point == 2) ? 0 : point + 1).y, ID.Obstacle);
+			}
+		
+		Graphics.setColor(Color.clear());
+		
+		
+		if(lineR.vertices.size() > 1) {
+			for(int line = 0; line < lineR.vertices.size(); line += 4) {
+				Graphics.setColor(Color.GREEN);
+				Graphics.drawLine(lineR.vertices.get(line).x, lineR.vertices.get(line).y, lineR.vertices.get(line + 1).x, lineR.vertices.get(line + 1).y, ID.Obstacle);
+				Graphics.setColor(Color.BLUE);
+				//System.out.println(lineR.vertices.get(line + 2).x + " x " + lineR.vertices.get(line + 2).y + "   " + lineR.vertices.get(line + 3).x + " x " + lineR.vertices.get(line + 3).y);
+				Graphics.drawLine(lineR.vertices.get(line + 2).x - 10, lineR.vertices.get(line + 2).y, lineR.vertices.get(line + 3).x + 10, lineR.vertices.get(line + 3).y, ID.Obstacle);
+			}
+		}
+		
+		//System.out.println(lineR.vertices.size());
+		
+		Graphics.setColor(Color.clear());
+		
+		closestTrianglesRender.clear();
+		otherClosestTrianglesRender.clear();
+		lineR.vertices.clear();
+		
+		for(Polygon triangle : triangles)
+			triangle.color = Color.RED;
 	}
 	
 	public boolean doOverlap(Collider collider) {
 				
-		closestPoints.clear();
-		otherClosestPoints.clear();
+		closestTriangles.clear();
+		otherClosestTriangles.clear();
 		
 		//Prevents collider from checking collison with itself
 		if(this.equals(collider))
@@ -142,8 +171,43 @@ public class Collider {
 		if(!doCollisionFieldsCollide(collider)) 
 			return false;	
 		
+		for(Polygon triangle : collider.triangles) {
+			for(int side = 0; side < triangle.vertices.size(); side++) {
+				Point p1 = triangle.vertices.get(side);
+				Point p2 = triangle.vertices.get((side == 2) ? 0 : side + 1);
+				
+				if(p1.equals(p2))
+					continue;
+				
+				double slope = (p2.y - p1.y) / (p2.x - p1.x);
+				double intercept = p1.y - slope * p1.x;
+				
+				double a = -1 / slope;
+				
+				for(Polygon otherTriangle : triangles) {
+					for(Point point : otherTriangle.vertices) {
+						double b = point.y - a *  point.x;
+
+						double x = (b - intercept) / (slope - a);
+						double y = a * x + b;
+						double dis = Math.sqrt(Math.pow(x - point.x, 2) + Math.pow(y - point.y, 2));
+					
+						if((p1.y > p2.y) ? (p1.y > y && y > p2.y) : (p2.y > y && y > p1.y))
+							if(dis < 0.00625f) {
+								closestTriangles.add(triangle);
+								otherClosestTriangles.add(otherTriangle);
+								
+								triangle.color = Color.GREEN;
+								otherTriangle.color = Color.GREEN;
+							}
+						
+					}
+				}
+			}
+		}
+
 		
-		for(Point point : points) {
+		/*for(Point point : points) {
 			for(Point otherColliderPoint : collider.points) {
 				float distance = (float) (Math.pow(otherColliderPoint.x - point.x, 2) + Math.pow(otherColliderPoint.y - point.y, 2));
 				
@@ -164,11 +228,10 @@ public class Collider {
 						otherClosestPoints.addAll(collider.points);
 				}
 			}
-		}
+		}*/
 		
-		closestPointsRender.addAll(closestPoints);
-		otherClosestPointsRender.addAll(otherClosestPoints);
 		
+		/*
 		//System.out.println(closestDistance + " x " + closestPoints.size());
 		//System.out.println(points.get(closestPointFirstPolygonID).x + " x " + points.get(closestPointFirstPolygonID).y);
 		//System.out.println(collider.points.get(closestPointSecondPolygonID).x + " x " + collider.points.get(closestPointSecondPolygonID).y);
@@ -194,8 +257,8 @@ public class Collider {
 			}
 			
 		}
-		
-		
+		*/
+
 		
 		return false;
 	}
@@ -206,7 +269,7 @@ public class Collider {
 				collisionFieldPosition.y + collisionFieldHeight / 2 <= collider.collisionFieldPosition.y - collider.collisionFieldHeight / 2 || collisionFieldPosition.y - collisionFieldHeight / 2 >= collider.collisionFieldPosition.y + collider.collisionFieldHeight / 2);
 	}
 	
-	public ArrayList<Point> getCollisonPoints(){
-		return points;
+	public Polygon getCollisonPoints(){
+		return (triangles.size() >= 2) ? triangles.get(0) : new Polygon();
 	}
 }
