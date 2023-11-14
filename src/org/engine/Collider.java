@@ -116,7 +116,7 @@ public class Collider {
 		Graphics.drawRect(collisionFieldPosition.x, collisionFieldPosition.y, collisionFieldWidth, collisionFieldHeight);
 		Graphics.setColor(Color.clear());*/
 		
-		for(Point point : extremes) {
+		/*for(Point point : extremes) {
 			Graphics.setColor(point.color);
 			Graphics.drawRect(point.x, point.y, .02f, .02f);
 			Graphics.setColor(Color.clear());
@@ -140,18 +140,18 @@ public class Collider {
 				//System.out.println(lineR.vertices.get(line + 2).x + " x " + lineR.vertices.get(line + 2).y + "   " + lineR.vertices.get(line + 3).x + " x " + lineR.vertices.get(line + 3).y);
 				Graphics.drawLine(lineR.vertices.get(line + 2).x - 10, lineR.vertices.get(line + 2).y, lineR.vertices.get(line + 3).x + 10, lineR.vertices.get(line + 3).y, ID.Obstacle);
 			}
-		}
+		}*/
 		
 		//System.out.println(lineR.vertices.size());
 		
-		Graphics.setColor(Color.clear());
+		//Graphics.setColor(Color.clear());
 		
 		closestTrianglesRender.clear();
 		otherClosestTrianglesRender.clear();
 		lineR.vertices.clear();
 		
-		for(Polygon triangle : triangles)
-			triangle.color = Color.RED;
+		//for(Polygon triangle : triangles)
+		//	triangle.color = Color.RED;
 	}
 	
 	public boolean doOverlap(Collider collider) {
@@ -194,6 +194,9 @@ public class Collider {
 					
 						if((p1.y > p2.y) ? (p1.y > y && y > p2.y) : (p2.y > y && y > p1.y))
 							if(dis < 0.00625f) {
+								if(closestTriangles.size() > 32)
+									break;
+								
 								closestTriangles.add(triangle);
 								otherClosestTriangles.add(otherTriangle);
 								
@@ -205,64 +208,25 @@ public class Collider {
 				}
 			}
 		}
-
 		
-		/*for(Point point : points) {
-			for(Point otherColliderPoint : collider.points) {
-				float distance = (float) (Math.pow(otherColliderPoint.x - point.x, 2) + Math.pow(otherColliderPoint.y - point.y, 2));
+		for(Polygon triangle : closestTriangles) {
+			for(Polygon otherTriangle : otherClosestTriangles) {
+				Polygon minkDiff = new Polygon();
 				
-				if(distance < .00625f) {
-					point.color = new Color(0,255,255,255);
-					otherColliderPoint.color = new Color(255,0,255,255);
-					
-					if(closestPoints.size() > 64) {}
-					else if(points.size() > 32)
-						closestPoints.add(point);
-					else
-						closestPoints.addAll(points);
-					
-					if(otherClosestPoints.size() > 64) {}
-					else if(collider.points.size() > 32)
-						otherClosestPoints.add(otherColliderPoint);
-					else
-						otherClosestPoints.addAll(collider.points);
+				for(Point vertex : triangle.vertices) {
+					for(Point otherVertex : otherTriangle.vertices) {
+						minkDiff.vertices.add(new Point(otherVertex.x - vertex.x, otherVertex.y - vertex.y));
+						 
+						
+					}
 				}
-			}
-		}*/
-		
-		
-		/*
-		//System.out.println(closestDistance + " x " + closestPoints.size());
-		//System.out.println(points.get(closestPointFirstPolygonID).x + " x " + points.get(closestPointFirstPolygonID).y);
-		//System.out.println(collider.points.get(closestPointSecondPolygonID).x + " x " + collider.points.get(closestPointSecondPolygonID).y);
-		
-		for(Point point : closestPoints) {
-			
-			Point diagStart = new Point(parentObject.getX(), parentObject.getY());
-			Point diagEnd = point;
-
-			for(Point otherColliderPoint : otherClosestPoints) {
-				Point edgeStart = new Point(otherColliderPoint.x, otherColliderPoint.y);
-				Point egdeEnd = new Point(collider.points.get((collider.points.indexOf(otherColliderPoint) + 1) % collider.points.size()).x, collider.points.get((collider.points.indexOf(otherColliderPoint) + 1) % collider.points.size()).y);
-
-				// Standard "off the shelf" line segment intersection
-				float h = (egdeEnd.x - edgeStart.x) * (diagStart.y - diagEnd.y) - (diagStart.x - diagEnd.x) * (egdeEnd.y - edgeStart.y);
-				float t1 = ((edgeStart.y - egdeEnd.y) * (diagStart.x - edgeStart.x) + (egdeEnd.x - edgeStart.x) * (diagStart.y - edgeStart.y)) / h;
-				float t2 = ((diagStart.y - diagEnd.y) * (diagStart.x - edgeStart.x) + (diagEnd.x - diagStart.x) * (diagStart.y - edgeStart.y)) / h;
 				
-				if(t1 >= 0 && t1 < 1 && t2 >= 0 && t2 < 1) {
-					
-					return true;
-				}
 			}
-			
 		}
-		*/
 
 		
 		return false;
 	}
-	
 	
 	private boolean doCollisionFieldsCollide(Collider collider) {
 		return !(collisionFieldPosition.x + collisionFieldWidth / 2 <= collider.collisionFieldPosition.x - collider.collisionFieldWidth / 2 || collisionFieldPosition.x - collisionFieldWidth / 2 >= collider.collisionFieldPosition.x + collider.collisionFieldWidth / 2 ||
