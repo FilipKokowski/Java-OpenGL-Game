@@ -6,6 +6,7 @@ public class Vector {
 
 	public float x = 0;
 	public float y = 0;
+	public final static float z = 1;
 	
 	private Color color = new Color(255, 255, 255, 255);
 	
@@ -30,8 +31,8 @@ public class Vector {
 		return (v1.x * v2.x + v1.y * v2.y);
 	}
 	
-	public static double crossProduct(Point p1, Point p2, Point p3) {
-		return (p2.x - p1.x) * (p3.y - p1.y) * (p2.y - p1.y) * (p3.x - p1.x);
+	public static Vector crossProduct(Vector p1, Vector p2) {
+		return new Vector(p1.y - p2.y, p2.x - p1.x);
 	}
 	
 	public float determinant(Point point) {
@@ -53,6 +54,15 @@ public class Vector {
 	        return 0;
 	    
 	    return (val > 0) ? 1 : 2;
+	}
+	
+	public Point toPoint() {
+		return new Point(x,y);
+	}
+	
+	public void mirror() {
+		x *= -1;
+		y *= -1;
 	}
 	
 	public Vector clone() {

@@ -116,7 +116,7 @@ public class Collider {
 		Graphics.drawRect(collisionFieldPosition.x, collisionFieldPosition.y, collisionFieldWidth, collisionFieldHeight);
 		Graphics.setColor(Color.clear());*/
 		
-		/*for(Point point : extremes) {
+		for(Point point : extremes) {
 			Graphics.setColor(point.color);
 			Graphics.drawRect(point.x, point.y, .02f, .02f);
 			Graphics.setColor(Color.clear());
@@ -140,18 +140,18 @@ public class Collider {
 				//System.out.println(lineR.vertices.get(line + 2).x + " x " + lineR.vertices.get(line + 2).y + "   " + lineR.vertices.get(line + 3).x + " x " + lineR.vertices.get(line + 3).y);
 				Graphics.drawLine(lineR.vertices.get(line + 2).x - 10, lineR.vertices.get(line + 2).y, lineR.vertices.get(line + 3).x + 10, lineR.vertices.get(line + 3).y, ID.Obstacle);
 			}
-		}*/
+		}
 		
 		//System.out.println(lineR.vertices.size());
 		
-		//Graphics.setColor(Color.clear());
+		Graphics.setColor(Color.clear());
 		
 		closestTrianglesRender.clear();
 		otherClosestTrianglesRender.clear();
 		lineR.vertices.clear();
 		
-		//for(Polygon triangle : triangles)
-		//	triangle.color = Color.RED;
+		for(Polygon triangle : triangles)
+			triangle.color = Color.RED;
 	}
 	
 	public boolean doOverlap(Collider collider) {
@@ -190,9 +190,9 @@ public class Collider {
 
 						double x = (b - intercept) / (slope - a);
 						double y = a * x + b;
-						double dis = Math.sqrt(Math.pow(x - point.x, 2) + Math.pow(y - point.y, 2));
 					
-						if((p1.y > p2.y) ? (p1.y > y && y > p2.y) : (p2.y > y && y > p1.y))
+						if((p1.y > p2.y) ? (p1.y > y && y > p2.y) : (p2.y > y && y > p1.y)) {
+							double dis = Math.sqrt(Math.pow(x - point.x, 2) + Math.pow(y - point.y, 2));
 							if(dis < 0.00625f) {
 								if(closestTriangles.size() > 32)
 									break;
@@ -203,29 +203,185 @@ public class Collider {
 								triangle.color = Color.GREEN;
 								otherTriangle.color = Color.GREEN;
 							}
-						
+						}
 					}
 				}
 			}
 		}
 		
+		Polygon simplex = new Polygon();
+		Vector direction = new Vector(1,0);
+		
 		for(Polygon triangle : closestTriangles) {
 			for(Polygon otherTriangle : otherClosestTriangles) {
-				Polygon minkDiff = new Polygon();
+				//simplex.vertices.clear();
 				
-				for(Point vertex : triangle.vertices) {
-					for(Point otherVertex : otherTriangle.vertices) {
-						minkDiff.vertices.add(new Point(otherVertex.x - vertex.x, otherVertex.y - vertex.y));
-						 
-						
+				Vector support = support(triangle, otherTriangle, direction);
+				simplex.vertices.add(support.toPoint());
+				
+				direction.mirror(); 
+				
+				while(true) {
+					if(simplex.vertices.size() > 4)
+						break;
+					
+					System.out.println(simplex.vertices.size());
+					support = support(triangle,otherTriangle,direction);
+					
+					if(Vector.dotProduct(support, direction) <= 0) {
+						System.out.println("Not collsiion");
+						break;
+					}
+					
+					simplex.vertices.add(support.toPoint());
+					
+					if((simplex.vertices.size() == 2) ? Line(simplex,direction) : (simplex.vertices.size() == 3) ? Triangle(simplex,direction) : (simplex.vertices.size() == 4) ? Tetrahedron(simplex,direction) : false) {
+						break;
 					}
 				}
-				
 			}
 		}
 
 		
 		return false;
+	}
+	
+	private boolean Line(Polygon simplex, Vector direction) {
+		Vector ab = Point.substract(simplex.vertices.get(1), simplex.vertices.get(0)).toVector();
+		Vector ao = simplex.vertices.get(0).toVector();
+		ao.mirror();
+		
+		if(sameDirection(ab,ao))
+			direction = Vector.crossProduct(Vector.crossProduct(ab, ao), ab);
+		else {
+			Point a = simplex.vertices.get(0);
+			
+			simplex.vertices.clear();
+			simplex.vertices.add(a);
+			direction = ao;	
+		}
+		
+		return false;
+	}
+	
+	public boolean Triangle(Polygon simplex, Vector direction) {
+		Point a = simplex.vertices.get(0);
+		Point b = simplex.vertices.get(1);
+		Point c = simplex.vertices.get(2);
+		
+		Vector ab = Point.substract(b, a).toVector();
+		Vector ac = Point.substract(c, a).toVector();
+		Vector ao = a.toVector();
+		ab.mirror();
+		
+		Vector abc = Vector.crossProduct(ab, ac);
+		
+		if(sameDirection(Vector.crossProduct(abc, ac), ao)) {
+			if(sameDirection(ac,ao)) {
+				simplex.vertices.clear();
+				simplex.vertices.add(a);
+				simplex.vertices.add(c);
+				
+				direction = Vector.crossProduct(Vector.crossProduct(ac, ao), ac);
+			}else {
+				simplex.vertices.clear();
+				simplex.vertices.add(a);
+				simplex.vertices.add(b);
+				return Line(simplex, direction);
+			}
+		} else {
+			if (sameDirection(Vector.crossProduct(ab, abc), ao)) {
+				simplex.vertices.clear();
+				simplex.vertices.add(a);
+				simplex.vertices.add(b);
+				return Line(simplex, direction);
+			}
+
+			else {
+				if (sameDirection(abc, ao)) {
+					direction = abc;
+				}
+
+				else {
+					simplex.vertices.clear();
+					simplex.vertices.add(a);
+					simplex.vertices.add(c);
+					simplex.vertices.add(b);
+					
+					abc.mirror();
+					direction = abc;
+				}
+			}
+		}
+		
+		return false;
+	}
+	
+	private boolean Tetrahedron(Polygon simplex, Vector direction){
+		Point a = simplex.vertices.get(0);
+		Point b = simplex.vertices.get(1);
+		Point c = simplex.vertices.get(2);
+		Point d = simplex.vertices.get(3);
+
+		Vector ab = Point.substract(b, a).toVector();
+		Vector ac = Point.substract(c, a).toVector();
+		Vector ad =  Point.substract(d, a).toVector();
+		Vector ao = a.toVector();
+		ab.mirror();
+	 
+		Vector abc = Vector.crossProduct(ab, ac);
+		Vector acd = Vector.crossProduct(ac, ad);
+		Vector adb = Vector.crossProduct(ad, ab);
+	 
+		if (sameDirection(abc, ao)) {
+			simplex.vertices.clear();
+			simplex.vertices.add(a);
+			simplex.vertices.add(b);
+			simplex.vertices.add(c);
+			return Triangle(simplex, direction);
+		}
+			
+		if (sameDirection(acd, ao)) {
+			simplex.vertices.clear();
+			simplex.vertices.add(a);
+			simplex.vertices.add(c);
+			simplex.vertices.add(d);
+			return Triangle(simplex, direction);
+		}
+	 
+		if (sameDirection(adb, ao)) {
+			simplex.vertices.clear();
+			simplex.vertices.add(a);
+			simplex.vertices.add(d);
+			simplex.vertices.add(b);
+			return Triangle(simplex, direction);
+		}
+	 
+		return true;
+	}
+	
+	public boolean sameDirection(Vector direction, Vector ao) {
+		return Vector.dotProduct(direction, ao) >  0;
+	}
+	
+	public static Point furthestPoint(Polygon triangle, Vector direction) {
+		Point maxPoint = new Point(0,0);
+		double maxDistance = 0;
+ 
+		for (Point vertex : triangle.vertices) {
+			double distance = Vector.dotProduct(new Vector((float)vertex.x, (float)vertex.y), direction);
+			if (distance > maxDistance) {
+				maxDistance = distance;
+				maxPoint = vertex;
+			}
+		}
+ 
+		return maxPoint;
+	}
+	
+	private Vector support(Polygon triangle, Polygon secondTriangle, Vector direction) {
+		
+		return Point.substract(Collider.furthestPoint(triangle, direction), Collider.furthestPoint(secondTriangle, direction)).toVector();
 	}
 	
 	private boolean doCollisionFieldsCollide(Collider collider) {

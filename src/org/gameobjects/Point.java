@@ -56,4 +56,12 @@ public class Point {
 		return furthestPoint;
 	}
 	
+	public static Point substract(Point p1, Point p2) {
+		return new Point(p2.x - p1.x, p2.y - p1.y);
+	}
+	
+	public Vector toVector() {
+		return new Vector(x,y);
+	}
+	
 }
