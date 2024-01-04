@@ -23,4 +23,19 @@ public class Polygon {
 		this.vertices = new ArrayList<Point>();
 	}
 	
+	public Point Support(Vector direction) {
+		float maxDist = -21;
+		Point furthestPoint = null;
+		
+		for(Point vertex : vertices) {
+			float distance = (float) Vector.dotProduct(vertex.toVector(), direction);
+			if(distance > maxDist) {
+				maxDist = distance;
+				furthestPoint = vertex;
+			}
+		}
+		
+		return furthestPoint;
+	}
+	
 }

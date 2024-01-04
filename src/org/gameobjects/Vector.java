@@ -31,8 +31,8 @@ public class Vector {
 		return (v1.x * v2.x + v1.y * v2.y);
 	}
 	
-	public static Vector crossProduct(Vector p1, Vector p2) {
-		return new Vector(p1.y - p2.y, p2.x - p1.x);
+	public static Vector cross(Vector v1, Vector v2) {
+		 return new Vector(v1.y * 1 - 1 * v2.y, 1 * v2.x - v1.x * 1);
 	}
 	
 	public float determinant(Point point) {

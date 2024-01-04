@@ -128,7 +128,7 @@ public class GameObject {
 		this.txt = new ImageResource(src);
 		
 		bounds = new Polygon(txt.getImageBounds());
-		
+
 		if(bounds.vertices.size() == 0) 
 			bounds.vertices = getBounds();
 		
@@ -374,10 +374,6 @@ public class GameObject {
 			bounds.add(new Point((float)((width / 2) * Math.cos(Math.toRadians(-rotation)) - (-height / 2 + Collider.minColliderPointSpacing * point) * Math.sin(Math.toRadians(-rotation))), (float)((width / 2) * Math.sin(Math.toRadians(-rotation)) + (-height / 2 + Collider.minColliderPointSpacing * point) * Math.cos(Math.toRadians(-rotation)))));
 			bounds.add(new Point((float)((-width / 2) * Math.cos(Math.toRadians(-rotation)) - (-height / 2 + Collider.minColliderPointSpacing * point) * Math.sin(Math.toRadians(-rotation))), (float)((-width / 2) * Math.sin(Math.toRadians(-rotation)) + (-height / 2 + Collider.minColliderPointSpacing * point) * Math.cos(Math.toRadians(-rotation)))));
 		}
-		/*
-		 * x′=(x−p)cos(θ)−(y−q)sin(θ)+p,
-		 * y'=(x−p)sin(θ)+(y−q)cos(θ)+q.
-		 */
 		
 		return bounds;
 	}

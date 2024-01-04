@@ -14,10 +14,12 @@ import org.graphics.Graphics;
 
 public class Obstacle extends Entities{
 
-	private String imagePath = "";
+	public boolean complex;
+	
+	public String imagePath = "";
 	
 	private boolean collisionEnabled = true;
-	
+		
 	public boolean verticallyCenteredText = false;
 	
 	private float textOffsetX = 0;
@@ -36,7 +38,7 @@ public class Obstacle extends Entities{
 		
 		text = uuid;
 		
-		if(imagePath.equals("")) bounds.vertices = getBounds();
+		if(imagePath.equals("")) bounds.vertices = getBounds();	
 		else scaleBounds(width, height);
 		
 		if(collider.trianglesOffsets.size() != 2)

@@ -7,6 +7,7 @@ public class Color {
 	public final static Color BLUE = new Color(0,0,255,255);
 	public final static Color WHITE = new Color(255,255,255,255);
 	public final static Color BLACK = new Color(0,0,0,255);
+	public final static Color TRANSPARENT = new Color(0,0,0,0);
 	
 	public float red = 1;
 	public float green = 1;
