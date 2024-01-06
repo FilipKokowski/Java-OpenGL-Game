@@ -4,6 +4,7 @@ import java.awt.Font;
 import java.util.ArrayList;
 
 import org.engine.Collider;
+import org.engine.GameLoop;
 import org.gameobjects.Entities;
 import org.gameobjects.ID;
 import org.gameobjects.Point;
@@ -41,14 +42,15 @@ public class Obstacle extends Entities{
 		if(imagePath.equals("")) bounds.vertices = getBounds();	
 		else scaleBounds(width, height);
 		
-		if(collider.trianglesOffsets.size() != 2)
-			collider.update();
 		
 	}
 	
 	public void update() {
 		
-		applyPhysics(moveable, moveable);
+		rotation = 45;
+		//position.x += .5f * GameLoop.updateDelta();
+		
+		//applyPhysics(true, true);
 		
 		deactiveteWhenOutOfView();
 		if(!outOfView) {
@@ -69,6 +71,7 @@ public class Obstacle extends Entities{
 			super.textOffsetY += textOffsetY;
 		}
 		
+		collider.update();
 		super.update();
 	}
 	
@@ -83,9 +86,11 @@ public class Obstacle extends Entities{
 		Graphics.setColor(Color.clear());*/
 		
 		if(imagePath.equals("")) {
+			Graphics.Rotate(-rotation);
 			Graphics.setColor(color.red, color.green, color.blue, color.alpha);
 			Graphics.drawRect(position.x, position.y, width, height);
 			Graphics.setColor(1, 1, 1, 1);
+			Graphics.Rotate(0);
 			
 			if(EventListener.renderBounds)
 				drawBounds();

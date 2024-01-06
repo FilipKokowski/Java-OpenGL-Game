@@ -132,9 +132,11 @@ public class GameObject {
 		if(bounds.vertices.size() == 0) 
 			bounds.vertices = getBounds();
 		
-		if(this.id != ID.HUD) {
-			bounds.vertices = ImageResource.organizePoints(bounds.vertices, this);
-		
+		if(this.id != ID.HUD) {		
+			
+			if(bounds.vertices.size() > 4)
+				bounds.vertices = ImageResource.organizePoints(bounds.vertices, this);
+			
 			ArrayList<Point> boundsToTriangulate = new ArrayList<>();
 			boundsToTriangulate.addAll(bounds.vertices);
 			
@@ -160,14 +162,8 @@ public class GameObject {
 				Point p2 = boundsToTriangulate.get(vertex);
 				Point p3 = boundsToTriangulate.get((vertex == boundsToTriangulate.size() - 1) ? 0 : vertex + 1);
 				
-				if(boundsToTriangulate.size() <= 3) {
-					triangulatedBounds.add(new Polygon(new Point[]{p1,p2,p3}));
-					break;
-				}
-				
 				Vector p1_p2 = new Vector(p2.x - p1.x, p2.y - p1.y);
 				Vector p1_p3 = new Vector(p3.x - p1.x, p3.y - p1.y);
-				
 				
 				if(p1_p2.x * p1_p3.y - p1_p3.x * p1_p2.y < 0) {
 					
@@ -179,7 +175,6 @@ public class GameObject {
 						if((p1.x == point.x && p1.y == point.y) || (p2.x == point.x && p2.y == point.y) || (p3.x == point.x && p3.y == point.y))
 							continue;
 						
-	
 						float detT = (p2.y - p3.y) * (p1.x - p3.x) + (p3.x - p2.x) * (p1.y - p3.y);
 						    
 					    float u = ((p2.y - p3.y) * (point.x - p3.x) + (p3.x - p2.x) * (point.y - p3.y)) / detT;
@@ -194,7 +189,6 @@ public class GameObject {
 					
 					if(ear) {
 						triangulatedBounds.add(new Polygon(new Point[]{p1,p2,p3}));
-						
 						boundsToTriangulate.remove(p2);
 						
 						vertex = 0;	
@@ -210,7 +204,6 @@ public class GameObject {
 
 		collider = new Collider(triangulatedBounds, this);
 		collider.nonTriangulatedBounds = bounds;
-		
 	
 		
 		centerOfMass = txt.centerOfMass;
@@ -361,19 +354,12 @@ public class GameObject {
 	//Returns simple rectangular bounds
 	public ArrayList<Point> getBounds() {
 		ArrayList<Point> bounds = new ArrayList<Point>();
-		float wSpacing = width / Collider.minColliderPointSpacing;
-		float hSpacing = height / Collider.minColliderPointSpacing;
+
+		bounds.add(new Point(-width / 2, height / 2));
+		bounds.add(new Point(width / 2, height / 2));
+		bounds.add(new Point(width / 2, -height / 2));
+		bounds.add(new Point(-width / 2, -height / 2));
 		
-		for(int point = 0; point <= wSpacing; point++) {
-			
-			bounds.add(new Point((float)((-width / 2 + Collider.minColliderPointSpacing * point) * Math.cos(Math.toRadians(-rotation)) - (height / 2) * Math.sin(Math.toRadians(-rotation))), (float)((-width / 2 + Collider.minColliderPointSpacing * point) * Math.sin(Math.toRadians(-rotation)) + (height / 2) * Math.cos(Math.toRadians(-rotation)))));
-			bounds.add(new Point((float)((-width / 2 + Collider.minColliderPointSpacing * point) * Math.cos(Math.toRadians(-rotation)) - (-height / 2) * Math.sin(Math.toRadians(-rotation))), (float)((-width / 2 + Collider.minColliderPointSpacing * point) * Math.sin(Math.toRadians(-rotation)) + (-height / 2) * Math.cos(Math.toRadians(-rotation)))));
-		}
-		for(int point = 0; point <= hSpacing; point++) {
-			
-			bounds.add(new Point((float)((width / 2) * Math.cos(Math.toRadians(-rotation)) - (-height / 2 + Collider.minColliderPointSpacing * point) * Math.sin(Math.toRadians(-rotation))), (float)((width / 2) * Math.sin(Math.toRadians(-rotation)) + (-height / 2 + Collider.minColliderPointSpacing * point) * Math.cos(Math.toRadians(-rotation)))));
-			bounds.add(new Point((float)((-width / 2) * Math.cos(Math.toRadians(-rotation)) - (-height / 2 + Collider.minColliderPointSpacing * point) * Math.sin(Math.toRadians(-rotation))), (float)((-width / 2) * Math.sin(Math.toRadians(-rotation)) + (-height / 2 + Collider.minColliderPointSpacing * point) * Math.cos(Math.toRadians(-rotation)))));
-		}
 		
 		return bounds;
 	}

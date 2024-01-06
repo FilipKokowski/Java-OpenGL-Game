@@ -14,8 +14,6 @@ import org.graphics.Graphics;
 import com.jogamp.graph.geom.Triangle;
 
 public class Collider {
-
-	public static float minColliderPointSpacing = .03275f;
 	
 	public ArrayList<GameObject> objectsToIgnore = new ArrayList<GameObject>();
 	
@@ -200,9 +198,9 @@ public class Collider {
 						double y = a * x + b;
 					
 						if((p1.y > p2.y) ? (p1.y > y && y > p2.y) : (p2.y > y && y > p1.y)) {
-							double dis = Math.sqrt(Math.pow(x - point.x, 2) + Math.pow(y - point.y, 2));
-							if(dis < 0.00625f) {
-								if(closestTriangles.size() > 128)
+							double dis = Math.pow(x - point.x, 2) + Math.pow(y - point.y, 2);
+							if(dis < 0.0000390625) {
+								if(closestTriangles.size() > 32)
 									break;
 								
 								closestTriangles.add(triangle);
@@ -226,7 +224,6 @@ public class Collider {
 					evolve = evolveSimplex(triangle, otherTriangle);
 				
 				if(evolve == evolveRes.collision) {
-					System.out.println("dawdawd");
 					return true;
 				}
 			}

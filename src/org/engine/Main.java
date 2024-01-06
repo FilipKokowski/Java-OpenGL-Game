@@ -40,12 +40,12 @@ public class Main {
 		obstacle4.setColor(255, 64, 135, 127);
 		Handler.addGO(obstacle4);
 		
-		Obstacle sign = new Obstacle(-3, onGround(3.75f), 5f, 3.75f, false, "res/org/scene/objects/Sign/sign.png");
+		/*Obstacle sign = new Obstacle(-3, onGround(3.75f), 5.f, 3.75f, false, "res/org/scene/objects/Sign/sign.png");
 		sign.verticallyCenteredText = true;
 		sign.offsetText(0, .05f);
 		sign.setTextColor(0, 0, 0, 1);
 		sign.text = sign.uuid;
-		Handler.addGO(sign);
+		Handler.addGO(sign);*/
 
 		GameLoop.start();
 		
