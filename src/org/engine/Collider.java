@@ -47,6 +47,8 @@ public class Collider {
 	
 	private Polygon simplex = new Polygon();
 	
+	private Vector direction = new Vector(0,0);
+	
 	public enum evolveRes {
 		collision,
 		noCollision,
@@ -175,7 +177,8 @@ public class Collider {
 				return false;
 		
 		//Only checks collisions if objects collsionFields are overlaping each other
-		
+		//if(!doCollisionFieldsCollide(collider))
+			//return false;
 		
 		for(Polygon triangle : collider.triangles) {
 			for(int side = 0; side < triangle.vertices.size(); side++) {
@@ -215,15 +218,11 @@ public class Collider {
 			}
 		}
 		
-		for(Polygon triangle : closestTriangles) {
-			for(Polygon otherTriangle : otherClosestTriangles) {
+		for(Polygon triangle : triangles) {
+			for(Polygon otherTriangle : collider.triangles) {
 				
-				evolveRes evolve = evolveRes.undefined;
-				
-				while(evolve == evolveRes.undefined) 
-					evolve = evolveSimplex(triangle, otherTriangle);
-				
-				if(evolve == evolveRes.collision) {
+				if(GJK(triangle, otherTriangle)) {
+					System.out.println("ada");
 					return true;
 				}
 			}
@@ -231,74 +230,68 @@ public class Collider {
 	
 		return false;
 	}
-	
-	private boolean addSupport(Vector direction, Polygon p1, Polygon p2) {
-		Point newVertex = Point.substract(p1.Support(direction), p2.Support(new Vector(-direction.x, -direction.y)));
-        simplex.vertices.add(newVertex);
-        return Vector.dotProduct(direction, newVertex.toVector()) > 0;
-    }
-	
-	private evolveRes evolveSimplex(Polygon p1, Polygon p2) {
-		Vector direction = new Vector(0,0);
+
+	private boolean GJK(Polygon p1, Polygon p2) {
+		Point a = minkowskiSupport(p1, p2, new Vector(1,1));
+		Vector direction = new Vector(-a.x, -a.y);
 		
-		switch(simplex.vertices.size()) {
-			case 0: {
-				direction = new Vector(p2.vertices.get(0).x - p1.vertices.get(0).x, p2.vertices.get(0).y - p1.vertices.get(0).y);
-				simplex.vertices.add(Point.substract(p1.Support(direction), p2.Support(direction)));
-			}
-			case 1: {
-				 direction = new Vector(-direction.x, -direction.y);
-				 simplex.vertices.add(Point.substract(p1.Support(direction), p2.Support(new Vector(-direction.x, -direction.y))));
-			}
-			case 2: {
-				Point b = simplex.vertices.get(1);
-				Point c = simplex.vertices.get(0);
-
-				Point cb = Point.substract(b, c);
-				Point c0 = new Point(-c.x, -c.y);
-
-	            direction = tripleProduct(cb.toVector(), c0.toVector(), cb.toVector());
-	            simplex.vertices.add(Point.substract(p1.Support(direction), p2.Support(new Vector(-direction.x, -direction.y))));
-			}
-			case 3: {
-				Point a = simplex.vertices.get(2);
-				Point b = simplex.vertices.get(1);
-				Point c = simplex.vertices.get(0);
-
-				Point a0 = new Point(-a.x, -a.y);
-				Point ab = Point.substract(b, a);
-				Point ac = Point.substract(c, a);
-
-				Vector abPerp = tripleProduct(ac.toVector(), ab.toVector(), ab.toVector());
-				Vector acPerp = tripleProduct(ab.toVector(), ac.toVector(), ac.toVector());
-
-	            if(Vector.dotProduct(abPerp, a0.toVector()) > 0) {
-	                simplex.vertices.remove(c);
-	                direction = abPerp;
-	            }
-	            else if(Vector.dotProduct(acPerp, a0.toVector()) > 0) {
-	                simplex.vertices.remove(b);
-	                direction = acPerp;
-	            }
-	            else {
-	                return evolveRes.collision;
-	            }
-			}
+		Point b = minkowskiSupport(p1, p2, direction);
+		if(Vector.dotProduct(b.toVector(), direction) <= 0) {
+			System.out.println(direction);
+			return false;
 		}
 		
-	    return addSupport(direction, p1, p2) ? evolveRes.undefined : evolveRes.noCollision;
+		Vector ab = Point.substract(b, a).toVector();
+		direction = tripleProduct(ab, new Vector(-a.x, -a.y),ab);
+		
+		for(;;) {
+			Point c = minkowskiSupport(p1,p2,direction);
+			if(Vector.dotProduct(c.toVector(), direction) <= 0)
+				return false;
+			
+			Vector c0 = new Vector(-c.x, -c.y);
+			Vector cb = Point.substract(b, c).toVector();
+			Vector ca = Point.substract(c, a).toVector();
+			
+			Vector cbPerp = tripleProduct(ca,cb,cb);
+			Vector caPerp = tripleProduct(cb,ca,ca);
+			
+			if(Vector.dotProduct(caPerp, c0) > 0) {
+				b = c;
+				direction = caPerp;
+			} else if(Vector.dotProduct(cbPerp, c0) > 0) {
+				a = c;
+				direction = caPerp;
+			} else return true;
+
+		}
+		
 	}
 	
-	private Vector tripleProduct(Vector a, Vector b, Vector c) {
-		Vector A = new Vector(a.x, a.y);
-        Vector B = new Vector(b.x, b.y);
-        Vector C = new Vector(c.x, c.y);
+	private Point minkowskiSupport(Polygon p1, Polygon p2, Vector direction) {
+		return Point.substract(support(p1, direction), support(p2, new Vector(-direction.x, -direction.y)));
+	}
 
-        Vector first = Vector.cross(A, B);
-        Vector second = Vector.cross(first, C);
-
-        return new Vector(second.x, second.y);
-    }
+	//Returns furthest vertex of polygon in given direction
+	private Point support(Polygon p, Vector direction) {
+		float max = Float.NEGATIVE_INFINITY;
+		Point furthest = p.vertices.get(0);
+		
+		for(Point point : p.vertices) {
+			float dot = (float) Vector.dotProduct(point.toVector(), direction);
+			if (dot > max) {
+				max = dot;
+				furthest = point;
+			}
+		}
+		return furthest;
+	}
+	
+	private Vector tripleProduct(Vector v1, Vector v2, Vector v3) {
+		float z = v1.x * v2.y - v1.y * v2.x;
+		
+		return new Vector(-v3.y * z, v3.x * z);
+	}
 	
 	private boolean doCollisionFieldsCollide(Collider collider) {
 		return !(collisionFieldPosition.x + collisionFieldWidth / 2 <= collider.collisionFieldPosition.x - collider.collisionFieldWidth / 2 || collisionFieldPosition.x - collisionFieldWidth / 2 >= collider.collisionFieldPosition.x + collider.collisionFieldWidth / 2 ||
